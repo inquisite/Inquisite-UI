@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Inquisite</title>
+		<link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/theme.css">
+
+        <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+		<script src="semantic/dist/jquery-3.1.0.min.js"></script> 
+		<script src="semantic/dist/semantic.min.js"></script>	
+        <script src="scripts/inquisite-vue.js"></script>
+	</head>
+	<body >
+
+<div id="app">
+
+  <!-- Header menu -->
+  <div class="ui fixed menu">	
+	<a href="http://inquisite.whirl-i-gig.com/inquisite-ui" class="header item logo">
+		<img class="logo" src="assets/images/logo.png">
+	</a>
+	<a href="#" class="item">Upload Data</a>
+	<a href="#" class="item">Search & Refine</a>
+	<div class="ui simple dropdown item">
+		Visualize <i class="dropdown icon"></i>
+		<div class="menu">
+			<a class="item" href="#">Map</a>
+			<a class="item" href="#">Timeline</a>
+			<a class="item" href="#">Sheet</a>
+			<a class="item" href="#">Nodes</a>
+		</div>
+	</div>
+	<div class="right menu">
+		
+		<div class="ui selection dropdown"> 
+			<input type="hidden" name="dataset">
+			<i class="dropdown icon"></i>
+			<div class="text">New York Scapes</div>
+			<div class="ui menu">
+				<div class="header">Choose a Repository</div>
+				<div class="divide"></div>
+				<div class="item" data-value="1">City Census Data</div>
+				<div class="item" data-value="2">New York Scapes</div>
+				<div class="item" data-value="3">NYC Street Addresses (1850 - 1901)</div>
+			</div>
+		</div>
+		<div class="ui simple dropdown item">
+			<i class="icon user"></i> <i class="dropdown icon"></i>
+			<div class="menu">
+				<a class="item" href="#">User Preferences</a>
+				<a class="item" href="#">User Profile</a>
+				<a class="item" href="#">Activity Log</a>
+			</div>
+		</div>						
+	</div>	
+  </div>
+  <!-- end Header Menu -->
+
+  <div class='ui pageContent container'>
+	<div class="ui grid">
+		<div class="sixteen wide column">
+		<h1>Sign Up!</h1>
+		</div>
+	</div>
+	<div class="ui section divider"></div>	
+	<div class="ui grid">	
+		<div class="sixteen wide column">
+			<div class="ui raised segment">
+				<div class="ui large list">
+
+                    <form id="signup-form" name="signup-form" method="POST" action="">
+                      <div class='item' style="padding: 5px 0"><div class="ui fluid input content">
+                        <input type="text" id="name" name="name" placeholder="Name" v-model="name">
+                      </div></div>
+                      <div class='item' style="padding: 5px 0"><div class="ui fluid input content">
+                        <input type="text" id="email" name="email" placeholder="Email" v-model="email">
+                      </div></div>
+                      <div class='item' style="padding: 5px 0"><div class="ui fluid input content">
+                        <input type="text" id="location" name="location" placeholder="Location" v-model="location">
+                      </div></div>
+                      <div class='item' style="padding: 5px 0"><div class="ui fluid input content">
+                        <input type="text" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
+                      </div></div>
+                      <div class='item' style="padding: 5px 0"><div class="ui fluid input content">
+                        <input type="text" id="url" name="url" placeholder="URL" v-model="url">
+                      </div></div>
+                      <div class='item' style="padding: 5px 0"><div class="ui fluid input content">
+                        <input type="password" id="password" name="password" placeholder="Password" v-model="password">
+                      </div></div>
+ 
+                      <div class='item' style="padding: 10px 0">
+                        <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="ui primary button">Submit</button>                       
+                      </div>
+
+                    </form>
+					
+				</div>	
+			</div>	
+		</div>
+			
+	</div>
+	<div class="ui section divider"></div>
+  </div>
+</div>
+</div><!-- end app -->
+
+<script>$('.ui.dropdown').dropdown();</script>	
+
+	</body>
+</html>	
+	
