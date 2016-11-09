@@ -1,17 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>inquisite-ui</title>
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/theme.css">
-  </head>
-  <body>
+<template>
+  <div id="app">
 
-    <!-- start vue.js container -->
-    <div id="app">
-      
-      <div class="ui fixed menu">
+    <div class="ui fixed menu">
         <a href="http://inquisite.whirl-i-gig.com/inquisite-ui" class="header item logo">
           <img class="logo" src="assets/images/logo.png">
         </a>
@@ -53,21 +43,57 @@
       </div>
 
       <!-- Start of Home page content -->
-      <div class="ui pageContent container">
-        <div class="ui grid">
-
-        </div>
+      <div id="page" class="ui pageContent container">
+          <router-view></router-view>
       </div>
-  
-    </div>
-    <!-- end vue.js container -->
 
+  </div>
+</template>
 
+<script>
 
-    <script src="/dist/build.js"></script>
+import Home from './Home.vue'
+import Signup from './Signup.vue'
 
-    <script src="semantic/dist/jquery-3.1.0.min.js"></script>
-    <script src="semantic/dist/semantic.min.js"></script>
+export default {
+  name: 'app',
+  components:{ 
+    'home': Home,
+    'signup': Signup 
+  },
+  data () {
+    return {
+      msg: 'Welcome to Your Vue.js App'
+    }
+  }
+}
+</script>
 
-  </body>
-</html>
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
+}
+</style>
