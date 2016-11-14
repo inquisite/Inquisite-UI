@@ -14,22 +14,25 @@
         <a class="ui teal ribbon label">Data Sets</a>
         <div class="ui relaxed divided list">
 
-          <div class="item">
-            <i class="large icon folder middle aligned"></i>
-            <div class="content">
-              <a class="header grey">New York Merchants 1800-1801</a>
-              <div class="description">
-                <small>by Tom A. 5,674 records, 30 elements</small></div>
-            </div>                  
-          </div>
-
-          <div class="item">
-            <i class="large icon folder middle aligned"></i>
-            <div class="content">
-              <a  class="header">Carnegie Hospital Records 1830s</a>
-              <div class="description"><small>by Nick W. 10,213 records, 9 elements</small></div>
+            <div class="item">
+              <i class="large icon folder middle aligned"></i>
+              <div class="content">
+                <a class="header grey">New York Merchants 1800-1801</a>
+                <div class="description">
+                  <small>by Tom A. 5,674 records, 30 elements</small>
+                </div>
+              </div>                  
             </div>
-          </div>
+
+            <div class="item">
+              <i class="large icon folder middle aligned"></i>
+              <div class="content">
+                <a  class="header">Carnegie Hospital Records 1830s</a>
+                <div class="description">
+                  <small>by Nick W. 10,213 records, 9 elements</small>
+                </div>
+              </div>
+            </div>
 
         </div>
       </div>
@@ -37,6 +40,10 @@
 
     <div class="eight wide column">
       <h3 class="ui header">Project Introduction and Goals</h3>
+      <p>Lorem ipsum dolor sit amet,</p>
+      <p>Vivamus sodales tortor in leo blandit pharetra</p>
+      <p>Lorem ipsum dolor sit amet,</p>
+      <p>Vivamus sodales tortor in leo blandit pharetra</p>
       <p>Lorem ipsum dolor sit amet,</p>
       <p>Vivamus sodales tortor in leo blandit pharetra</p>
     </div>

@@ -43,11 +43,11 @@
 
 <script>
 export default { 
-  name: 'home',
+  name: 'login',
   data: function() {
     return {
-      email: '',
-      password: '',
+      'email': '',
+      'password': '',
     }
   },
   methods: {
@@ -65,6 +65,10 @@ export default {
           console.log('success');
           console.log('data');
           console.log(data);
+
+          console.log('store?');
+          console.log(store)
+
         }
       })
     }
