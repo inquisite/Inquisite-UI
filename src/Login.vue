@@ -15,6 +15,11 @@
        
           <form id="login-form" name="login-form" method="POST" action="">
 
+            <div id="login-msg" class="ui message" style="display: none;">
+              <div class="header"></div>
+              <div class="msg"></div>
+            </div>
+
             <div class="item form-item">
               <div class="ui fluid input content">
                 <input type="text" id="email" name="email" placeholder="Email" v-model="email">
@@ -62,13 +67,20 @@ export default {
           password: this.password
         },
         success: function(data, textStatus, jqXHR) {
-          console.log('success');
-          console.log('data');
-          console.log(data);
+          if("ok" == data.status) {
 
-          console.log('store?');
-          console.log(store)
+            jQuery('#login-msg').addClass('success');
+            jQuery('#login-msg .header').html('Success!');
+            jQuery('#login-msg .msg').html(data.msg);
 
+          } else {
+
+            jQuery('#login-msg').addClass('error');
+            jQuery('#login-msg .header').html('There was a problem');
+            jQuery('#login-msg .msg').html(data.msg);
+          }
+
+          jQuery('#login-msg').show();
         }
       })
     }
