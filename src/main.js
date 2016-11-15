@@ -21,11 +21,10 @@ import App from './App.vue'
 // Setup Vuex Store
 const store = new Vuex.Store({
   state: {
-    logged_in: false
+    logged_in: false,
+    username: ''
   },
-  mutations: {
-
-  }
+  mutations: {}
 });
 
 const router = new VueRouter({
@@ -39,5 +38,8 @@ const router = new VueRouter({
 inquisite = new Vue({
   el: '#app',
   render: h => h(App),
-  router: router
+  router: router,
+  data: {
+    sharedState: store.state
+  }
 })
