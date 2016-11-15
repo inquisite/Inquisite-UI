@@ -9,25 +9,26 @@ module.exports = {
     filename: 'build.js'
   },
   module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: 'vue',
-        options: {
-          // vue-loader options go here
-        }
+    loaders: [
+      { test: /\.vue$/,
+        loader: 'vue-loader',
+        //options: {
+        //  loaders: { html: 'raw' }
+        //} 
       },
-      {
-        test: /\.js$/,
-        loader: 'babel',
-        exclude: /node_modules/
+      { 
+        test:/\.js$/,
+        exclude: /(node_modules)/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015'],
+          cacheDirectory: ['true']
+        }
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file',
-        options: {
-          name: '[name].[ext]?[hash]'
-        }
+        loader: "file",
+        options: { name: '[name].[ext]?[hash]' }
       }
     ]
   },

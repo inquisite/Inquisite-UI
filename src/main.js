@@ -26,8 +26,7 @@ const store = new Vuex.Store({
   mutations: {
 
   }
-})
-
+});
 
 const router = new VueRouter({
   routes: [
@@ -35,9 +34,9 @@ const router = new VueRouter({
     { path: '/signup', name: 'signup', component: Signup },
     { path: '/login', name: 'login', component: Login }
   ]
-})
+});
 
-new Vue({
+inquisite = new Vue({
   el: '#app',
   render: h => h(App),
   router: router

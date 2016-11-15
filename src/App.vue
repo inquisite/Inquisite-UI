@@ -52,15 +52,17 @@
 
 <script>
 
-import Home from './Home.vue'
-import Signup from './Signup.vue'
+//import Home from './Home.vue'
+//import Signup from './Signup.vue'
+//import Login from '/.Login.vue'
 
 export default {
   name: 'app',
-  components:{ 
-    'home': Home,
-    'signup': Signup 
-  },
+  //components:{ 
+  //  Home,
+  //  Signup,
+  //  Login 
+  //},
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
