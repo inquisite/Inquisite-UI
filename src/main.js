@@ -1,45 +1,42 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter);
-Vue.use(Vuex);
 
 // Load template components
-import Home from './Home.vue'
+//import Home from './Home.vue'
+const Home = require('./Home.vue');
 Vue.component('home', Home)
 
-import Signup from './Signup.vue'
+//import Signup from './Signup.vue'
+const Signup = require('./Signup.vue');
 Vue.component('signup', Signup)
 
-import Login from './Login.vue'
+//import Login from './Login.vue'
+const Login = require('./Login.vue');
 Vue.component('login', Login)
 
-import App from './App.vue'
+//import UploadData from './UploadData.vue'
+const UploadData = require('./UploadData.vue');
+Vue.component('upload-data', UploadData)
+
+const App = require('./App.vue')
+const store = require('./store.js');
 
 
-// Setup Vuex Store
-const store = new Vuex.Store({
-  state: {
-    logged_in: false,
-    username: ''
-  },
-  mutations: {}
-});
 
 const router = new VueRouter({
   routes: [
     { path: '/', name: 'home', component: Home },
     { path: '/signup', name: 'signup', component: Signup },
-    { path: '/login', name: 'login', component: Login }
+    { path: '/login', name: 'login', component: Login },
+    { path: '/upload', name: 'upload-data', component: UploadData }
   ]
 });
 
-inquisite = new Vue({
+new Vue({
+  store,
   el: '#app',
   render: h => h(App),
   router: router,
-  data: {
-    sharedState: store.state
-  }
 })

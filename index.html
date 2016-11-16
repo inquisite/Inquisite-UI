@@ -15,8 +15,13 @@
         <a href="http://inquisite.whirl-i-gig.com/inquisite-ui" class="header item logo">
           <img class="logo" src="assets/images/logo.png">
         </a>
-        <a href="#" class="item">Upload Data</a>
-        <a href="#" class="item">Search & Refine</a>
+
+        <!--<router-link :to="{name: 'uploaddata'}" class="item">Upload Data</router-link>
+        <router-link :to="{name: 'searchrefine'}" class="item">Search & Refine</router-link>-->
+
+        <a v-link="{ name: 'uploaddata'}" class="item">Upload Data</a>
+        <a v-link="{ name: 'searchrefine'}" class="item">Search & Refine</a>
+
         <div class="ui simple dropdown item">
           Visulize <i class="dropdown icon"></i>
           <div class="menu">

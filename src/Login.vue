@@ -47,12 +47,15 @@
 </template>
 
 <script>
+import store from './store.js'
+
 export default { 
   name: 'login',
   data: function() {
     return {
-      'email': '',
-      'password': '',
+      email: '',
+      password: '',
+      sharedState: store.state
     }
   },
   methods: {
@@ -69,8 +72,7 @@ export default {
         success: function(data, textStatus, jqXHR) {
           if("ok" == data.status) {
 
-            $vm.$parent.$root.sharedState.logged_in = true;
-            $vm.$parent.$root.sharedState.username = data.email;
+            store.dispatch('login');
 
             jQuery('#login-msg').addClass('success');
             jQuery('#login-msg .header').html('Success!');
@@ -84,9 +86,9 @@ export default {
           }
 
           jQuery('#login-msg').show();
-          setTimeout(function() { $vm.$parent.$root.$router.push('/') }, 3000);
+          //setTimeout( this.$root.$options.router.push('/') , 6000);
 
-        }
+        }.bind(this)
       })
     }
   }
