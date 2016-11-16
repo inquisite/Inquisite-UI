@@ -8,7 +8,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     logged_in: false,
-    username: ''
+    username: '',
+    user_id: ''
+   
   },
   getters: {
     is_loggedin(state) {
@@ -17,11 +19,23 @@ export default new Vuex.Store({
   },
   mutations: {
     login:  state => state.logged_in = true,
-    logout: state => state.logged_in = false
+    logout: state => state.logged_in = false,
+    setUsername(state, username) {
+      state.username = username
+    },
+    setUserID(state, user_id) { 
+      state.user_id = user_id
+    }
   },
   actions: {
     login: context => context.commit('login'),
-    logout: context => context.commit('logout')
+    logout: context => context.commit('logout'),
+    setUsername(context, username) {
+      context.commit('setUsername', username) 
+    },
+    setUserID(context, user_id) {
+      context.commit('setUserID', user_id)
+    }
   }
 })
 

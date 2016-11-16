@@ -73,6 +73,8 @@ export default {
           if("ok" == data.status) {
 
             store.dispatch('login');
+            store.dispatch('setUsername', data.email);
+            store.dispatch('setUserID', data.user_id);
 
             jQuery('#login-msg').addClass('success');
             jQuery('#login-msg .header').html('Success!');
@@ -86,7 +88,7 @@ export default {
           }
 
           jQuery('#login-msg').show();
-          //setTimeout( this.$root.$options.router.push('/') , 6000);
+          setTimeout( this.$root.$options.router.push('/') , 30000);
 
         }.bind(this)
       })
