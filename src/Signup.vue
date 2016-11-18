@@ -12,8 +12,14 @@
     <div class="eight wide column">
       <div class="ui raised segment">
         <div class="ui large list">
-       
+
           <form id="signup-form" name="signup-form" method="POST" action="">
+
+            <div id="signup-msg" class="ui msessage" style="display: none;">
+              <div class="header"></div>
+              <div class="msg"></div>
+            </div>
+
             <div class="item form-item">
               <div class="ui fluid input content">
                 <input type="text" id="name" name="name" placeholder="Name" v-model="name">
@@ -93,9 +99,22 @@ export default {
           password: this.password
         },
         success: function(data, textStatus, jqXHR) {
-          console.log('success');
-          console.log('data');
-          console.log(data);
+          if("ok" == data.status) {
+
+            jQuery('#signup-msg').addClass('success');
+            jQuery('#signup-msg .header').html('Success!');
+            jQuery('#signup-msg .msg').html(data.msg);
+
+            var self = this;
+            setTimeout( function() { self.$root.$options.router.push('login') }, 6000);
+
+          } else {
+            jQuery('#signup-msg').addClass('error');
+            jQuery('#signup-msg .header').html('There was a problem');
+            jQuery('#signup-msg .msg').html(data.msg);
+          }          
+ 
+          jQuery('#signup-msg').show();
         }
       })
     }

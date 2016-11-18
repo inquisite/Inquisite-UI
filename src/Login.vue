@@ -80,6 +80,9 @@ export default {
             jQuery('#login-msg .header').html('Success!');
             jQuery('#login-msg .msg').html(data.msg);
 
+            var self = this;
+            setTimeout( function() { self.$root.$options.router.push('/') }, 6000);
+
           } else {
 
             jQuery('#login-msg').addClass('error');
@@ -89,9 +92,7 @@ export default {
 
           jQuery('#login-msg').show();
 
-          var self = this;
-          setTimeout( function() { self.$root.$options.router.push('/') }, 6000);
-
+          
         }.bind(this)
       })
     }
