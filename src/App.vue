@@ -34,9 +34,9 @@
           <div class="ui simple dropdown item">
             <i class="icon user"></i> <i class="dropdown icon"></i>
             <div class="menu" v-if="sharedState.logged_in">
-              <router-link to="/preferences" class="item" >User Preferences</router-link>
-              <router-link to="/profile" class="item" >User Profile</router-link>
-              <router-link to="/activity-log" class="item" >Activity Log</router-link>
+              <router-link :to="{name: 'user-prefs', params: { id: sharedState.user_id }}" class="item">User Preferences</router-link>
+              <router-link :to="{name: 'user-profile', params: { id: sharedState.user_id }}" class="item">User Profile</router-link>
+              <router-link :to="{name: 'user-activity', params: { id: sharedState.user_id }}" class="item" >Activity Log</router-link>
               <a @click="processLogout" class="item" >Logout</a>
             </div>
             <div class="menu" v-else>
@@ -88,7 +88,7 @@ export default {
         }
       })
     }
-  }
+  },
 }
 </script>
 
