@@ -13,7 +13,15 @@
       <div class="ui raised segment">
         <div class="ui large list">
        
-         <div> User Details to come for {{sharedState.username}} </div> 
+         <div> User Details to come for {{sharedState.username}} 
+               <div>Name: {{name}}</div>
+               <div>Email: {{email}}</div>
+               <div>Location: {{location}}</div>
+               <div>Tagline: {{tagline}}</div>
+               <div>URL: {{url}}</div>
+         </div> 
+         
+
 
         </div>  
       </div>
@@ -30,11 +38,46 @@ export default {
   name: 'user-profile',
   data: function() {
     return {
-      sharedState: store.state
+      sharedState: store.state,
+      name: '',
+      email: '',
+      location: '',
+      tagline: '',
+      url: ''
     }
   },
-  methods: {},
-  
+  created: function() {
+      console.log(' created lifecycle hook ... ');
+      this.getUser()   
+  },
+  watch: {
+    '$route': 'getUser'
+  },
+  methods: {
+    getUser: function() {
+    
+      var self = this;
+
+      jQuery.ajax({
+        type: "POST",
+        url: "http://localhost:5000/people/" + store.state.user_id,
+        crossDomain: true,
+        data: {},
+        success: function(data, textStatus, jqXHR) {
+          if("ok" == data.status) {
+          
+            console.log('got user data back');
+            self.name = data.name;
+            self.email = data.email;
+            self.location = data.location;
+            self.tagline = data.tagline;
+            self.url = data.url;
+
+          }
+        }
+      })
+     }
+  },
 }
 </script>
 
