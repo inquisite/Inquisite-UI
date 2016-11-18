@@ -66,7 +66,6 @@ export default {
         success: function(data, textStatus, jqXHR) {
           if("ok" == data.status) {
           
-            console.log('got user data back');
             self.name = data.name;
             self.email = data.email;
             self.location = data.location;
