@@ -88,7 +88,9 @@ export default {
           }
 
           jQuery('#login-msg').show();
-          setTimeout( this.$root.$options.router.push('/') , 30000);
+
+          var self = this;
+          setTimeout( function() { self.$root.$options.router.push('/') }, 6000);
 
         }.bind(this)
       })
