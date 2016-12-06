@@ -67,6 +67,10 @@ export default {
       sharedState: store.state
     }
   },
+  created: function() {
+    console.log('calling userStore')
+    store.getters.get_token
+  },
   methods: {
     processLogout: function() {
 
@@ -74,16 +78,18 @@ export default {
         type: "POST",
         url: "http://localhost:5000/logout",
         crossDomain: true,
-        data: { 
-          user_id: ''
-        },
+        headers: {"Authorization": "Bearer " + store.state.token },
         success: function(data, textStatus, jqXHR) {
           if("ok" == data.status) {
             console.log('logout called');
 
+            // probably move into store logout action
+            window.sessionStorage.removeItem('jwt')
+
+
             store.dispatch('logout');
 
-            //TODO: Redirect to home
+            //TODO: Redirect to home from store?
           }
         }
       })

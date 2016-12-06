@@ -61,20 +61,27 @@ export default {
   methods: {
     processLogin: function() {
 
+      var mydata = this;
+
       jQuery.ajax({
         type: "POST",
         url: "http://localhost:5000/login",
         crossDomain: true,
         data: {
-          email: this.email,
-          password: this.password
+          username: mydata.email,
+          password: mydata.password
         },
         success: function(data, textStatus, jqXHR) {
-          if("ok" == data.status) {
+          if(data.access_token) {
+
 
             store.dispatch('login');
+            store.dispatch('setToken', data.access_token);
             store.dispatch('setUsername', data.email);
             store.dispatch('setUserID', data.user_id);
+
+            // Store token
+            window.sessionStorage.setItem('jwt', data.access_token)
 
             jQuery('#login-msg').addClass('success');
             jQuery('#login-msg .header').html('Success!');

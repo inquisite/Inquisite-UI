@@ -13,7 +13,7 @@
       <div class="ui raised segment">
         <div class="ui large list">
        
-         <div> User Details to come for {{sharedState.username}} 
+         <div> User Details to come for {{email}} 
                <div>Name: {{name}}</div>
                <div>Email: {{email}}</div>
                <div>Location: {{location}}</div>
@@ -47,7 +47,6 @@ export default {
     }
   },
   created: function() {
-      console.log(' created lifecycle hook ... ');
       this.getUser()   
   },
   watch: {
@@ -60,12 +59,19 @@ export default {
 
       jQuery.ajax({
         type: "POST",
-        url: "http://localhost:5000/people/" + store.state.user_id,
+        url: "http://localhost:5000/people/" + this.$route.params.id,
         crossDomain: true,
-        data: {},
+        headers: {"Authorization": "Bearer " + store.state.token },
+        error: function(jqXHR, textStatus, errorThrown) {
+          if("error" == textStatus) { self.$router.go('/login') }
+        },
         success: function(data, textStatus, jqXHR) {
+
+          console.log('checking response');
+          console.log( data )
+
           if("ok" == data.status) {
-          
+            
             self.name = data.name;
             self.email = data.email;
             self.location = data.location;

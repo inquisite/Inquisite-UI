@@ -101,11 +101,11 @@ export default {
   methods: {
     getUser: function() {
     
-      var self = this;
+      var mydata = this;
 
       jQuery.ajax({
         type: "POST",
-        url: "http://localhost:5000/people/" + store.state.user_id,
+        url: "http://localhost:5000/people/" + mydata.state.user_id,
         crossDomain: true,
         data: {},
         success: function(data, textStatus, jqXHR) {

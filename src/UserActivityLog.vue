@@ -1,8 +1,8 @@
 <template>
-<div id="user-profile">
+<div id="user-activity">
   <div class="ui grid">
     <div class="sixteen wide column">
-      <h1>User Profile</h1>
+      <h1>User Activity Log</h1>
     </div>
   </div>
 
@@ -13,7 +13,7 @@
       <div class="ui raised segment">
         <div class="ui large list">
        
-         <div> User Details to come </div> 
+         <div> User Activity Log to come </div> 
 
         </div>  
       </div>
@@ -27,7 +27,7 @@
 import store from './store.js'
 
 export default { 
-  name: 'user-profile',
+  name: 'user-activity',
   data: function() {
     return {}
   },
