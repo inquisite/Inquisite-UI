@@ -1,6 +1,3 @@
-//import {router} from '../main'
-//import store from '../store'
-
 // userStore object
 export default {
   state: {
@@ -16,8 +13,6 @@ export default {
          
         console.log('jwt: ' + jwt)
         state.token = jwt
-
-      //return jwt
     }
   }
 }
