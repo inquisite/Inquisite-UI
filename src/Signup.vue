@@ -81,14 +81,24 @@ export default {
       tagline: '',
       url: '',
       password: '',
+      api_endpoint: ''
     }
+  },
+  created: function() {
+    this.$http.get('/inqusite-local-config.json').then(function(response) {
+      this.api_endpoint = response.data.api_endpoint;
+    }, function(response) {
+      console.log('there was an error');
+    });
   },
   methods: {
     processSignup: function() {
 
+      var self = this;
+
       jQuery.ajax({
         type: "POST",
-        url: "http://localhost:5000/people/add",
+        url: self.api_endpoint + "/people/add",
         crossDomain: true,
         data: {
           name: this.name,

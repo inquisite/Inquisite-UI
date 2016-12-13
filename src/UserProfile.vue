@@ -43,11 +43,19 @@ export default {
       email: '',
       location: '',
       tagline: '',
-      url: ''
+      url: '',
+      api_endpoint: ''
     }
   },
   created: function() {
-      this.getUser()   
+
+      this.$http.get('/inqusite-local-config.json').then(function(response) {
+        this.api_endpoint = response.data.api_endpint;
+        this.getUser(),
+      }, function(response) {
+        console.log('there was an error');
+      });
+
   },
   watch: {
     '$route': 'getUser'
@@ -59,7 +67,7 @@ export default {
 
       jQuery.ajax({
         type: "POST",
-        url: "http://localhost:5000/people/" + this.$route.params.id,
+        url: self.api_endpoint + "/people/" + self.$route.params.id,
         crossDomain: true,
         headers: {"Authorization": "Bearer " + store.state.token },
         error: function(jqXHR, textStatus, errorThrown) {

@@ -4,7 +4,11 @@
 
 ## Build Setup
 
+
 ``` bash
+# setup inqusite config with local settings
+mv inqusite-sample-config.json inqusite-local-config.json
+
 # install dependencies
 npm install
 

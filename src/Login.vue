@@ -55,8 +55,18 @@ export default {
     return {
       email: '',
       password: '',
-      sharedState: store.state
+      sharedState: store.state,
+      api_endpoint: ''
     }
+  },
+  created: function() {
+    console.log('Login ready event fired');
+    this.$http.get('/inqusite-local-config.json').then(function(response) {
+      console.log('getting config data {data}')
+      this.api_endpoint = response.data.api_endpoint;
+    }, function(response) {
+      console.log('there was an error');
+    });
   },
   methods: {
     processLogin: function() {
@@ -65,7 +75,7 @@ export default {
 
       jQuery.ajax({
         type: "POST",
-        url: "http://localhost:5000/login",
+        url: mydata.api_endpoint + "/login",
         crossDomain: true,
         data: {
           username: mydata.email,

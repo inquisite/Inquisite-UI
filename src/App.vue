@@ -64,19 +64,29 @@ export default {
   data: function() {
     return {
       msg: 'Welcome to Your Vue.js App',
-      sharedState: store.state
+      sharedState: store.state,
+      api_endpoint: ''
     }
   },
   created: function() {
     console.log('calling userStore')
     store.getters.get_token
+
+    this.$http.get('/inqusite-local-config.json').then(function(response) {
+      this.api_endpoint = response.data.api_endpoint;
+    }, function(response) {
+      console.log('there was an error');
+    });
+
   },
   methods: {
     processLogout: function() {
 
+      var self = this;
+
       jQuery.ajax({
         type: "POST",
-        url: "http://localhost:5000/logout",
+        url: self.api_endpoint + "/logout",
         crossDomain: true,
         headers: {"Authorization": "Bearer " + store.state.token },
         success: function(data, textStatus, jqXHR) {
@@ -85,8 +95,6 @@ export default {
 
             // probably move into store logout action
             window.sessionStorage.removeItem('jwt')
-
-
             store.dispatch('logout');
 
             //TODO: Redirect to home from store?
