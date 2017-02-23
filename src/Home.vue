@@ -2,7 +2,7 @@
 <div id="home">
   <div class="ui grid">
     <div class="sixteen wide column">
-      <h1>HOME PAGE - New York Scapes</h1>
+      <h1>New York Scapes</h1>
     </div>
   </div>
 

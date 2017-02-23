@@ -50,8 +50,8 @@ export default {
   created: function() {
 
       this.$http.get('/inqusite-local-config.json').then(function(response) {
-        this.api_endpoint = response.data.api_endpint;
-        this.getUser(),
+        this.api_endpoint = response.data.api_endpoint;
+        this.getUser();
       }, function(response) {
         console.log('there was an error');
       });
