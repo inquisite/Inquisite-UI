@@ -1,27 +1,25 @@
 <template>
 <div id="user-profile">
-  <div class="ui grid">
-    <div class="sixteen wide column">
-      <h1>User Profile</h1>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h1>User Profile</h1>
+      </div>
     </div>
   </div>
 
-  <div class="ui section divider"></div>
-
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui raised segment">
-        <div class="ui large list">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel">
+        <div class="panel-body">
        
-         <div> User Details to come for {{email}} 
-               <div>Name: {{name}}</div>
-               <div>Email: {{email}}</div>
-               <div>Location: {{location}}</div>
-               <div>Tagline: {{tagline}}</div>
-               <div>URL: {{url}}</div>
-         </div> 
-         
-
+          <div> User Details to come for {{email}} 
+            <div>Name: {{name}}</div>
+            <div>Email: {{email}}</div>
+            <div>Location: {{location}}</div>
+            <div>Tagline: {{tagline}}</div>
+            <div>URL: {{url}}</div>
+          </div> 
 
         </div>  
       </div>

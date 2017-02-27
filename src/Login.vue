@@ -1,17 +1,17 @@
 <template>
 <div id="login">
-  <div class="ui grid">
-    <div class="sixteen wide column">
-      <h1>Inquisite Login</h1>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h1>Inquisite Login</h1>
+      </div>
     </div>
   </div>
 
-  <div class="ui section divider"></div>
-
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui raised segment">
-        <div class="ui large list">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel">
+        <div class="panel-body">
        
           <form id="login-form" name="login-form" method="POST" action="">
 
@@ -22,18 +22,18 @@
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="email" name="email" placeholder="Email" v-model="email">
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="password" id="password" name="password" placeholder="Password" v-model="password">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
               </div>
             </div>
 
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processLogin" v-on:click.prevent="processLogin" class="ui primary button">Login</button>
+              <button v-on:submit.prevent="processLogin" v-on:click.prevent="processLogin" class="btn btn-primary">Login</button>
             </div>
 
           </form>

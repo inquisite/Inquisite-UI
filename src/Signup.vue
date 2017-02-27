@@ -1,17 +1,18 @@
 <template>
 <div id="signup">
-  <div class="ui grid">
-    <div class="sixteen wide column">
-      <h1>Signup with Inquisite</h1>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h1>Signup with Inquisite</h1>
+      </div>
     </div>
   </div>
 
-  <div class="ui section divider"></div>
 
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui raised segment">
-        <div class="ui large list">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel">
+        <div class="panel-body">
 
           <form id="signup-form" name="signup-form" method="POST" action="">
 
@@ -22,42 +23,42 @@
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="name" name="name" placeholder="Name" v-model="name">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="email" name="email" placeholder="Email" v-model="email">
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="location" name="location" placeholder="Location" v-model="location">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="location">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
+                <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="url" name="url" placeholder="URL" v-model="url">
+                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="password" id="password" name="password" placeholder="Password" v-model="password">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
               </div>
             </div>
 
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="ui primary button">Submit</button>
+              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="btn btn-primary">Submit</button>
             </div>
 
           </form>

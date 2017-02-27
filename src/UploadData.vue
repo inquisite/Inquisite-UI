@@ -1,27 +1,27 @@
 <template>
 <div id="upload-data">
-  <div class="ui grid">
-    <div class="sixteen wide column">
-      <h1>Upload Data</h1>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h1>Upload Data</h1>
+      </div>
     </div>
   </div>
 
-  <div class="ui section divider"></div>
-
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui raised segment">
-        <div class="ui large list">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel">
+        <div class="panel-body">
        
           <form id="signup-form" name="signup-form" method="POST" action="">
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="name" name="name" placeholder="Name" v-model="name">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
               </div>
             </div>
 
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="ui primary button">Submit</button>
+              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="btn btn-primary">Submit</button>
             </div>
 
           </form>

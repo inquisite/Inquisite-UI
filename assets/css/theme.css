@@ -23,3 +23,26 @@
 	padding-top:.6em;
 	padding-bottom:.6em;
 }
+
+.list-item {
+  border-bottom: 1px solid rgba(34,36,38,.15);
+  padding-bottom: 5px;
+}
+
+.input-container {
+  display: inline-block;
+  width: 450px;
+  padding: 8px 15px 0 15px;
+}
+
+.mobile-btn-container {
+  margin-right: 0px !important;
+  padding-top: 15px;
+}
+
+#mobileNav-container { margin-top: 50px; }
+#mobileNav li { padding: 1%; border-bottom: 1px solid rgba(34,36,38,.15); }
+
+.navbar-nav li {
+  border-left: 1px solid rgba(34,36,38,.15);
+}
