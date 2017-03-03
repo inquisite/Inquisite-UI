@@ -21,7 +21,7 @@
          <div id="mobileNav-container" class="container collapse">
            <ul id="mobileNav" class="nav nav-pills nav-stacked">
              <li><router-link class="item" to="/upload">Upload Data</router-link></li>
-             <li><router-link class="item" to="/searchrefine">Search &amp; Refine</a></li>
+             <li><router-link class="item" to="/searchrefine">Search &amp; Refine</router-link></li>
              <li><router-link class="item" to="/visualize/map">Map</router-link></li>
              <li><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
              <li><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
@@ -81,12 +81,12 @@
                  <li><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
                </ul>
 
-            <li>
+            </li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
 
-            <li>
+            <li v-if="isLogggedIn">
               <div class="input-container">
               <div class="input-group">
                 <input type="text" class="form-control" aria-label="Choose a Repository" value="New York Scapes">
@@ -96,9 +96,7 @@
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="#">City Census Data</a></li>
-                    <li><a href="#">New York Scapes</a></li>
-                    <li><a href="#">NYC Street Addresses (1850 - 1901)</a></li>
+                   	<li v-for="repository in repositories"><a href="#">{{ repository.name }}</a></li>
                   </ul>
 
                 </div>
@@ -145,9 +143,10 @@ export default {
   name: 'app',
   data: function() {
     return {
-      msg: 'Welcome to Your Vue.js App',
+      msg: 'Inquisite',
       sharedState: store.state,
-      api_endpoint: ''
+      api_endpoint: '',
+      repositories: []
     }
   },
   created: function() {
@@ -156,18 +155,23 @@ export default {
 
     this.$http.get('/inqusite-local-config.json').then(function(response) {
       this.api_endpoint = response.data.api_endpoint;
+		this.getRepositoryList();
     }, function(response) {
       console.log('there was an error');
     });
 
   },
+  computed: {
+		isLogggedIn() {
+			return store.getters.is_loggedin;
+		}
+	},
   methods: {
     processLogout: function() {
-
       var self = this;
 
       jQuery.ajax({
-        type: "POST",
+        type: "GET",
         url: self.api_endpoint + "/logout",
         crossDomain: true,
         headers: {"Authorization": "Bearer " + store.state.token },
@@ -179,7 +183,24 @@ export default {
             window.sessionStorage.removeItem('jwt')
             store.dispatch('logout');
 
-            //TODO: Redirect to home from store?
+            // Redirect to home from store
+            self.$root.$options.router.push('/')
+          }
+        }
+      })
+    },
+    
+    getRepositoryList: function() {
+      var self = this;
+      jQuery.ajax({
+        type: "GET",
+        url: self.api_endpoint + "/repositories",
+        crossDomain: true,
+        headers: {"Authorization": "Bearer " + store.state.token },
+        success: function(data, textStatus, jqXHR) {
+          if("ok" == data.status) {
+            console.log('got repos', data['repos']);
+            self.repositories = data['repos'];
           }
         }
       })

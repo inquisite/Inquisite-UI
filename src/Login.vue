@@ -94,24 +94,27 @@ export default {
             window.sessionStorage.setItem('jwt', data.access_token)
 
             jQuery('#login-msg').addClass('success');
-            jQuery('#login-msg .header').html('Success!');
+            jQuery('#login-msg .header').html('You are now logged in');
             jQuery('#login-msg .msg').html(data.msg);
 
-            var self = this;
-            setTimeout( function() { self.$root.$options.router.push('/') }, 6000);
+            setTimeout( function() { mydata.$root.$options.router.push('/') }, 1500);
 
           } else {
-
             jQuery('#login-msg').addClass('error');
-            jQuery('#login-msg .header').html('There was a problem');
+            jQuery('#login-msg .header').html('Login failed');
             jQuery('#login-msg .msg').html(data.msg);
           }
 
           jQuery('#login-msg').show();
-
-          
-        }.bind(this)
-      })
+        },
+        statusCode: {
+          400: function() {
+            jQuery('#login-msg .header').html('Login failed');
+            jQuery('#login-msg .msg').html("");
+            jQuery('#login-msg').addClass('error').show();
+		  }
+		}
+      });
     }
   }
 } 

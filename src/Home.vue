@@ -1,16 +1,19 @@
 <template>
 <div id="home">
-  <div class="row">
+  <div class="row" v-if="!isLogggedIn">
+		 <h1>Welcome to New York Scapes</h1>
+  </div>
+  <div class="row" v-if="isLogggedIn">
     <div class="col-sm-12">
 
       <div class="page-header">
-        <h1>New York Scapes</h1>
+        <h1>Dashboard</h1>
       </div>
 
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" v-if="isLogggedIn">
     <div class="col-sm-6">
 
       <div class="panel panel-primary">
@@ -43,7 +46,7 @@
                   <small>by Nick W. 10,213 records, 9 elements</small>
                 </div>
               </div>
-            <li>
+            </li>
           </ul>
 
         </div>
@@ -65,7 +68,7 @@
 
   <hr/>   
 
-  <div class="row">
+  <div class="row" v-if="isLogggedIn">
     <div class="col-sm-6">
       <h4>Users in this Repository</h4>
 
@@ -169,7 +172,16 @@
 </template>
 
 <script>
-export default { name: 'home' }
+	import store from './store.js'
+	export default { 
+		name: 'home',
+		computed: {
+			isLogggedIn() {
+				return store.getters.is_loggedin;
+			}
+		}
+	}
+	
 </script>
 
 <style>
