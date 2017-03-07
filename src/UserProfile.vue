@@ -13,12 +13,12 @@
       <div class="panel">
         <div class="panel-body">
        
-          <div> User Details to come for {{email}} 
-            <div>Name: {{name}}</div>
-            <div>Email: {{email}}</div>
-            <div>Location: {{location}}</div>
-            <div>Tagline: {{tagline}}</div>
-            <div>URL: {{url}}</div>
+          <div> User Details to come for {{sharedState.user.email}} 
+            <div>Name: {{sharedState.user.name}}</div>
+            <div>Email: {{sharedState.user.email}}</div>
+            <div>Location: {{sharedState.user.location}}</div>
+            <div>Tagline: {{sharedState.user.tagline}}</div>
+            <div>URL: {{sharedState.user.url}}</div>
           </div> 
 
         </div>  
@@ -31,6 +31,7 @@
 
 <script>
 import store from './store.js'
+import config from './config.js'
 
 export default { 
   name: 'user-profile',
@@ -42,52 +43,18 @@ export default {
       location: '',
       tagline: '',
       url: '',
-      api_endpoint: ''
     }
-  },
-  created: function() {
-
-      this.$http.get('/inqusite-local-config.json').then(function(response) {
-        this.api_endpoint = response.data.api_endpoint;
-        this.getUser();
-      }, function(response) {
-        console.log('there was an error');
-      });
-
   },
   watch: {
     '$route': 'getUser'
   },
+  created: function() {
+    this.getUser();
+  },
   methods: {
     getUser: function() {
-    
-      var self = this;
-
-      jQuery.ajax({
-        type: "POST",
-        url: self.api_endpoint + "/people/" + self.$route.params.id,
-        crossDomain: true,
-        headers: {"Authorization": "Bearer " + store.state.token },
-        error: function(jqXHR, textStatus, errorThrown) {
-          if("error" == textStatus) { self.$router.go('/login') }
-        },
-        success: function(data, textStatus, jqXHR) {
-
-          console.log('checking response');
-          console.log( data )
-
-          if("ok" == data.status) {
-            
-            self.name = data.name;
-            self.email = data.email;
-            self.location = data.location;
-            self.tagline = data.tagline;
-            self.url = data.url;
-
-          }
-        }
-      })
-     }
+      store.dispatch('getUserInfo', {token: store.state.token});
+    }
   },
 }
 </script>

@@ -12,7 +12,9 @@ const state = {
   logged_in: false,
   username: '',
   user_id: '',
-  token: ''
+  token: '',
+  user: {},
+  repositories: []
 }
 
 const store = new Vuex.Store({

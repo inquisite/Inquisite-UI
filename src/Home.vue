@@ -1,9 +1,9 @@
 <template>
 <div id="home">
-  <div class="row" v-if="!isLogggedIn">
+  <div class="row" v-if="!isLoggedIn">
 		 <h1>Welcome to New York Scapes</h1>
   </div>
-  <div class="row" v-if="isLogggedIn">
+  <div class="row" v-if="isLoggedIn">
     <div class="col-sm-12">
 
       <div class="page-header">
@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <div class="row" v-if="isLogggedIn">
+  <div class="row" v-if="isLoggedIn">
     <div class="col-sm-6">
 
       <div class="panel panel-primary">
@@ -68,7 +68,7 @@
 
   <hr/>   
 
-  <div class="row" v-if="isLogggedIn">
+  <div class="row" v-if="isLoggedIn">
     <div class="col-sm-6">
       <h4>Users in this Repository</h4>
 
@@ -173,10 +173,11 @@
 
 <script>
 	import store from './store.js'
+ 
 	export default { 
 		name: 'home',
 		computed: {
-			isLogggedIn() {
+			isLoggedIn() {
 				return store.getters.is_loggedin;
 			}
 		}

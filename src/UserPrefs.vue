@@ -23,35 +23,35 @@
             <div class="item form-item">
               <div class="ui fluid labeled input content">
                 <div class="ui label">Name:</div>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="sharedState.user.name">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid labeled input content">
                 <div class="ui label">Email:</div>
-                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="sharedState.user.email">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid labeled input content">
                 <div class="ui label">Location:</div>
-                <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="location">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="sharedState.user.location">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid labeled input content">
                 <div class="ui label">Tagline</div>
-                <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
+                <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="sharedState.user.tagline">
               </div>
             </div>
 
             <div class="item form-item">
               <div class="ui fluid labeled input content">
                 <div class="ui label">URL:</div>
-                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
+                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="sharedState.user.url">
               </div>
             </div>
 
@@ -78,6 +78,7 @@
 
 <script>
 import store from './store.js'
+import config from './config.js'
 
 export default { 
   name: 'user-prefs',
@@ -91,26 +92,17 @@ export default {
       url: ''
     }
   },
-  created: function() {
-  
-    this.$http.get('/inqusite-local-config.json').thin(function(response) {
-      this.api_endpoint = response.data.api_endpoint;
-      this.getUser();
-    }, function(response) {
-      console.log('there was an error');
-    });
-  },
-  watch: {
-    '$route': 'getUser'
-  },
-  methods: {
+    methods: {
     getUser: function() {
     
-      var mydata = this;
+      // TODO: .. not sure this is still needed?
 
-      jQuery.ajax({
+
+      //var mydata = this;
+
+      /*jQuery.ajax({
         type: "POST",
-        url: "http://localhost:5000/people/" + mydata.state.user_id,
+        url: config.api_endpoint + '/people/' + mydata.state.user_id,
         crossDomain: true,
         data: {},
         success: function(data, textStatus, jqXHR) {
@@ -124,7 +116,7 @@ export default {
 
           }
         }
-      })
+      })*/
      }
   },
 

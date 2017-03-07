@@ -27,31 +27,36 @@
              <li><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
              <li><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
 
-             <li>
-               <div class="input-container">
-                 <div class="input-group">
-                   <input type="text" class="form-control" aria-label="Choose a Repository" value="New York Scapes">
-                   <div class="input-group-btn">
-                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                       Choose a Repository <span class="caret"></span>
-                     </button>
+             <li v-if="hasRepos">
+              <div class="input-container">
+              <div class="input-group">
+                <input type="text" class="form-control" aria-label="Choose a Repository" value="New York Scapes">
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Choose a Repository <span class="caret"></span>
+                  </button>
 
-                     <ul class="dropdown-menu dropdown-menu-right">
-                       <li><a href="#">City Census Data</a></li>
-                       <li><a href="#">New York Scapes</a></li>
-                       <li><a href="#">NYC Street Addresses (1850 - 1901)</a></li>
-                     </ul>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                   	<li v-for="repository in sharedState.repositories"><router-link to="#">{{ repository.name }}</router-link></li>
+                  </ul>
 
-                   </div>
-                 </div>
-               </div> 
+                </div>
+              </div>
+              </div>
+            </li>
+            <li v-else></li>
+
+             <li v-if="isLoggedIn">
+               <router-link to="/user/preferences" class="item">User Preferences</router-link>
              </li>
-
-             <li v-if="sharedState.logged_in"><router-link :to="{name: 'user-prefs', params: {id: sharedState.user_id}}" class="item">User Preferences</router-link></li>
-             <li v-if="sharedState.logged_in"><router-link :to="{name: 'user-profile', params: {id: sharedState.user_id}}" class="item">User Profile</router-link></li>
-             <li v-if="sharedState.logged_in"><router-link :to="{name: 'user-activity', params: {id: sharedState.user_id}}" class="item">Activity Log</router-link></li>
-             <li v-if="sharedState.logged_in"><a @click="processLogout" class="item">Logout</a></li>
-             <li v-if="!sharedState.logged_in"><router-link to="/login" class="item">Login</router-link></li>
+             <li v-if="isLoggedIn">
+               <router-link to="/user/profile" class="item">User Profile</router-link>
+             </li>
+             <li v-if="isLoggedIn">
+               <router-link to="/user/activity" class="item">Activity Log</router-link>
+             </li>
+             <li v-if="isLoggedIn"><a @click="processLogout" class="item">Logout</a></li>
+             <li v-if="!isLoggedIn"><router-link to="/login" class="item">Login</router-link></li>
            </ul>
          </div>
 
@@ -68,7 +73,7 @@
           <ul class="nav navbar-nav navbar-left">
 
             <li><router-link to="/upload" class="item">Upload Data</router-link></li>
-            <li><a v-link="{ name: 'searchrefine'}" class="item">Search &amp; Refine</a></li>
+            <li><router-link to="/searchrefine" class="item">Search &amp; Refine</router-link></li>
             <li class="dropdown">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                  Visualize <span class="caret"></span>
@@ -86,7 +91,7 @@
 
           <ul class="nav navbar-nav navbar-right">
 
-            <li v-if="isLogggedIn">
+            <li v-if="hasRepos">
               <div class="input-container">
               <div class="input-group">
                 <input type="text" class="form-control" aria-label="Choose a Repository" value="New York Scapes">
@@ -96,23 +101,26 @@
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repository in repositories"><a href="#">{{ repository.name }}</a></li>
+                   	<li v-for="repository in sharedState.repositories"><router-link to="#">{{ repository.name }}</router-link></li>
                   </ul>
 
                 </div>
               </div>
               </div>
             </li>
+            <li v-else></li>
+
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <span class="glyphicon glyphicon-user"></span><span class="caret"></span>
               </a>
 
-              <ul class="dropdown-menu" v-if="sharedState.logged_in">
-                <li><router-link :to="{name: 'user-prefs', params: {id: sharedState.user_id}}" class="item">User Preferences</router-link></li>
-                <li><router-link :to="{name: 'user-profile', params: {id: sharedState.user_id}}" class="item">User Profile</router-link></li>
-                <li><router-link :to="{name: 'user-activity', params: {id: sharedState.user_id}}" class="item">Activity Log</router-link></li>
+              <ul class="dropdown-menu" v-if="isLoggedIn">
+
+                <li><router-link to="/user/preferences" class="item">User Preferences</router-link></li>
+                <li><router-link to="/user/profile" class="item">User Profile</router-link></li>
+                <li><router-link to="/user/activity" class="item">Activity Log</router-link></li>
                 <li><a @click="processLogout" class="item">Logout</a></li>
               </ul>
 
@@ -138,6 +146,7 @@
 <script>
 
 import store from './store.js'
+import config from './config.js'
 
 export default {
   name: 'app',
@@ -145,65 +154,49 @@ export default {
     return {
       msg: 'Inquisite',
       sharedState: store.state,
-      api_endpoint: '',
-      repositories: []
     }
   },
   created: function() {
-    console.log('calling userStore')
-    store.getters.get_token
-
-    this.$http.get('/inqusite-local-config.json').then(function(response) {
-      this.api_endpoint = response.data.api_endpoint;
-		this.getRepositoryList();
-    }, function(response) {
-      console.log('there was an error');
-    });
-
+    if(store.getters.is_loggedin) {
+      this.getRepositoryList();
+    }
+  },
+  watch: {
+    '$route': 'getRepositoryList'
   },
   computed: {
-		isLogggedIn() {
+		isLoggedIn: function() {
 			return store.getters.is_loggedin;
-		}
+		},
+        hasRepos: function() {
+          return store.getters.repositories.length;
+        }
 	},
   methods: {
     processLogout: function() {
-      var self = this;
 
-      jQuery.ajax({
+      store.dispatch('doLogout', { token: store.state.token });
+
+      /*jQuery.ajax({
         type: "GET",
-        url: self.api_endpoint + "/logout",
+        url: config.api_endpoint + "/logout",
         crossDomain: true,
         headers: {"Authorization": "Bearer " + store.state.token },
         success: function(data, textStatus, jqXHR) {
-          if("ok" == data.status) {
-            console.log('logout called');
+          console.log('logout called');
 
-            // probably move into store logout action
-            window.sessionStorage.removeItem('jwt')
-            store.dispatch('logout');
+          // probably move into store logout action
+          window.sessionStorage.removeItem('jwt')
+          store.dispatch('logout');
 
-            // Redirect to home from store
-            self.$root.$options.router.push('/')
-          }
+          // Redirect to home from store
+          self.$root.$options.router.push('/')
         }
-      })
+      })*/
     },
     
     getRepositoryList: function() {
-      var self = this;
-      jQuery.ajax({
-        type: "GET",
-        url: self.api_endpoint + "/repositories",
-        crossDomain: true,
-        headers: {"Authorization": "Bearer " + store.state.token },
-        success: function(data, textStatus, jqXHR) {
-          if("ok" == data.status) {
-            console.log('got repos', data['repos']);
-            self.repositories = data['repos'];
-          }
-        }
-      })
+      store.dispatch('getRepositories', { token: store.state.token });
     },
     
   },

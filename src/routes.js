@@ -29,7 +29,7 @@ export default [
   { path: '/signup', name: 'signup', component: Signup },
   { path: '/login', name: 'login', component: Login },
   { path: '/upload', name: 'upload-data', component: UploadData },
-  { path: '/user/:id/preferences', name: 'user-prefs', component: UserPrefs },
-  { path: '/user/:id/profile', name: 'user-profile', component: UserProfile },
-  { path: '/user/:id/activity', name: 'user-activity', component: UserActivityLog }
+  { path: '/user/preferences', name: 'user-prefs', component: UserPrefs },
+  { path: '/user/profile', name: 'user-profile', component: UserProfile },
+  { path: '/user/activity', name: 'user-activity', component: UserActivityLog }
 ]

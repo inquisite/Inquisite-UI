@@ -72,6 +72,9 @@
 </template>
 
 <script>
+
+import config from './config.js'
+
 export default { 
   name: 'home',
   data: function() {
@@ -82,16 +85,9 @@ export default {
       tagline: '',
       url: '',
       password: '',
-      api_endpoint: ''
     }
   },
-  created: function() {
-    this.$http.get('/inqusite-local-config.json').then(function(response) {
-      this.api_endpoint = response.data.api_endpoint;
-    }, function(response) {
-      console.log('there was an error');
-    });
-  },
+  
   methods: {
     processSignup: function() {
 
@@ -99,7 +95,7 @@ export default {
 
       jQuery.ajax({
         type: "POST",
-        url: self.api_endpoint + "/people/add",
+        url: config.api_endpoint + "/people/add",
         crossDomain: true,
         data: {
           name: this.name,

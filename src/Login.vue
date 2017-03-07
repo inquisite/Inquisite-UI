@@ -48,6 +48,7 @@
 
 <script>
 import store from './store.js'
+import config from './config.js'
 
 export default { 
   name: 'login',
@@ -56,26 +57,21 @@ export default {
       email: '',
       password: '',
       sharedState: store.state,
-      api_endpoint: ''
     }
   },
-  created: function() {
-    console.log('Login ready event fired');
-    this.$http.get('/inqusite-local-config.json').then(function(response) {
-      console.log('getting config data {data}')
-      this.api_endpoint = response.data.api_endpoint;
-    }, function(response) {
-      console.log('there was an error');
-    });
-  },
+  
   methods: {
     processLogin: function() {
 
-      var mydata = this;
+      // Stores Token in sessionStorage on success
+      store.dispatch('doLogin', {username: this.email, password: this.password})
+     
+      // TODO: Move messaging to template for reactive display
 
-      jQuery.ajax({
+
+      /*jQuery.ajax({
         type: "POST",
-        url: mydata.api_endpoint + "/login",
+        url: config.api_endpoint + "/login",
         crossDomain: true,
         data: {
           username: mydata.email,
@@ -83,7 +79,6 @@ export default {
         },
         success: function(data, textStatus, jqXHR) {
           if(data.access_token) {
-
 
             store.dispatch('login');
             store.dispatch('setToken', data.access_token);
@@ -114,7 +109,7 @@ export default {
             jQuery('#login-msg').addClass('error').show();
 		  }
 		}
-      });
+      });*/
     }
   }
 } 
