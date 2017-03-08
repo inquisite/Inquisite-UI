@@ -91,7 +91,17 @@ export default {
   methods: {
     processSignup: function() {
 
-      var self = this;
+
+      store.dispatch('addPerson', 
+          { name: this.name, 
+            email: this.email, 
+            location: this.location, 
+            tagline: this.tagline, 
+            url: this.url, 
+            password: this.password
+      });
+
+      /*var self = this;
 
       jQuery.ajax({
         type: "POST",
@@ -123,7 +133,7 @@ export default {
  
           jQuery('#signup-msg').show();
         }
-      })
+      })*/
     }
   } 
   

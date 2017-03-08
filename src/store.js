@@ -14,6 +14,7 @@ const state = {
   user_id: '',
   token: '',
   user: {},
+  active_repo: {},
   repositories: []
 }
 

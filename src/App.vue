@@ -1,6 +1,7 @@
 <template>
   <div id="app">
 
+     <!-- Mobile Nav -->
      <nav role="navigation" class="navbar navbar-static-top visible-sm visible-xs">
        <div class="container-fluid">
          <div class="navbar-header">
@@ -62,6 +63,7 @@
 
      </nav>
 
+     <!-- Desktop Nav -->
      <nav role="navigation" class="navbar navbar-default navbar-static-top hidden-sm hidden-xs">
         <div class="container-fluid">
           <div class="navbar-header">
@@ -94,14 +96,14 @@
             <li v-if="hasRepos">
               <div class="input-container">
               <div class="input-group">
-                <input type="text" class="form-control" aria-label="Choose a Repository" value="New York Scapes">
+                <input type="text" class="form-control" aria-label="Choose a Repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Choose a Repository <span class="caret"></span>
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repository in sharedState.repositories"><router-link to="#">{{ repository.name }}</router-link></li>
+                   	<li v-for="repository in sharedState.repositories"><a @click="setActiveRepo(repository)">{{ repository.name }}</a></li>
                   </ul>
 
                 </div>
@@ -174,31 +176,17 @@ export default {
 	},
   methods: {
     processLogout: function() {
-
       store.dispatch('doLogout', { token: store.state.token });
-
-      /*jQuery.ajax({
-        type: "GET",
-        url: config.api_endpoint + "/logout",
-        crossDomain: true,
-        headers: {"Authorization": "Bearer " + store.state.token },
-        success: function(data, textStatus, jqXHR) {
-          console.log('logout called');
-
-          // probably move into store logout action
-          window.sessionStorage.removeItem('jwt')
-          store.dispatch('logout');
-
-          // Redirect to home from store
-          self.$root.$options.router.push('/')
-        }
-      })*/
     },
     
     getRepositoryList: function() {
       store.dispatch('getRepositories', { token: store.state.token });
     },
     
+    setActiveRepo: function(repository) {
+      store.commit('setActiveRepo', repository);
+    }
+
   },
 }
 </script>

@@ -24,8 +24,17 @@ export const doLogin = function(context, data) {
 export const doLogout = function(context, token) {
   return api.get('/logout', token)
     .then(function(response) { 
-        window.sessionsStorage.setItem('jwt', '');
+        window.sessionsStorage.removeItem('jwt');
         context.commit('logout')
+    })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
+// People
+export const addPerson = function(context, data) {
+  return api.post('/people/add', data)
+    .then(function(response) {
+      context.commit('ADD_PERSON', response); 
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
@@ -42,3 +51,11 @@ export const getRepositories = function(context, token) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+// Repo Data
+export const uploadRepoData = function(context, datafile) {
+  return api.post('/repositories/ repo_id /upload_data', data)
+    .then(function(response) {
+      context.commit('UPLOAD_REPO_DATA', response)
+    })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
