@@ -6,6 +6,6 @@ export const get_token = state => {
     
     if (state.token) { state.logged_in = true }
 
-    console.log("state token: " + state.token)
     return state.token
 }
+export const get_rwt = state => { return window.sessionStorage.getItem('rwt') }

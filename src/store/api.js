@@ -10,32 +10,55 @@ var instance = axios.create({
 
 export default {
 
-  get(url, request) {
+  get(url, req_config) {
 
-    return instance.get(url, {headers: {'Authorization': 'Bearer ' + request.token }})
+    console.log('GET CONFIG:');
+    console.log( req_config );
+
+    return instance.get(url, req_config)
       .then(function(response) { console.log('API GET SUCCESS'); Promise.resolve(response.data); return response.data; })
-      .catch(function(error) { console.log('API GET FAILURE'); Promise.reject(error); return error; });
+      .catch(function(error) { 
+        console.log('API GET FAILURE'); 
+        //Promise.reject(error); 
+
+        Promise.reject('do refresh');
+        if(error.status === undefined) {
+          console.log('Im gonna try refresh now');
+          return "do refresh";
+        }
+
+        return error;
+      });
   },
-  post(url, request) {
-  
-    var head = {'Content-Type': 'application/x-www-form-urlencoded'};
-    if(request.token !== undefined) {
-      head = {'Authorization': 'Bearer ' + request.token, 'Content-Type': 'application/x-www-form-urlencoded'}  
-    }
 
-    console.log('request');
-    console.log(request)
+  post(url, data, req_config) {
 
-    var qs_request = qs.stringify(request);
+    console.log('RAW POST DATA:');
+    console.log(data);
+    data = qs.stringify(data);
+ 
+    console.log('STRING DATA');
+    console.log(data);
 
-    console.log('qs request');
-    console.log(qs_request);
+    console.log('POST Config');
+    console.log(req_config);
 
-    console.log('headers: ');
-    console.log(head);
 
-    return instance.post(url, qs_request, {headers: head})
+    return instance.post(url, data, req_config)
       .then(function(response) { console.log('API POST SUCCESS'); Promise.resolve(response); return response.data;})
       .catch(function(error) { console.log('API POST FAILURE'); Promise.reject(error); return error;});
   },
+
+  put(url, data, req_config) {
+
+    console.log('RAW PUT DATA:');
+    console.log(data);
+
+    console.log('PUT Config');
+    console.log(req_config);
+
+    return instance.put(url, data, req_config)
+      .then(function(response) { console.log('API PUT SUCESS'); Promise.resolve(response); return response.data;})
+      .catch(function(error) { console.log('API PUT ERROR'); Promise.reject(error); return error;});
+  }
 }

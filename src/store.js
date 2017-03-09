@@ -10,8 +10,6 @@ Vue.use(Vuex)
 
 const state = {
   logged_in: false,
-  username: '',
-  user_id: '',
   token: '',
   user: {},
   active_repo: {},

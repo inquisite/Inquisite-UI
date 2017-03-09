@@ -171,7 +171,11 @@ export default {
 			return store.getters.is_loggedin;
 		},
         hasRepos: function() {
-          return store.getters.repositories.length;
+          var length = 0;
+          if(store.getters.repositories !== undefined) {
+            length =  store.getters.repositories.length;
+          }
+          return length;
         }
 	},
   methods: {

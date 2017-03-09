@@ -63,53 +63,11 @@ export default {
   methods: {
     processLogin: function() {
 
-      // Stores Token in sessionStorage on success
-      store.dispatch('doLogin', {username: this.email, password: this.password})
-     
-      // TODO: Move messaging to template for reactive display
+      var self = this;
 
-
-      /*jQuery.ajax({
-        type: "POST",
-        url: config.api_endpoint + "/login",
-        crossDomain: true,
-        data: {
-          username: mydata.email,
-          password: mydata.password
-        },
-        success: function(data, textStatus, jqXHR) {
-          if(data.access_token) {
-
-            store.dispatch('login');
-            store.dispatch('setToken', data.access_token);
-            store.dispatch('setUsername', data.email);
-            store.dispatch('setUserID', data.user_id);
-
-            // Store token
-            window.sessionStorage.setItem('jwt', data.access_token)
-
-            jQuery('#login-msg').addClass('success');
-            jQuery('#login-msg .header').html('You are now logged in');
-            jQuery('#login-msg .msg').html(data.msg);
-
-            setTimeout( function() { mydata.$root.$options.router.push('/') }, 1500);
-
-          } else {
-            jQuery('#login-msg').addClass('error');
-            jQuery('#login-msg .header').html('Login failed');
-            jQuery('#login-msg .msg').html(data.msg);
-          }
-
-          jQuery('#login-msg').show();
-        },
-        statusCode: {
-          400: function() {
-            jQuery('#login-msg .header').html('Login failed');
-            jQuery('#login-msg .msg').html("");
-            jQuery('#login-msg').addClass('error').show();
-		  }
-		}
-      });*/
+      store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
+      .then(function() { setTimeout( function() { self.$root.$options.router.push('/') }, 1500) });
+      
     }
   }
 } 

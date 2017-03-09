@@ -8,9 +8,9 @@ export const logout = state => {
   state.username = ''
   state.user = {}
 }
-export const setUsername = function(state, username) { state.username = username }
-export const setUserID = function(state, user_id) { state.user_id = user_id }
+
 export const setToken = function(state, access_token) { state.token = access_token }
+export const setRefresh = function(state, refresh_token) { state.refresh = refresh_token }
 
 // Active Repo
 export const setActiveRepo = function(state, new_repo) { state.active_repo = new_repo }

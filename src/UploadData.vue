@@ -18,13 +18,13 @@
           <form id="signup-form" name="signup-form" method="POST" action="">
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="file" class="form-control" id="datafile" name="datafile" placeholder="Data File">
+                <input type="file" class="form-control" id="datafile" name="datafile" placeholder="Data File" @change="onFileChange">
               </div>
             </div>
 
-            <div class="item" style="padding: 10px 0">
+            <!--<div class="item" style="padding: 10px 0">
               <button v-on:submit.prevent="processData" v-on:click.prevent="processData" class="btn btn-primary">Submit</button>
-            </div>
+            </div>-->
 
           </form>
 
@@ -45,12 +45,19 @@ export default {
   data: function() {
     return {
       sharedState: store.state,
-      datafile: '',
     }
   },
   methods: {
-    processData: function() {
-      store.dispatch('uploadRepoData', {token: store.state.token, datafile: this.datafile, repo_id: store.active_repo.id});
+    onFileChange: function(e) {
+      var files = e.target.files || e.dataTransfer.files;
+
+      if(!files.length)
+        return;
+ 
+      this.processData(files[0]);
+    },
+    processData: function(repo_data) {
+      store.dispatch('uploadRepoData', {token: store.state.token, form: { repo_file: repo_data, repo_id: store.state.active_repo.id }});
     }
   } 
   

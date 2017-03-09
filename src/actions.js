@@ -1,28 +1,33 @@
 import api from './store/api.js'
 
-//export const login  = ({commit}) => { commit('login') }
-//export const logout = ({commit}) => { commit('logout') }
-export const setUsername = function(context, username) { context.commit('setUsername', username) }
-export const setUserID   = function(context, user_id) { context.commit('setUserID', user_id) }
-export const setToken    = function(context, access_token) { context.commit('setToken', access_token) }
-
-
+export const setToken = function(context, access_token) { context.commit('setToken', access_token) }
 
 // API Actions:
 
 export const doLogin = function(context, data) {
-  return api.post('/login', data)
+  return api.post('/login', data.data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { 
         window.sessionStorage.setItem('jwt', response.access_token); 
-        context.commit('login')
+        window.sessionStorage.setItem('rwt', response.refresh_token);
+         
+        context.commit('login');
+        context.commit('setToken', response.access_token);
+        context.commit('setRefresh', response.refresh_token);
+    })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
 
-        // TODO: Route to homepage
+export const doRefresh = function(context, data) {
+  return api.post('/refresh', data.refresh, {headers: {'Authorization': 'Bearer' + data.refresh}})
+    .then(function(response) {
+      console.log('doRefresh response'); 
+      console.log(response);
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
 export const doLogout = function(context, token) {
-  return api.get('/logout', token)
+  return api.get('/logout', {headers: {'Authorization': 'Bearer ' + token}})
     .then(function(response) { 
         window.sessionsStorage.removeItem('jwt');
         context.commit('logout')
@@ -32,29 +37,46 @@ export const doLogout = function(context, token) {
 
 // People
 export const addPerson = function(context, data) {
-  return api.post('/people/add', data)
-    .then(function(response) {
-      context.commit('ADD_PERSON', response); 
-    })
+  return api.post('/people/add', data.data, {headers: {'Authorization': 'Bearer' + data.token, 'Content-type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { context.commit('ADD_PERSON', response); })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
-export const getUserInfo = function(context, token) {
-  return api.get('/people/info', token)
+export const getUserInfo = function(context, data) {
+  return api.get('/people/info', {headers: {'Authorization': 'Bearer ' + data.token}})
     .then(function(response) { context.commit('GET_USER_INFO', response) })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
-export const getRepositories = function(context, token) {
-  return api.get('/people/repos', token)
-    .then(function(response) { context.commit('GET_REPOS', response) })
-    .catch(function(error) { context.commit('API_FAILURE', error) });
+export const getRepositories = function(context, data) {
+  return api.get('/people/repos', {headers: {'Authorization': 'Bearer ' + data.token}})
+    .then(function(response) { 
+      console.log('Actions Resp: '); 
+      console.log(response); 
+
+      if('do refresh' == response) {
+        
+      } else {
+        context.commit('GET_REPOS', response) 
+      }
+    })
+    .catch(function(error) { console.log('Actions error: '); console.log(error); context.commit('API_FAILURE', error) });
 }
 
 // Repo Data
-export const uploadRepoData = function(context, datafile) {
-  return api.post('/repositories/ repo_id /upload_data', data)
+export const uploadRepoData = function(context, data) {
+
+  var fd = new FormData();
+  fd.append('repo_file', data.form.repo_file);  
+  fd.append('repo_id', data.form.repo_id);
+
+  //return api.put('/repositories/upload', data.form.repo_file, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': data.form.repo_file.type}})
+  return api.put('repositories/upload', fd, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'multipart/form-data'}})
     .then(function(response) {
+      console.log('uploadRepoData response:');
+      console.log( response );
+
+
       context.commit('UPLOAD_REPO_DATA', response)
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
