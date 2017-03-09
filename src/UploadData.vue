@@ -28,6 +28,11 @@
 
           </form>
 
+          <div id="teaser-container" v-show="sharedState.teaser !== ''">
+            {{sharedState.teaser}}
+          </div>
+
+
         </div>  
       </div>
     </div>

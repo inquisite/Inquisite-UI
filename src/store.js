@@ -11,6 +11,7 @@ Vue.use(Vuex)
 const state = {
   logged_in: false,
   token: '',
+  teaser: '... uploading file',
   user: {},
   active_repo: {},
   repositories: []
