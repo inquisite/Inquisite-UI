@@ -164,13 +164,13 @@ export default {
       sharedState: store.state,
     }
   },
-  created: function() {
+  /*created: function() {
     if(store.getters.is_loggedin) {
       this.getRepositoryList();
     }
-  },
+  },*/
   watch: {
-    '$route': 'getRepositoryList'
+    '$route': 'pageChangeActions'
   },
   computed: {
 		isLoggedIn: function() {
@@ -189,6 +189,18 @@ export default {
       store.dispatch('doLogout', { token: store.state.token });
     },
     
+    pageChangeActions: function() {
+
+      // Clear form msg
+      store.state.msg = '';
+
+      // Get User Repos if Logged in and we don't have them 
+      if( store.getters.is_loggedin && (store.state.repositories.length == 0) ) {
+        store.dispatch('getRepositories', { token: store.state.token }); 
+      }
+
+    },
+
     getRepositoryList: function() {
       store.dispatch('getRepositories', { token: store.state.token });
     },
