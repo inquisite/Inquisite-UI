@@ -43,10 +43,11 @@ export const doRefresh = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
-export const doLogout = function(context, token) {
-  return api.get('/logout', {headers: {'Authorization': 'Bearer ' + token}})
+export const doLogout = function(context, data) {
+  return api.get('/logout', {headers: {'Authorization': 'Bearer ' + data.token}})
     .then(function(response) { 
-        window.sessionsStorage.removeItem('jwt');
+        window.sessionStorage.removeItem('jwt');
+        window.sessionStorage.removeItem('rwt');
         context.commit('logout')
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
