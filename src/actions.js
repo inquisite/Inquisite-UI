@@ -45,7 +45,7 @@ export const doLogout = function(context, data) {
 
 // People
 export const addPerson = function(context, data) {
-  return api.post('/people/add', data.data, {headers: {'Authorization': 'Bearer' + data.token, 'Content-type': 'application/x-www-form-urlencoded'}})
+  return api.post('/people/add', data.data, {headers: {'Authorization': 'Bearer' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { context.commit('ADD_PERSON', response); })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
@@ -60,6 +60,26 @@ export const getRepositories = function(context, data) {
   return api.get('/people/repos', {headers: {'Authorization': 'Bearer ' + data.token}})
     .then(function(response) { 
       context.commit('GET_REPOS', response) 
+    })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
+// Repos
+export const addRepo = function(context, data) {
+  return api.post('/repositories/add', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { 
+        context.commit('ADD_REPO', response); 
+
+        console.log('context');
+        console.log( context );
+
+        if(context.getters.repositories.length == 0) {
+          console.log('set Active Repo from response here');
+          console.log('Active Repo: ');
+          console.log(response.data.repo);
+          context.commit('setActiveRepo', response.data.repo);
+        }
+
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }

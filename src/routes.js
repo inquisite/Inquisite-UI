@@ -24,6 +24,9 @@ Vue.component('user-profile', UserProfile)
 const UserActivityLog = require('./UserActivityLog.vue')
 Vue.component('user-activity', UserActivityLog)
 
+const AddRepo = require('./AddRepo.vue')
+Vue.component('add-repo', AddRepo)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -31,5 +34,6 @@ export default [
   { path: '/upload', name: 'upload-data', component: UploadData },
   { path: '/user/preferences', name: 'user-prefs', component: UserPrefs },
   { path: '/user/profile', name: 'user-profile', component: UserProfile },
-  { path: '/user/activity', name: 'user-activity', component: UserActivityLog }
+  { path: '/user/activity', name: 'user-activity', component: UserActivityLog },
+  { path: '/add-repo', name: 'add-repo', component: AddRepo }
 ]

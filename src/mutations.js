@@ -22,4 +22,5 @@ export const API_FAILURE = function(state, error) { state.msg = error }
 export const GET_REPOS = function(state, response) { state.repositories = response.repos; state.msg = response.msg }
 export const GET_USER_INFO = function(state, response) { state.user = response.person; } 
 export const ADD_PERSON = function(state, response) { state.msg = response.msg }
+export const ADD_REPO = function(state, response) { state.msg = response.msg }
 export const UPLOAD_REPO_DATA = function(state, response) { state.msg = response.msg; state.teaser = response.data }

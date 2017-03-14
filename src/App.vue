@@ -118,7 +118,9 @@
             </li>
             <li v-else-if="isLoggedIn" style="border-left: none;">
               <div class="input-container text-right">
-                <button type="button" class="btn btn-default">Add a Repository</button>
+                <button type="button" class="btn btn-default">
+                  <router-link to="/add-repo" class="item">Add a Repository</router-link>
+                </button>
               </div>
             </li>
             
@@ -169,11 +171,6 @@ export default {
       sharedState: store.state,
     }
   },
-  /*created: function() {
-    if(store.getters.is_loggedin) {
-      this.getRepositoryList();
-    }
-  },*/
   watch: {
     '$route': 'pageChangeActions'
   },
