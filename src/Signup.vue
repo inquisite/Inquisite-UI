@@ -14,6 +14,8 @@
       <div class="panel">
         <div class="panel-body">
 
+          <div id="signup-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+
           <form id="signup-form" name="signup-form" method="POST" action="">
 
             <div id="signup-msg" class="ui msessage" style="display: none;">
@@ -73,6 +75,7 @@
 
 <script>
 
+import store from './store.js'
 import config from './config.js'
 
 export default { 
@@ -85,6 +88,7 @@ export default {
       tagline: '',
       url: '',
       password: '',
+      sharedState: store.state
     }
   },
   
@@ -92,48 +96,20 @@ export default {
     processSignup: function() {
 
 
-      store.dispatch('addPerson', 
-          { name: this.name, 
+      if( this.name !== '' && this.email !== '' && this.password !== '') {
+        store.dispatch('addPerson', 
+          { data: {name: this.name, 
             email: this.email, 
             location: this.location, 
             tagline: this.tagline, 
             url: this.url, 
             password: this.password
-      });
+        }});
+      } else {
 
-      /*var self = this;
+        this.sharedState.msg = "Name, Email, and Password are required fields"   
 
-      jQuery.ajax({
-        type: "POST",
-        url: config.api_endpoint + "/people/add",
-        crossDomain: true,
-        data: {
-          name: this.name,
-          email: this.email,
-          location: this.location,
-          tagline: this.tagline,
-          url: this.url,
-          password: this.password
-        },
-        success: function(data, textStatus, jqXHR) {
-          if("ok" == data.status) {
-
-            jQuery('#signup-msg').addClass('success');
-            jQuery('#signup-msg .header').html('Success!');
-            jQuery('#signup-msg .msg').html(data.msg);
-
-            var self = this;
-            setTimeout( function() { self.$root.$options.router.push('login') }, 6000);
-
-          } else {
-            jQuery('#signup-msg').addClass('error');
-            jQuery('#signup-msg .header').html('There was a problem');
-            jQuery('#signup-msg .msg').html(data.msg);
-          }          
- 
-          jQuery('#signup-msg').show();
-        }
-      })*/
+      }
     }
   } 
   
