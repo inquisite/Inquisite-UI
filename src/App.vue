@@ -183,6 +183,10 @@ export default {
           if(store.getters.repositories !== undefined) {
             length =  store.getters.repositories.length;
           }
+
+          console.log('has repos?');
+          console.log( length );
+
           return length;
         }
 	},
@@ -207,7 +211,9 @@ export default {
       store.state.msg = '';
 
       // Get User Repos if Logged in and we don't have them 
-      if( store.getters.is_loggedin && (store.state.repositories.length == 0) ) {
+      if( store.getters.logged_in && !this.hasRepos) {
+
+        console.log(' getting some repos now');
         store.dispatch('getRepositories', { token: store.state.token }); 
       }
 

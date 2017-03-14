@@ -87,6 +87,7 @@ export default {
     addRepo: function() {
       if(this.name !== '') {
         store.dispatch('addRepo', { token: store.state.token, data: {name: this.name, readme: this.readme, url: this.url}})
+        .then(function() { store.dispatch('getRepositories', { token: store.state.token }) })
       } else {
         this.sharedState.msg = 'Repository name is a required field';
       }

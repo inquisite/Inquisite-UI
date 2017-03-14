@@ -76,8 +76,8 @@ export const addRepo = function(context, data) {
         if(context.getters.repositories.length == 0) {
           console.log('set Active Repo from response here');
           console.log('Active Repo: ');
-          console.log(response.data.repo);
-          context.commit('setActiveRepo', response.data.repo);
+          console.log(response.repo);
+          context.commit('setActiveRepo', response.repo);
         }
 
     })
