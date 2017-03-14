@@ -15,6 +15,8 @@
        
           <p>Adding data to {{sharedState.active_repo.name}}</p>
 
+          <div id="data-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+
           <form id="signup-form" name="signup-form" method="POST" action="">
             <div class="item form-item">
               <div class="ui fluid input content">
