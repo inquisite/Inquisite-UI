@@ -28,6 +28,7 @@
              <li><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
              <li><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
              <li><router-link class="item" to="/schema">Schema</router-link></li>
+             <li><router-link class="item" to="/signup">Sign up</router-link></li>
 
              <li v-if="hasRepos">
               <div class="input-container">
@@ -92,6 +93,7 @@
             </li>
 
             <li><router-link class="item" to="/schema">Schema</router-link></li>
+            <li><router-link class="item" to="/signup">Sign up</router-link></li>
 
           </ul>
 

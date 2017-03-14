@@ -7,14 +7,31 @@ export const setToken = function(context, access_token) { context.commit('setTok
 export const doLogin = function(context, data) {
   return api.post('/login', data.data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { 
-        window.sessionStorage.setItem('jwt', response.access_token); 
-        window.sessionStorage.setItem('rwt', response.refresh_token);
-         
-        context.commit('login');
-        context.commit('setToken', response.access_token);
-        context.commit('setRefresh', response.refresh_token);
+
+        if(response.access_token !== undefined) {
+
+          console.log('Login SUCCESS! Response: ');
+          console.log( response.response );
+
+          window.sessionStorage.setItem('jwt', response.access_token); 
+          window.sessionStorage.setItem('rwt', response.refresh_token);
+          
+          context.commit('login');
+          context.commit('setToken', response.access_token);
+          context.commit('setRefresh', response.refresh_token);
+        } else {
+          // Error is in here
+          console.log( 'Response Error: ' + response.response.status );
+          console.log( response.response.data.msg );
+ 
+          context.commit('API_FAILURE', response.response.data.msg );
+        }
     })
-    .catch(function(error) { context.commit('API_FAILURE', error) });
+    .catch(function(error) { 
+      console.log('caught error: ');
+      console.log(error);
+      context.commit('API_FAILURE', error)
+    });
 }
 
 export const doRefresh = function(context, data) {

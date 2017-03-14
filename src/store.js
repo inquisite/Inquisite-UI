@@ -13,6 +13,7 @@ const state = {
   token: '',
   teaser: '... uploading file',
   user: {},
+  msg: '',
   active_repo: {},
   repositories: []
 }

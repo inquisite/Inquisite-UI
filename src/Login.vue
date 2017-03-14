@@ -13,6 +13,8 @@
       <div class="panel">
         <div class="panel-body">
        
+          <div id="login-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+
           <form id="login-form" name="login-form" method="POST" action="">
 
             <div id="login-msg" class="ui message" style="display: none;">
@@ -22,7 +24,7 @@
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
+                  <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
               </div>
             </div>
 
@@ -63,11 +65,16 @@ export default {
   methods: {
     processLogin: function() {
 
-      var self = this;
+      if( this.email !== '' && this.password !== '') {
 
-      store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
-      .then(function() { setTimeout( function() { self.$root.$options.router.push('/') }, 1500) });
-      
+          var self = this;
+          store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
+          //.then(function() { setTimeout( function() { self.$root.$options.router.push('/') }, 1500) });
+        
+      } else {
+          this.sharedState.msg = 'Email and Password are required fields';
+      }
+
     }
   }
 } 
