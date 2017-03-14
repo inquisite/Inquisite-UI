@@ -3,16 +3,11 @@ import api from './store/api.js'
 export const setToken = function(context, access_token) { context.commit('setToken', access_token) }
 
 // API Actions:
-
 export const doLogin = function(context, data) {
   return api.post('/login', data.data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { 
 
         if(response.access_token !== undefined) {
-
-          console.log('Login SUCCESS! Response: ');
-          console.log( response.response );
-
           window.sessionStorage.setItem('jwt', response.access_token); 
           window.sessionStorage.setItem('rwt', response.refresh_token);
           
@@ -21,15 +16,10 @@ export const doLogin = function(context, data) {
           context.commit('setRefresh', response.refresh_token);
         } else {
           // Error is in here
-          console.log( 'Response Error: ' + response.response.status );
-          console.log( response.response.data.msg );
- 
           context.commit('API_FAILURE', response.response.data.msg );
         }
     })
     .catch(function(error) { 
-      console.log('caught error: ');
-      console.log(error);
       context.commit('API_FAILURE', error)
     });
 }
@@ -69,16 +59,9 @@ export const getUserInfo = function(context, data) {
 export const getRepositories = function(context, data) {
   return api.get('/people/repos', {headers: {'Authorization': 'Bearer ' + data.token}})
     .then(function(response) { 
-      console.log('Actions Resp: '); 
-      console.log(response); 
-
-      if('do refresh' == response) {
-        
-      } else {
-        context.commit('GET_REPOS', response) 
-      }
+      context.commit('GET_REPOS', response) 
     })
-    .catch(function(error) { console.log('Actions error: '); console.log(error); context.commit('API_FAILURE', error) });
+    .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
 // Repo Data
@@ -88,13 +71,8 @@ export const uploadRepoData = function(context, data) {
   fd.append('repo_file', data.form.repo_file);  
   fd.append('repo_id', data.form.repo_id);
 
-  //return api.put('/repositories/upload', data.form.repo_file, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': data.form.repo_file.type}})
   return api.put('repositories/upload', fd, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'multipart/form-data'}})
     .then(function(response) {
-      console.log('uploadRepoData response:');
-      console.log( response );
-
-
       context.commit('UPLOAD_REPO_DATA', response)
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
