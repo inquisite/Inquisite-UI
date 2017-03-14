@@ -84,6 +84,14 @@ export const addRepo = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+export const deleteRepo = function(context, data) {
+  return api.post('/repositories/delete', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded' }})
+    .then(function(response) {
+      context.commit('DELETE_REPO', response);
+    })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
 // Repo Data
 export const uploadRepoData = function(context, data) {
 

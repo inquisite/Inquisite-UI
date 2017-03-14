@@ -70,8 +70,8 @@
                           <td>{{repo.url}}</td>
                           <td>{{repo.created_on}}</td>
                           <td>
-                            <span class="glyphicon glyphicon-pencil" @click="editRepo(repo.id)"></span> |
-                            <span class="glyphicon glyphicon-remove" @click="deleteRepo(repo.id)"></span>
+                            <a @click="editRepo(repo.id)"><span class="glyphicon glyphicon-pencil"></span></a> |
+                            <a @click="deleteRepo(repo.id)"><span class="glyphicon glyphicon-remove"></span></a>
                           </td>
                         </tr> 
                       </tbody>
@@ -121,7 +121,14 @@ export default {
   methods: {
     getUser: function() {
       store.dispatch('getUserInfo', {token: store.state.token});
+    },
+    editRepo: function(repo_id) {
+      console.log('edit Repo ' + repo_id);
+    },
+    deleteRepo: function(repo_id) {
+      store.dispatch('deleteRepo', {token: store.state.token, data: { repo_id: repo_id }})
     }
+
   },
 }
 </script>

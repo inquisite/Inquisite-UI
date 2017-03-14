@@ -188,7 +188,17 @@ export default {
 	},
   methods: {
     processLogout: function() {
-      store.dispatch('doLogout', { token: store.state.token });
+      var self = this;
+
+      store.dispatch('doLogout', { token: store.state.token })
+      .then(function() {
+
+           // Transition to Home Page if logged out
+           if(!self.sharedState.logged_in) {
+               setTimeout( function() { self.$root.$options.router.push('/') }, 300) 
+           }
+      });
+
     },
     
     pageChangeActions: function() {
