@@ -49,17 +49,17 @@
             </li>
             <li v-else></li>
 
-             <li v-if="isLoggedIn">
+            <li v-if="isLoggedIn">
                <router-link to="/user/preferences" class="item">User Preferences</router-link>
-             </li>
-             <li v-if="isLoggedIn">
+            </li>
+            <li v-if="isLoggedIn">
                <router-link to="/user/profile" class="item">User Profile</router-link>
-             </li>
-             <li v-if="isLoggedIn">
+            </li>
+            <li v-if="isLoggedIn">
                <router-link to="/user/activity" class="item">Activity Log</router-link>
-             </li>
-             <li v-if="isLoggedIn"><a @click="processLogout" class="item">Logout</a></li>
-             <li v-if="!isLoggedIn"><router-link to="/login" class="item">Login</router-link></li>
+            </li>
+            <li v-if="isLoggedIn"><a @click="processLogout" class="item">Logout</a></li>
+            <li v-if="!isLoggedIn"><router-link to="/login" class="item">Login</router-link></li>
            </ul>
          </div>
 
@@ -116,7 +116,12 @@
               </div>
               </div>
             </li>
-            <li v-else></li>
+            <li v-else-if="isLoggedIn" style="border-left: none;">
+              <div class="input-container text-right">
+                <button type="button" class="btn btn-default">Add a Repository</button>
+              </div>
+            </li>
+            
 
 
             <li class="dropdown">
