@@ -102,15 +102,20 @@
             <li v-if="hasRepos">
               <div class="input-container">
               <div class="input-group">
-                <input type="text" class="form-control" aria-label="Choose a Repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
+                <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Choose a Repository <span class="caret"></span>
+                    Repos <span class="caret"></span>
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
                    	<li v-for="repository in sharedState.repositories"><a @click="setActiveRepo(repository)">{{ repository.name }}</a></li>
                   </ul>
+
+
+                  <button type="button" class="btn btn-default">
+                    <router-link to="/add-repo" class="item"><span class="glyphicon glyphicon-plus"></span></router-link>
+                  </button>
 
                 </div>
               </div>
