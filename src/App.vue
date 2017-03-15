@@ -207,6 +207,8 @@ export default {
     
     pageChangeActions: function() {
 
+      console.log('page Change Actions');
+
       // Clear form msg
       store.state.msg = '';
 

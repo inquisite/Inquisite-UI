@@ -112,16 +112,7 @@ export default {
       url: '',
     }
   },
-  watch: {
-    '$route': 'getUser'
-  },
-  created: function() {
-    this.getUser();
-  },
   methods: {
-    getUser: function() {
-      store.dispatch('getUserInfo', {token: store.state.token});
-    },
     editRepo: function(repo_id) {
       console.log('edit Repo ' + repo_id);
     },

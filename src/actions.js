@@ -14,6 +14,13 @@ export const doLogin = function(context, data) {
           context.commit('login');
           context.commit('setToken', response.access_token);
           context.commit('setRefresh', response.refresh_token);
+
+          // Get Repos for User
+          context.dispatch('getRepositories', {token: response.access_token});
+
+          // Get User Data
+          context.dispatch('getUserInfo', {token: response.access_token});
+
         } else {
           // Error is in here
           context.commit('API_FAILURE', response.response.data.msg );
