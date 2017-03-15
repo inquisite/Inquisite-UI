@@ -20,50 +20,84 @@
               <div class="msg"></div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Name:</div>
+                <div class="ui">Name:</div>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="sharedState.user.name">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Email:</div>
+                <div class="ui">Email:</div>
                 <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="sharedState.user.email">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Location:</div>
+                <div class="ui">Location:</div>
                 <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="sharedState.user.location">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Tagline</div>
+                <div class="ui">Tagline</div>
                 <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="sharedState.user.tagline">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">URL:</div>
+                <div class="ui">URL:</div>
                 <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="sharedState.user.url">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Password:</div>
+                <div class="ui">Password:</div>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
               </div>
             </div>
 
+            <div class="item form-item form-group">
+              <div class="ui">Active Repository:</div>
+ 
+              <div v-if="hasRepos"> <!-- if has repos -->
+                <div class="input-group">
+
+                  <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a Repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
+                            
+                   <div class="input-group-btn">
+                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       Repos <span class="caret"></span>
+                     </button>
+                    </div> 
+
+                </div>
+              </div>
+              <div v-else>
+ 
+                <div class="alert alert-info" role="alert">
+                  <p>It looks like you have yet to create any repositories. Click here to get started!</p> 
+
+                  <br/>
+
+                  <button type="button" class="btn btn-default">
+                    <router-link to="/add-repo" class="item">
+                      <span class="glyphicon glyphicon-plus"></span> Add a Repository
+                    </router-link>
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="btn btn-primary">Submit</button>
+              <button v-on:submit.prevent="editUser()" v-on:click.prevent="editUser()" class="btn btn-primary">Submit</button>
             </div>
 
           </form>
@@ -92,35 +126,11 @@ export default {
       url: ''
     }
   },
-    methods: {
-    getUser: function() {
-    
-      // TODO: .. not sure this is still needed?
-
-
-      //var mydata = this;
-
-      /*jQuery.ajax({
-        type: "POST",
-        url: config.api_endpoint + '/people/' + mydata.state.user_id,
-        crossDomain: true,
-        data: {},
-        success: function(data, textStatus, jqXHR) {
-          if("ok" == data.status) {
-          
-            self.name = data.name;
-            self.email = data.email;
-            self.location = data.location;
-            self.tagline = data.tagline;
-            self.url = data.url;
-
-          }
-        }
-      })*/
-     }
-  },
-
-
+  methods: {
+    editUser: function() {
+        //it's coming soon
+    } 
+  }
 }
 </script>
 
