@@ -21,14 +21,14 @@
 
          <div id="mobileNav-container" class="container collapse">
            <ul id="mobileNav" class="nav nav-pills nav-stacked">
-             <li><router-link class="item" to="/upload">Upload Data</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/upload">Upload Data</router-link></li>
              <li><router-link class="item" to="/searchrefine">Search &amp; Refine</router-link></li>
-             <li><router-link class="item" to="/visualize/map">Map</router-link></li>
-             <li><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
-             <li><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
-             <li><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
-             <li><router-link class="item" to="/schema">Schema</router-link></li>
-             <li><router-link class="item" to="/signup">Sign up</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/map">Map</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
+             <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
 
              <li v-if="hasRepos">
               <div class="input-container">
@@ -75,10 +75,9 @@
           </div>
 
           <ul class="nav navbar-nav navbar-left">
-
-            <li><router-link to="/upload" class="item">Upload Data</router-link></li>
-            <li><router-link to="/searchrefine" class="item">Search &amp; Refine</router-link></li>
-            <li class="dropdown">
+            <li v-if="isLoggedIn"><router-link to="/upload" class="item">Upload Data</router-link></li>
+            <li v-if="isLoggedIn"><router-link to="/searchrefine" class="item">Search &amp; Refine</router-link></li>
+            <li class="dropdown" v-if="isLoggedIn">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                  Visualize <span class="caret"></span>
                </a>
@@ -92,8 +91,8 @@
 
             </li>
 
-            <li><router-link class="item" to="/schema">Schema</router-link></li>
-            <li><router-link class="item" to="/signup">Sign up</router-link></li>
+            <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
+            <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
 
           </ul>
 
