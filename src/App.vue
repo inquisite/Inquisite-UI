@@ -21,19 +21,19 @@
 
          <div id="mobileNav-container" class="container collapse">
            <ul id="mobileNav" class="nav nav-pills nav-stacked">
-             <li><router-link class="item" to="/upload">Upload Data</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/upload">Upload Data</router-link></li>
              <li><router-link class="item" to="/searchrefine">Search &amp; Refine</router-link></li>
-             <li><router-link class="item" to="/visualize/map">Map</router-link></li>
-             <li><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
-             <li><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
-             <li><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
-             <li><router-link class="item" to="/schema">Schema</router-link></li>
-             <li><router-link class="item" to="/signup">Sign up</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/map">Map</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
+             <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
 
              <li v-if="hasRepos">
               <div class="input-container">
               <div class="input-group">
-                <input type="text" class="form-control" aria-label="Choose a Repository" value="New York Scapes">
+                <input type="text" class="form-control" aria-label="Choose a Repository" value="">
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Choose a Repository <span class="caret"></span>
@@ -75,10 +75,9 @@
           </div>
 
           <ul class="nav navbar-nav navbar-left">
-
-            <li><router-link to="/upload" class="item">Upload Data</router-link></li>
-            <li><router-link to="/searchrefine" class="item">Search &amp; Refine</router-link></li>
-            <li class="dropdown">
+            <li v-if="isLoggedIn"><router-link to="/upload" class="item">Upload Data</router-link></li>
+            <li v-if="isLoggedIn"><router-link to="/searchrefine" class="item">Search &amp; Refine</router-link></li>
+            <li class="dropdown" v-if="isLoggedIn">
                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                  Visualize <span class="caret"></span>
                </a>
@@ -92,8 +91,8 @@
 
             </li>
 
-            <li><router-link class="item" to="/schema">Schema</router-link></li>
-            <li><router-link class="item" to="/signup">Sign up</router-link></li>
+            <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
+            <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
 
           </ul>
 
@@ -176,6 +175,10 @@ export default {
       sharedState: store.state,
     }
   },
+  mounted: function() {
+      console.log("mounted");
+    this.getRepositoryList();
+  },
   watch: {
     '$route': 'pageChangeActions'
   },
@@ -183,17 +186,17 @@ export default {
 		isLoggedIn: function() {
 			return store.getters.is_loggedin;
 		},
-        hasRepos: function() {
-          var length = 0;
-          if(store.getters.repositories !== undefined) {
-            length =  store.getters.repositories.length;
-          }
+    hasRepos: function() {
+      var length = 0;
+      if(store.getters.repositories !== undefined) {
+        length =  store.getters.repositories.length;
+      }
 
-          console.log('has repos?');
-          console.log( length );
+      console.log('has repos?');
+      console.log( length );
 
-          return length;
-        }
+      return length;
+    }
 	},
   methods: {
     processLogout: function() {
@@ -218,7 +221,7 @@ export default {
       store.state.msg = '';
 
       // Get User Repos if Logged in and we don't have them 
-      if( store.getters.logged_in && !this.hasRepos) {
+      if( this.isLoggedIn && !this.hasRepos) {
 
         console.log(' getting some repos now');
         store.dispatch('getRepositories', { token: store.state.token }); 
