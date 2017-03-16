@@ -29,32 +29,30 @@
         </div>
         <div class="panel-body">
 
-          <ul class="media-list">
-            <li class="media list-item">
-              <div class="media-left">
-                <span class="glyphicon glyphicon-folder-close"></span>
-              </div>
-              <div class="media-body">
-                <h5 class="media-heading">New York Merchants 1800-1801</h5>
-                <div class="description">
-                  <small>by Tom A. 5,674 records, 30 elements</small>
-                </div>
-              </div>                  
-            </li>
+          <ul class="media-list" v-if="sharedState.active_repo.datasets">
 
-            <li class="media list-item">
+            <li class="media list-item" v-for="set in sharedState.active_repo.datasets">
               <div class="media-left">
                 <span class="glyphicon glyphicon-folder-close"></span>
               </div>
 
               <div class="media-body">
-                <h5  class="media-heading">Carnegie Hospital Records 1830s</h5>
+                <h5 class="media-heading">{{set.name}}</h5>
                 <div class="description">
-                  <small>by Nick W. 10,213 records, 9 elements</small>
-                </div>
+                   <small>by {{set.owner}} {{set.record_count}}, {{set.element_count}} elements</small>
+                </div> 
               </div>
             </li>
           </ul>
+
+          <div v-else>
+            <p>It looks like you haven't added any datasets to your repository yet?</p>
+
+
+            <router-link to="/upload">
+              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add Dataset</button>
+            </router-link>
+          </div>
 
         </div>
       </div>
@@ -62,7 +60,6 @@
     </div>
 
     <div class="col-sm-6">
-      <h3>Project Introduction and Goals</h3>
       <div v-html="compiledMarkdown"></div>
     </div>
 
