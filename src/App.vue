@@ -33,7 +33,7 @@
              <li v-if="hasRepos">
               <div class="input-container">
               <div class="input-group">
-                <input type="text" class="form-control" aria-label="Choose a Repository" value="New York Scapes">
+                <input type="text" class="form-control" aria-label="Choose a Repository" value="">
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Choose a Repository <span class="caret"></span>
@@ -170,6 +170,10 @@ export default {
       sharedState: store.state,
     }
   },
+  mounted: function() {
+      console.log("mounted");
+    this.getRepositoryList();
+  },
   watch: {
     '$route': 'pageChangeActions'
   },
@@ -177,17 +181,17 @@ export default {
 		isLoggedIn: function() {
 			return store.getters.is_loggedin;
 		},
-        hasRepos: function() {
-          var length = 0;
-          if(store.getters.repositories !== undefined) {
-            length =  store.getters.repositories.length;
-          }
+    hasRepos: function() {
+      var length = 0;
+      if(store.getters.repositories !== undefined) {
+        length =  store.getters.repositories.length;
+      }
 
-          console.log('has repos?');
-          console.log( length );
+      console.log('has repos?');
+      console.log( length );
 
-          return length;
-        }
+      return length;
+    }
 	},
   methods: {
     processLogout: function() {
@@ -212,7 +216,7 @@ export default {
       store.state.msg = '';
 
       // Get User Repos if Logged in and we don't have them 
-      if( store.getters.logged_in && !this.hasRepos) {
+      if( this.isLoggedIn && !this.hasRepos) {
 
         console.log(' getting some repos now');
         store.dispatch('getRepositories', { token: store.state.token }); 
