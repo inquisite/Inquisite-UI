@@ -52,8 +52,14 @@ export const doLogout = function(context, data) {
 
 // People
 export const addPerson = function(context, data) {
-  return api.post('/people/add', data.data, {headers: {'Authorization': 'Bearer' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+  return api.post('/people/add', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { context.commit('ADD_PERSON', response); })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
+export const editPerson = function(context, data) {
+  return api.post('/people/edit', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { context.commit('EDIT_PERSON', response); })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
@@ -96,6 +102,12 @@ export const deleteRepo = function(context, data) {
     .then(function(response) {
       context.commit('DELETE_REPO', response);
     })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
+export const getRepoUsers = function(context, data) {
+  return api.post('repositories/users', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded' }})
+    .then(function(response) { context.commit('GET_REPO_USERS', response); })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 

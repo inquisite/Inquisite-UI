@@ -22,42 +22,36 @@
 
             <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui">Name:</div>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="sharedState.user.name">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
               </div>
             </div>
 
             <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui">Email:</div>
-                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="sharedState.user.email">
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
               </div>
             </div>
 
             <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui">Location:</div>
-                <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="sharedState.user.location">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="location">
               </div>
             </div>
 
             <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui">Tagline</div>
-                <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="sharedState.user.tagline">
+                <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
               </div>
             </div>
 
             <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui">URL:</div>
-                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="sharedState.user.url">
+                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
               </div>
             </div>
 
             <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui">Password:</div>
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
               </div>
             </div>
@@ -119,16 +113,38 @@ export default {
   data: function() {
     return {
       sharedState: store.state,
-      name: '',
-      email: '',
-      location: '',
-      tagline: '',
-      url: ''
     }
+  },
+  computed: {
+    name: {
+      get: function() { return store.state.user.name; },
+      set: function(value) { store.commit('setUserName', value) }
+    },
+    email: {
+      get: function() { return store.state.user.email; },
+      set: function(value) { store.commit('setUserEmail', value) }
+    },
+    location: {
+      get: function() { return store.state.user.location; },
+      set: function(value) { store.commit('setUserLocation', value) }
+    },
+    tagline: {
+      get: function() { return store.state.user.tagline; },
+      set: function(value) { store.commit('setUserTagline', value) }
+    },
+    url: {
+      get: function() { return store.state.user.url; },
+      set: function(value) { store.commit('setUserUrl', value) }
+    },
   },
   methods: {
     editUser: function() {
-        //it's coming soon
+
+        store.dispatch('editPerson', {
+          token: store.state.token, 
+          data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
+        })      
+
     } 
   }
 }

@@ -1,13 +1,20 @@
 <template>
 <div id="home">
   <div class="row" v-if="!isLoggedIn">
-		 <h1>Welcome to New York Scapes</h1>
+		 <h1>Welcome to Inquisite</h1>
   </div>
   <div class="row" v-if="isLoggedIn">
     <div class="col-sm-12">
 
+      <div class="pull-right">
+        <a @click="deleteRepo(sharedState.active_repo.id)">
+          <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete Repository</button>
+        </a>
+      </div>
+
+
       <div class="page-header">
-        <h1>Dashboard</h1>
+        <h1>Dashboard - {{sharedState.active_repo.name}}</h1>
       </div>
 
     </div>
@@ -56,12 +63,7 @@
 
     <div class="col-sm-6">
       <h3>Project Introduction and Goals</h3>
-      <p>Lorem ipsum dolor sit amet,
-        Vivamus sodales tortor in leo blandit pharetra
-        Lorem ipsum dolor sit amet,
-        Vivamus sodales tortor in leo blandit pharetra
-        Lorem ipsum dolor sit amet,</p>
-      <p>Vivamus sodales tortor in leo blandit pharetra</p>
+      <div v-html="compiledMarkdown"></div>
     </div>
 
   </div>
@@ -73,61 +75,26 @@
       <h4>Users in this Repository</h4>
 
       <ul class="media-list">
-
-        <li class="media list-item">
+        <li class="media list-item" v-for="user in repoUsers">
           <div class="media-left">
-            <a href="#">
-              <span class="glyphicon glyphicon-user"></span>
-            </a>
+            <span class="glyphicon glyphicon-user"></span>
           </div>
-
+  
           <div class="media-body">
-            <h5 class="media-heading">Daniel L.</h5>
-            <small>online now</small>
+            <h5 class="media-heading">{{user.name}}</h5>
+            <small>{{user.status}}</small>
           </div>
 
           <div class="media-right">
+            <a @click="userProfil(user.id)">
               <button type="button" class="btn btn-default text-right">Profile</button>
-          </div>
-
-        </li>
-
-        <li class="media list-item">
-          <div class="media-left">
-            <a href="#">
-              <span class="glyphicon glyphicon-user"></span>
             </a>
           </div>
-
-          <div class="media-body">
-            <h5 class="media-heading">Elliot F.</h5>
-            <small>online now</small>
-          </div>
-
-          <div class="media-right">
-            <button type="button" class="btn btn-default">Profile</button>
-          </div>
-
         </li>
-
-        <li class="media list-item">
-          <div class="media-left">
-            <a href="#">
-              <span class="glyphicon glyphicon-user"></span>
-            </a>
-          </div>
-
-          <div class="media-body">
-            <h5 class="media-heading">Elliot F.</h5>
-            <small>online now</small>
-          </div>
-
-          <div class="media-right">
-            <button type="button" class="btn btn-default">Profile</button>
-          </div>
-        </li>
-
       </ul>
+
+      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add People</button>
+
     </div>
 
     <div class="col-sm-6">
@@ -173,14 +140,39 @@
 
 <script>
 	import store from './store.js'
- 
+    var marked = require('marked'); 
+
 	export default { 
 		name: 'home',
+        data: function() {
+          return {
+            sharedState: store.state
+          }
+        },
 		computed: {
 			isLoggedIn() {
 				return store.getters.is_loggedin;
-			}
-		}
+			},
+            compiledMarkdown: function() {
+                if(store.state.active_repo.readme) {
+                  return marked(store.state.active_repo.readme, { sanitize: true})
+                } else {
+                  return ''
+                }
+            },
+            repoUsers: function() {
+                store.dispatch('getRepoUsers', {token: store.state.token, data: {repo_id: store.state.active_repo.id}})
+                return store.state.active_repo.users;
+            }
+		},
+        methods: {
+          userProfile: function(user_id) {
+            console.log(' go to user profile ')
+          },
+          deleteRepo: function(repo_id) {
+            store.dispatch('deleteRepo', {token: store.state.token, data: { repo_id: repo_id }})
+          }
+        }
 	}
 	
 </script>
