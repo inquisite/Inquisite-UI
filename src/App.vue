@@ -5,9 +5,9 @@
      <nav role="navigation" class="navbar navbar-static-top visible-sm visible-xs">
        <div class="container-fluid">
          <div class="navbar-header">
-           <a href="http://inquisite.whirl-i-gig.com/inquisite-ui" class="navbar-brand">
+           <router-link to="/" class="navbar-brand">
              <img class="logo" src="assets/images/logo.png">
-           </a>
+           </router-link>
          </div>
 
          <div class="navbar navbar-right mobile-btn-container">
@@ -69,9 +69,9 @@
      <nav role="navigation" class="navbar navbar-default navbar-static-top hidden-sm hidden-xs">
         <div class="container-fluid">
           <div class="navbar-header">
-            <a href="http://inquisite.whirl-i-gig.com/inquisite-ui" class="header item logo navbar-brand">
+            <router-link to="/" class="header item logo navbar-brand">
               <img class="logo" src="assets/images/logo.png" style="height: 100%;">
-            </a>
+            </router-link>
           </div>
 
           <ul class="nav navbar-nav navbar-left">
@@ -176,16 +176,16 @@ export default {
     }
   },
   mounted: function() {
-      console.log("mounted");
+    console.log("mounted");
     this.getRepositoryList();
   },
   watch: {
     '$route': 'pageChangeActions'
   },
   computed: {
-		isLoggedIn: function() {
-			return store.getters.is_loggedin;
-		},
+    isLoggedIn: function() {
+	    return store.getters.is_loggedin;
+	},
     hasRepos: function() {
       var length = 0;
       if(store.getters.repositories !== undefined) {
@@ -197,7 +197,7 @@ export default {
 
       return length;
     }
-	},
+  },
   methods: {
     processLogout: function() {
       var self = this;
