@@ -57,18 +57,24 @@
             </div>
 
             <div class="item form-item form-group">
-              <div class="ui">Active Repository:</div>
+              <div class="ui">Default Repository:</div>
  
-              <div v-if="hasRepos"> <!-- if has repos -->
+              <div v-if="hasRepos"> 
                 <div class="input-group">
 
-                  <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a Repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
+                  <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a Repository" :value="sharedState.user.prefs.default_repo.name"
+v-model="sharedState.user.prefs.default_repo.name">
                             
                    <div class="input-group-btn">
                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                        Repos <span class="caret"></span>
                      </button>
-                    </div> 
+
+                     <ul class="dropdown-menu dropdown-menu-right">
+                   	   <li v-for="repository in sharedState.repositories"><a @click="setDefaultRepo(repository)">{{ repository.name }}</a></li>
+                     </ul>
+
+                   </div> 
 
                 </div>
               </div>
@@ -106,7 +112,6 @@
 
 <script>
 import store from './store.js'
-import config from './config.js'
 
 export default { 
   name: 'user-prefs',
@@ -136,16 +141,36 @@ export default {
       get: function() { return store.state.user.url; },
       set: function(value) { store.commit('setUserUrl', value) }
     },
+    default_repo: {
+      get: function() { return store.getters.default_repo; },
+      set: function(value) { store.commit('setDefaultRepo', value) }
+    },
+    hasRepos: function() {
+      var length = 0;
+      if(store.getters.repositories !== undefined) {
+        length = store.getters.repositories.length;
+      }
+
+      return length;
+    }
+
   },
   methods: {
     editUser: function() {
 
         store.dispatch('editPerson', {
           token: store.state.token, 
-          data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
+          data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url, default_repo: this.default_repo}
         })      
 
-    } 
+    },
+    setDefaultRepo: function(repository) {
+ 
+      console.log('setting default repo');
+      console.log( repository.name );
+
+      store.commit('setDefaultRepo', repository);
+    }
   }
 }
 </script>

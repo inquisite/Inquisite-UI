@@ -1,20 +1,20 @@
 <template>
 <div id="home">
-  <div class="row" v-if="!isLoggedIn">
-		 <h1>Welcome to Inquisite</h1>
-  </div>
-  <div class="row" v-if="isLoggedIn">
+  
+  <div class="row">
     <div class="col-sm-12">
 
-      <div class="pull-right">
+      <div class="pull-right" v-if="isLoggedIn">
         <a @click="deleteRepo(sharedState.active_repo.id)">
           <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete Repository</button>
         </a>
       </div>
 
-
-      <div class="page-header">
+      <div class="page-header" v-if="isLoggedIn">
         <h1>Dashboard - {{sharedState.active_repo.name}}</h1>
+      </div>
+      <div class="page-header" v-else>
+        <h1>Welcome to Inquisite</h1>
       </div>
 
     </div>
@@ -83,14 +83,16 @@
           </div>
 
           <div class="media-right">
-            <a @click="userProfil(user.id)">
+            <a @click="userProfile(user.id)">
               <button type="button" class="btn btn-default text-right">Profile</button>
             </a>
           </div>
         </li>
       </ul>
 
-      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add People</button>
+      <router-link to="/add-person-repo">
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add People</button>
+      </router-link>
 
     </div>
 
@@ -115,13 +117,39 @@
         <li class="media list-item">
           <div class="media-left">
             <a href="#">
-              <span class="glyphicon glyphicon-git-branch"></span>
+              <span class="glyphicon glyphicon-upload"></span>
             </a>
           </div>
 
           <div class="media-body">
             <h5 class="media-heading">Nick W.</h5>
-            <small>created a fork <a href="#">New York Scapes</a> 2 days</small>
+            <small>uploaded <a href="#">New York Scapes</a> 2 days</small>
+          </div>
+        </li>
+
+        <li class="media list-item">
+          <div class="media-left">
+            <a href="#">
+              <span class="glyphicon glyphicon-edit"></span>
+            </a>
+          </div>
+
+          <div class="media-body">
+            <h5 class="media-heading">Nick W.</h5>
+            <small>edited <a href="#">New York Scapes</a> 2 days</small>
+          </div>
+        </li>
+
+        <li class="media list-item">
+          <div class="media-left">
+            <a href="#">
+              <span class="glyphicon glyphicon-duplicate"></span>
+            </a>
+          </div>
+
+          <div class="media-body">
+            <h5 class="media-heading">Nick W.</h5>
+            <small>copied <a href="#">New York Scapes</a> 2 days</small>
           </div>
         </li>
 
@@ -158,8 +186,13 @@
                 }
             },
             repoUsers: function() {
-                store.dispatch('getRepoUsers', {token: store.state.token, data: {repo_id: store.state.active_repo.id}})
-                return store.state.active_repo.users;
+                var repo_users = {}
+                if(store.state.active_repo !== {}) {
+                  store.dispatch('getRepoUsers', {token: store.state.token, data: {repo_id: store.state.active_repo.id}})
+                  repo_users = store.state.active_repo.users;
+                }
+    
+                return repo_users;
             }
 		},
         methods: {

@@ -12,7 +12,12 @@ const state = {
   logged_in: false,
   token: '',
   teaser: '... uploading file',
-  user: {},
+  user: {
+    prefs: {
+      default_repo: {}
+    }
+  },
+  users: [],
   msg: '',
   active_repo: {},
   repositories: []

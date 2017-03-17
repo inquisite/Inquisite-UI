@@ -106,10 +106,24 @@ export const deleteRepo = function(context, data) {
 }
 
 export const getRepoUsers = function(context, data) {
-  return api.post('repositories/users', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded' }})
+  return api.post('/repositories/users', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded' }})
     .then(function(response) { context.commit('GET_REPO_USERS', response); })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
+
+export const getPeople = function(context, data) {
+  return api.get('/people', {headers: {'Authorization': 'Bearer ' + data.token}})
+    .then(function(response) { context.commit('GET_PEOPLE', response); })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
+export const addPersonRepo = function(context, data) {
+  return api.post('/repositories/add_collaborator', data.data,
+    {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { context.commit('ADD_PERSON_REPO', response); })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+} 
+
 
 // Repo Data
 export const uploadRepoData = function(context, data) {
@@ -118,7 +132,7 @@ export const uploadRepoData = function(context, data) {
   fd.append('repo_file', data.form.repo_file);  
   fd.append('repo_id', data.form.repo_id);
 
-  return api.put('repositories/upload', fd, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'multipart/form-data'}})
+  return api.put('/repositories/upload', fd, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'multipart/form-data'}})
     .then(function(response) {
       context.commit('UPLOAD_REPO_DATA', response)
     })
