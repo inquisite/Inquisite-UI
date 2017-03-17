@@ -1,5 +1,5 @@
 export const is_loggedin = state => { return state.logged_in }
-export const repositories = state => { return state.repositories }
+export const repositories = state => { return state.user.repositories }
 export const default_repo = state => { 
 
   var repo = {}

@@ -187,7 +187,7 @@
             },
             repoUsers: function() {
                 var repo_users = {}
-                if(store.state.active_repo !== {}) {
+                if(store.state.active_repo) {
                   store.dispatch('getRepoUsers', {token: store.state.token, data: {repo_id: store.state.active_repo.id}})
                   repo_users = store.state.active_repo.users;
                 }
@@ -196,8 +196,12 @@
             }
 		},
         methods: {
-          userProfile: function(user_id) {
+          userProfile: function(person_id) {
             console.log(' go to user profile ')
+
+            store.dispatch('setPerson', { token: store.state.token, data: { person_id: person_id }})
+            .then(function() { console.log('send me to the user profile!') });
+
           },
           deleteRepo: function(repo_id) {
             store.dispatch('deleteRepo', {token: store.state.token, data: { repo_id: repo_id }})

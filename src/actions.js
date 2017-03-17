@@ -14,12 +14,12 @@ export const doLogin = function(context, data) {
           context.commit('login');
           context.commit('setToken', response.access_token);
           context.commit('setRefresh', response.refresh_token);
+          
+          // Get User Data
+          context.dispatch('getUserInfo', {token: response.access_token});
 
           // Get Repos for User
           context.dispatch('getRepositories', {token: response.access_token});
-
-          // Get User Data
-          context.dispatch('getUserInfo', {token: response.access_token});
 
         } else {
           // Error is in here
@@ -68,6 +68,13 @@ export const getUserInfo = function(context, data) {
     .then(function(response) { context.commit('GET_USER_INFO', response) })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
+
+export const setPerson = function(context, data) {
+  return api.post('/people/info', {headers: {'Authorization': 'Bearer ' + data.token}})
+    .then(function(response) { context.commit('SET_PERSON', response) })
+    .catch(function(error) { context.commit('API_FAILURE', error)  });
+}
+
 
 export const getRepositories = function(context, data) {
   return api.get('/people/repos', {headers: {'Authorization': 'Bearer ' + data.token}})

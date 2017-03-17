@@ -71,7 +71,7 @@ v-model="sharedState.user.prefs.default_repo.name">
                      </button>
 
                      <ul class="dropdown-menu dropdown-menu-right">
-                   	   <li v-for="repository in sharedState.repositories"><a @click="setDefaultRepo(repository)">{{ repository.name }}</a></li>
+                   	   <li v-for="repository in sharedState.users.repositories"><a @click="setDefaultRepo(repository)">{{ repository.name }}</a></li>
                      </ul>
 
                    </div> 

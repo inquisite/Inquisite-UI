@@ -14,6 +14,9 @@ export const logout = state => {
 export const setToken = function(state, access_token) { state.token = access_token }
 export const setRefresh = function(state, refresh_token) { state.refresh = refresh_token }
 
+// User Profile Person Object
+export const setPerson = function(state, person) { state.person = person }
+
 // User Prefs
 export const setUserName = function(state, newName) { state.user.name = newName }
 export const setUserEmail = function(state, newEmail) { state.user.email = newEmail }
@@ -35,7 +38,7 @@ export const setActiveRepo = function(state, new_repo) { state.active_repo = new
 
 // API Mutations
 export const API_FAILURE = function(state, error) { state.msg = error }
-export const GET_REPOS = function(state, response) { state.repositories = response.repos; state.msg = response.msg }
+export const GET_REPOS = function(state, response) { state.user.repositories = response.repos; state.msg = response.msg }
 export const GET_REPO_USERS = function(state, response) { state.active_repo.users = response.users; state.msg = response.msg }
 export const GET_USER_INFO = function(state, response) { 
 
@@ -43,8 +46,12 @@ export const GET_USER_INFO = function(state, response) {
 
   if(!('prefs' in response.person)) {
     console.log('Adding prefs to user object');
-    state.users.prefs = {default_repo: {}};
+    state.user.prefs = {default_repo: {}};
   }
+  if(!('repositories' in response.person)) {
+    state.user.repositories = {}
+  }
+
 } 
 
 export const GET_PEOPLE = function(state, response) { state.users = response.people }

@@ -15,12 +15,13 @@ const state = {
   user: {
     prefs: {
       default_repo: {}
-    }
+    },
+    repositories: [] 
   },
+  person: {},
   users: [],
   msg: '',
   active_repo: {},
-  repositories: []
 }
 
 const store = new Vuex.Store({

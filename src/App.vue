@@ -40,7 +40,7 @@
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repository in sharedState.repositories"><router-link to="#">{{ repository.name }}</router-link></li>
+                   	<li v-for="repository in sharedState.user.repositories"><router-link to="#">{{ repository.name }}</router-link></li>
                   </ul>
 
                 </div>
@@ -108,7 +108,7 @@
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repository in sharedState.repositories"><a @click="setActiveRepo(repository)">{{ repository.name }}</a></li>
+                   	<li v-for="repository in sharedState.user.repositories"><a @click="setActiveRepo(repository)">{{ repository.name }}</a></li>
                   </ul>
 
 
@@ -187,15 +187,14 @@ export default {
 	    return store.getters.is_loggedin;
 	},
     hasRepos: function() {
-      var length = 0;
-      if(store.getters.repositories !== undefined) {
-        length =  store.getters.repositories.length;
-      }
+        var length = 0;
 
-      console.log('has repos?');
-      console.log( length );
+        if(store.state.user.repositories !== undefined) {
+          length = store.state.user.repositories.length;
+        }
 
-      return length;
+        return length;
+        
     }
   },
   methods: {

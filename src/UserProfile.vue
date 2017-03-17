@@ -65,7 +65,7 @@
      
                       <tbody>
 
-                        <tr v-for="repo in sharedState.repositories">
+                        <tr v-for="repo in sharedState.user.repositories">
                           <td>{{repo.name}}</td>
                           <td>{{repo.url}}</td>
                           <td>{{repo.created_on}}</td>
