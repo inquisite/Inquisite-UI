@@ -79,7 +79,7 @@
   
           <div class="media-body">
             <h5 class="media-heading">{{user.name}}</h5>
-            <small>{{user.status}}</small>
+            <small>{{user.role}}</small>
           </div>
 
           <div class="media-right">
