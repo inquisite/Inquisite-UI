@@ -25,6 +25,7 @@
 
 <script>
 import store from './store.js'
+import config from './config.js'
 
 export default { 
   name: 'user-activity',

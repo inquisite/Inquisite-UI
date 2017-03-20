@@ -1,30 +1,39 @@
 <template>
 <div id="upload-data">
-  <div class="ui grid">
-    <div class="sixteen wide column">
-      <h1>Upload Data</h1>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h1>Upload Data</h1>
+      </div>
     </div>
   </div>
 
-  <div class="ui section divider"></div>
-
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui raised segment">
-        <div class="ui large list">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel">
+        <div class="panel-body">
        
+          <p>Adding data to {{sharedState.active_repo.name}}</p>
+
+          <div id="data-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+
           <form id="signup-form" name="signup-form" method="POST" action="">
             <div class="item form-item">
               <div class="ui fluid input content">
-                <input type="text" id="name" name="name" placeholder="Name" v-model="name">
+                <input type="file" class="form-control" id="datafile" name="datafile" placeholder="Data File" @change="onFileChange">
               </div>
             </div>
 
-            <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="ui primary button">Submit</button>
-            </div>
+            <!--<div class="item" style="padding: 10px 0">
+              <button v-on:submit.prevent="processData" v-on:click.prevent="processData" class="btn btn-primary">Submit</button>
+            </div>-->
 
           </form>
+
+          <div id="teaser-container" v-show="sharedState.teaser !== ''">
+            {{sharedState.teaser}}
+          </div>
+
 
         </div>  
       </div>
@@ -35,29 +44,27 @@
 </template>
 
 <script>
+
+import store from './store.js'
+
 export default { 
   name: 'upload-data',
   data: function() {
     return {
-      name: '',
-          }
+      sharedState: store.state,
+    }
   },
   methods: {
-    processData: function() {
+    onFileChange: function(e) {
+      var files = e.target.files || e.dataTransfer.files;
 
-      jQuery.ajax({
-        type: "POST",
-        url: "http://localhost:5000/data/",
-        crossDomain: true,
-        data: {
-          name: this.name,
-        },
-        success: function(data, textStatus, jqXHR) {
-          console.log('success');
-          console.log('data');
-          console.log(data);
-        }
-      })
+      if(!files.length)
+        return;
+ 
+      this.processData(files[0]);
+    },
+    processData: function(repo_data) {
+      store.dispatch('uploadRepoData', {token: store.state.token, form: { repo_file: repo_data, repo_id: store.state.active_repo.id }});
     }
   } 
   

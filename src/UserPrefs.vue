@@ -1,17 +1,17 @@
 <template>
-<div id="user-profile">
-  <div class="ui grid">
-    <div class="sixteen wide column">
-      <h1>User Profile</h1>
+<div id="user-preferences">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h1>User Preferences</h1>
+      </div>
     </div>
   </div>
 
-  <div class="ui section divider"></div>
-
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui raised segment">
-        <div class="ui large list">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel">
+        <div class="panel-body">
 
          <form id="signup-form" name="signup-form" method="POST" action="">
 
@@ -20,50 +20,84 @@
               <div class="msg"></div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Name:</div>
-                <input type="text" id="name" name="name" placeholder="Name" v-model="name">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Email:</div>
-                <input type="text" id="email" name="email" placeholder="Email" v-model="email">
+                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Location:</div>
-                <input type="text" id="location" name="location" placeholder="Location" v-model="location">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="location">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Tagline</div>
-                <input type="text" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
+                <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">URL:</div>
-                <input type="text" id="url" name="url" placeholder="URL" v-model="url">
+                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
               </div>
             </div>
 
-            <div class="item form-item">
+            <div class="item form-item form-group">
               <div class="ui fluid labeled input content">
-                <div class="ui label">Password:</div>
-                <input type="password" id="password" name="password" placeholder="Password" v-model="password">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
               </div>
+            </div>
+
+            <div class="item form-item form-group">
+              <div class="ui">Default Repository:</div>
+ 
+              <div v-if="hasRepos"> 
+                <div class="input-group">
+
+                  <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a Repository" :value="sharedState.user.prefs.default_repo.name"
+v-model="sharedState.user.prefs.default_repo.name">
+                            
+                   <div class="input-group-btn">
+                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       Repos <span class="caret"></span>
+                     </button>
+
+                     <ul class="dropdown-menu dropdown-menu-right">
+                   	   <li v-for="repository in sharedState.users.repositories"><a @click="setDefaultRepo(repository)">{{ repository.name }}</a></li>
+                     </ul>
+
+                   </div> 
+
+                </div>
+              </div>
+              <div v-else>
+ 
+                <div class="alert alert-info" role="alert">
+                  <p>It looks like you have yet to create any repositories. Click here to get started!</p> 
+
+                  <br/>
+
+                  <button type="button" class="btn btn-default">
+                    <router-link to="/add-repo" class="item">
+                      <span class="glyphicon glyphicon-plus"></span> Add a Repository
+                    </router-link>
+                  </button>
+                </div>
+
+              </div>
+
             </div>
 
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="ui primary button">Submit</button>
+              <button v-on:submit.prevent="editUser()" v-on:click.prevent="editUser()" class="btn btn-primary">Submit</button>
             </div>
 
           </form>
@@ -80,50 +114,64 @@
 import store from './store.js'
 
 export default { 
-  name: 'user-profile',
+  name: 'user-prefs',
   data: function() {
     return {
       sharedState: store.state,
-      name: '',
-      email: '',
-      location: '',
-      tagline: '',
-      url: ''
     }
   },
-  created: function() {
-      console.log(' created lifecycle hook ... ');
-      this.getUser()   
-  },
-  watch: {
-    '$route': 'getUser'
+  computed: {
+    name: {
+      get: function() { return store.state.user.name; },
+      set: function(value) { store.commit('setUserName', value) }
+    },
+    email: {
+      get: function() { return store.state.user.email; },
+      set: function(value) { store.commit('setUserEmail', value) }
+    },
+    location: {
+      get: function() { return store.state.user.location; },
+      set: function(value) { store.commit('setUserLocation', value) }
+    },
+    tagline: {
+      get: function() { return store.state.user.tagline; },
+      set: function(value) { store.commit('setUserTagline', value) }
+    },
+    url: {
+      get: function() { return store.state.user.url; },
+      set: function(value) { store.commit('setUserUrl', value) }
+    },
+    default_repo: {
+      get: function() { return store.getters.default_repo; },
+      set: function(value) { store.commit('setDefaultRepo', value) }
+    },
+    hasRepos: function() {
+      var length = 0;
+      if(store.getters.repositories !== undefined) {
+        length = store.getters.repositories.length;
+      }
+
+      return length;
+    }
+
   },
   methods: {
-    getUser: function() {
-    
-      var mydata = this;
+    editUser: function() {
 
-      jQuery.ajax({
-        type: "POST",
-        url: "http://localhost:5000/people/" + mydata.state.user_id,
-        crossDomain: true,
-        data: {},
-        success: function(data, textStatus, jqXHR) {
-          if("ok" == data.status) {
-          
-            self.name = data.name;
-            self.email = data.email;
-            self.location = data.location;
-            self.tagline = data.tagline;
-            self.url = data.url;
+        store.dispatch('editPerson', {
+          token: store.state.token, 
+          data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url, default_repo: this.default_repo}
+        })      
 
-          }
-        }
-      })
-     }
-  },
+    },
+    setDefaultRepo: function(repository) {
+ 
+      console.log('setting default repo');
+      console.log( repository.name );
 
-
+      store.commit('setDefaultRepo', repository);
+    }
+  }
 }
 </script>
 

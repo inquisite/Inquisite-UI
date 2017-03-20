@@ -1,73 +1,162 @@
 <template>
 <div id="home">
-  <div class="ui grid">
-    <div class="sixteen wide column">
-      <h1>New York Scapes</h1>
+  
+  <div class="row">
+    <div class="col-sm-12">
+
+      <div class="pull-right" v-if="isLoggedIn">
+        <a @click="deleteRepo(sharedState.active_repo.id)">
+          <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete Repository</button>
+        </a>
+      </div>
+
+      <div class="page-header" v-if="isLoggedIn">
+        <h1>Dashboard - {{sharedState.active_repo.name}}</h1>
+      </div>
+      <div class="page-header" v-else>
+        <h1>Welcome to Inquisite</h1>
+      </div>
+
     </div>
   </div>
 
-  <div class="ui section divider"></div>
+  <div class="row" v-if="isLoggedIn">
+    <div class="col-sm-6">
 
-  <div class="ui grid">
-    <div class="eight wide column">
-      <div class="ui raised segment">
-        <a class="ui teal ribbon label">Data Sets</a>
-        <div class="ui relaxed divided list">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Data Sets</h3>
+        </div>
+        <div class="panel-body">
 
-            <div class="item">
-              <i class="large icon folder middle aligned"></i>
-              <div class="content">
-                <a class="header grey">New York Merchants 1800-1801</a>
-                <div class="description">
-                  <small>by Tom A. 5,674 records, 30 elements</small>
-                </div>
-              </div>                  
-            </div>
+          <ul class="media-list" v-if="sharedState.active_repo.datasets">
 
-            <div class="item">
-              <i class="large icon folder middle aligned"></i>
-              <div class="content">
-                <a  class="header">Carnegie Hospital Records 1830s</a>
-                <div class="description">
-                  <small>by Nick W. 10,213 records, 9 elements</small>
-                </div>
+            <li class="media list-item" v-for="set in sharedState.active_repo.datasets">
+              <div class="media-left">
+                <span class="glyphicon glyphicon-folder-close"></span>
               </div>
-            </div>
+
+              <div class="media-body">
+                <h5 class="media-heading">{{set.name}}</h5>
+                <div class="description">
+                   <small>by {{set.owner}} {{set.record_count}}, {{set.element_count}} elements</small>
+                </div> 
+              </div>
+            </li>
+          </ul>
+
+          <div v-else>
+            <p>It looks like you haven't added any datasets to your repository yet?</p>
+
+
+            <router-link to="/upload">
+              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add Dataset</button>
+            </router-link>
+          </div>
 
         </div>
       </div>
+
     </div>
 
-    <div class="eight wide column">
-      <h3 class="ui header">Project Introduction and Goals</h3>
-      <p>Lorem ipsum dolor sit amet,</p>
-      <p>Vivamus sodales tortor in leo blandit pharetra</p>
-      <p>Lorem ipsum dolor sit amet,</p>
-      <p>Vivamus sodales tortor in leo blandit pharetra</p>
-      <p>Lorem ipsum dolor sit amet,</p>
-      <p>Vivamus sodales tortor in leo blandit pharetra</p>
+    <div class="col-sm-6">
+      <div v-html="compiledMarkdown"></div>
     </div>
 
   </div>
 
-  <div class="ui section divider"></div>
-   
-  <div class="ui grid">
-    <div class="eight wide column">
-      <h3 class="ui header">Users in this Repository</h3>
-      <div class="ui middle aligned relaxed divided list">
-        <div class="item">
-          <div class="right floated content">
-            <div class="ui button">Profile</div>
+  <hr/>   
+
+  <div class="row" v-if="isLoggedIn">
+    <div class="col-sm-6">
+      <h4>Users in this Repository</h4>
+
+      <ul class="media-list">
+        <li class="media list-item" v-for="user in repoUsers">
+          <div class="media-left">
+            <span class="glyphicon glyphicon-user"></span>
           </div>
-          <i class="large icon user"></i>
-          <div class="content">
-            <a class="header">Daniel L.</a>
-            <small>online now</small>
+  
+          <div class="media-body">
+            <h5 class="media-heading">{{user.name}}</h5>
+            <small>{{user.role}}</small>
           </div>
-        </div>
-      </div>
+
+          <div class="media-right">
+            <a @click="userProfile(user.id)">
+              <button type="button" class="btn btn-default text-right">Profile</button>
+            </a>
+          </div>
+        </li>
+      </ul>
+
+      <router-link to="/add-person-repo">
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add People</button>
+      </router-link>
+
     </div>
+
+    <div class="col-sm-6">
+      <h4>Recent Activity</h4>
+
+      <ul class="media-list">
+         
+        <li class="media list-item">
+          <div class="media-left">
+            <a href="#">
+              <span class="glyphicon glyphicon-user"></span>
+            </a>
+          </div>
+
+          <div class="media-body">
+            <h5 class="media-heading">B. Shellnut</h5>
+            <small>joined the Repository <a href="#">New York Scapes</a> 32m</small>
+          </div>
+        </li>
+
+        <li class="media list-item">
+          <div class="media-left">
+            <a href="#">
+              <span class="glyphicon glyphicon-upload"></span>
+            </a>
+          </div>
+
+          <div class="media-body">
+            <h5 class="media-heading">Nick W.</h5>
+            <small>uploaded <a href="#">New York Scapes</a> 2 days</small>
+          </div>
+        </li>
+
+        <li class="media list-item">
+          <div class="media-left">
+            <a href="#">
+              <span class="glyphicon glyphicon-edit"></span>
+            </a>
+          </div>
+
+          <div class="media-body">
+            <h5 class="media-heading">Nick W.</h5>
+            <small>edited <a href="#">New York Scapes</a> 2 days</small>
+          </div>
+        </li>
+
+        <li class="media list-item">
+          <div class="media-left">
+            <a href="#">
+              <span class="glyphicon glyphicon-duplicate"></span>
+            </a>
+          </div>
+
+          <div class="media-body">
+            <h5 class="media-heading">Nick W.</h5>
+            <small>copied <a href="#">New York Scapes</a> 2 days</small>
+          </div>
+        </li>
+
+      </ul>
+
+    </div>
+
   </div>
 
 </div>
@@ -75,7 +164,51 @@
 </template>
 
 <script>
-export default { name: 'home' }
+	import store from './store.js'
+    var marked = require('marked'); 
+
+	export default { 
+		name: 'home',
+        data: function() {
+          return {
+            sharedState: store.state
+          }
+        },
+		computed: {
+			isLoggedIn() {
+				return store.getters.isLoggedIn;
+			},
+            compiledMarkdown: function() {
+                if(store.state.active_repo.readme) {
+                  return marked(store.state.active_repo.readme, { sanitize: true})
+                } else {
+                  return ''
+                }
+            },
+            repoUsers: function() {
+                var repo_users = {}
+                if(store.state.active_repo) {
+                  store.dispatch('getRepoUsers', {token: store.state.token, data: {repo_id: store.state.active_repo.id}})
+                  repo_users = store.state.active_repo.users;
+                }
+    
+                return repo_users;
+            }
+		},
+        methods: {
+          userProfile: function(person_id) {
+            console.log(' go to user profile ')
+
+            store.dispatch('setPerson', { token: store.state.token, data: { person_id: person_id }})
+            .then(function() { console.log('send me to the user profile!') });
+
+          },
+          deleteRepo: function(repo_id) {
+            store.dispatch('deleteRepo', {token: store.state.token, data: { repo_id: repo_id }})
+          }
+        }
+	}
+	
 </script>
 
 <style>

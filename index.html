@@ -2,74 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>inquisite-ui</title>
-    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <title>Inquisite</title>
     <link rel="stylesheet" type="text/css" href="assets/css/theme.css">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
   </head>
   <body>
 
     <!-- start vue.js container -->
-    <div id="app">
-      
-      <div class="ui fixed menu">
-        <a href="http://inquisite.whirl-i-gig.com/inquisite-ui" class="header item logo">
-          <img class="logo" src="assets/images/logo.png">
-        </a>
-
-        <!--<router-link :to="{name: 'uploaddata'}" class="item">Upload Data</router-link>
-        <router-link :to="{name: 'searchrefine'}" class="item">Search & Refine</router-link>-->
-
-        <a v-link="{ name: 'uploaddata'}" class="item">Upload Data</a>
-        <a v-link="{ name: 'searchrefine'}" class="item">Search & Refine</a>
-
-        <div class="ui simple dropdown item">
-          Visulize <i class="dropdown icon"></i>
-          <div class="menu">
-            <a class="item" href="#">Map</a>
-            <a class="item" href="#">Timeline</a>
-            <a class="item" href="#">Sheet</a>
-            <a class="item" href="#">Nodes</a>
-          </div>
-        </div>
-
-        <div class="right menu">
-          <div class="ui selection dropdown">
-            <input type="hidden" name="dataset">
-            <i class="dropdown icon"></i>
-            <div class="text">New York Scapes</div>
-            <div class="ui menu">
-              <div class="header">Choose a Repository</div>
-              <div class="divide"></div>
-              <div class="item" data-value="1">City Census Data</div>
-              <div class="item" data-value="2">New York Scapes</div>
-              <div class="item" data-value="3">NYC Street Addresses (1850 - 1901)</div>
-            </div>
-          </div>
-
-          <div class="ui simple dropdown item">
-            <i class="icon user"></i> <i class="dropdown icon"></i>
-            <div class="menu">
-              <a class="item" href="#">User Preferences</a>
-              <a class="item" href="#">User Profile</a>
-              <a class="item" href="#">Activity Log</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Start of Home page content -->
-      <div class="ui pageContent container">
-        <div class="ui grid">
-
-        </div>
-      </div>
-  
-    </div>
+    <div id="app"></div>
     <!-- end vue.js container -->
 
-    <script src="semantic/dist/jquery-3.1.0.min.js"></script>
+    <script src="/assets/js/jquery-3.1.0.min.js"></script>
     <script src="/dist/build.js"></script>
-    <script src="semantic/dist/semantic.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
   </body>
 </html>

@@ -1,9 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
+import axios from 'axios'
 
-Vue.use(VueRouter);
-Vue.use(VueResource);
+Vue.use(VueRouter, axios);
 
 const routes = require('./routes.js')
 const App = require('./App.vue')
@@ -23,7 +22,6 @@ new Vue({
     root: '../'
   },
   created: function() {
-    console.log('calling userStore')
-    store.default.getters.get_token
+    store.default.getters.getToken
   }
 })
