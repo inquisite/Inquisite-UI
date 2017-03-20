@@ -15,8 +15,6 @@
              <span class="glyphicon glyphicon-menu-hamburger"></span>
            </button>
          </div>
-
-
        </div>
 
          <div id="mobileNav-container" class="container collapse">
@@ -177,7 +175,7 @@ export default {
   },
   mounted: function() {
     this.getRepoList();
-    store.commit('setActiveRepo',store.getters.getActiveRepo);
+   // store.commit('setActiveRepo',store.getters.getActiveRepo);
   },
   watch: {
     '$route': 'pageChangeActions'
@@ -208,15 +206,11 @@ export default {
           length = store.state.user.repos.length;
         }
 
-console.log("exec computed prop hasRepos", length);
         return length;
         
     },
     
     pageChangeActions: function() {
-
-      console.log('page Change Actions');
-
       // Clear form msg
       store.state.msg = '';
 
@@ -224,7 +218,7 @@ console.log("exec computed prop hasRepos", length);
       if( this.isLoggedIn && !this.hasRepos) {
 
         console.log(' getting some repos now');
-        store.dispatch('getRepos', { token: store.state.token }); 
+        store.dispatch('getRepos', { token: store.state.token });
       }
 
     },
@@ -240,6 +234,3 @@ console.log("exec computed prop hasRepos", length);
   },
 }
 </script>
-
-<style>
-</style>

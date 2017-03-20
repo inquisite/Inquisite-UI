@@ -92,6 +92,8 @@ export const getRepos = function(context, data) {
   return api.get('/people/repos', {headers: {'Authorization': 'Bearer ' + data.token}})
     .then(function(response) { 
       context.commit('GET_REPOS', response);
+      context.commit('setActiveRepo', context.getters.getActiveRepo);
+      return response;
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }

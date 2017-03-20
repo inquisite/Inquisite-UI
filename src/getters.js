@@ -16,7 +16,7 @@ export const defaultRepo = state => {
 }
 
 export const getActiveRepo = state => { 
-	console.log("active repo=", window.sessionStorage.getItem('repo_id'));
+	//console.log("active repo=", window.sessionStorage.getItem('repo_id'));
 	return window.sessionStorage.getItem('repo_id');
 }
 
