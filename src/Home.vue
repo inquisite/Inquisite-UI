@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-sm-12">
 
-      <div class="pull-right" v-if="isLoggedIn">
+      <div class="pull-right" v-if="showRepoControls">
         <a @click="deleteRepo(sharedState.active_repo.id)">
           <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete Repository</button>
         </a>
@@ -193,7 +193,18 @@
                 }
     
                 return repo_users;
+            },
+            showRepoControls: function() {
+
+              var show = false;
+              if( this.isLoggedIn && store.state.active_repo.id ) {
+                show = true;
+              }
+            
+              return show;
+
             }
+
 		},
         methods: {
           userProfile: function(person_id) {
