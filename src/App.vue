@@ -40,7 +40,7 @@
               <a @click="processLogout" class="item" >Logout</a>
             </div>
             <div class="menu" v-else>
-              <router-link to="/login" class="item" >Login</rotuer-link>
+              <router-link to="/login" class="item" >Login</router-link>
             </div>
 
           </div>
