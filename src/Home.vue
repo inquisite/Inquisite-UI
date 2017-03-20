@@ -176,7 +176,7 @@
         },
 		computed: {
 			isLoggedIn() {
-				return store.getters.is_loggedin;
+				return store.getters.isLoggedIn;
 			},
             compiledMarkdown: function() {
                 if(store.state.active_repo.readme) {

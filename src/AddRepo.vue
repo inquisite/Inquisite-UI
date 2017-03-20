@@ -14,13 +14,13 @@
       <div class="panel">
         <div class="panel-body">
 
-          <div class="alert alert-info" v-show="sharedState.repositories.length == 0">
-            This looks like your first repository, It will be set as your Active Repository!
+          <div class="alert alert-info" v-show="repositoryCount == 0">
+            This looks like your first repository. It will be set as your Active Repository!
           </div>
 
           <div id="repo-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
 
-          <form id="addRepo-form" name="addRepo-form" method="POST" action="">
+          <form id="addRepo-form" name="addRepo-form" method="POST" action="#">
 
             <div class="item form-item">
               <div class="ui fluid input content">
@@ -80,6 +80,9 @@ export default {
   computed: {
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
+    },
+    repositoryCount: function() {
+      return store.state.repositories;
     }
   }, 
   methods: {

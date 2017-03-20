@@ -22,6 +22,6 @@ new Vue({
     root: '../'
   },
   created: function() {
-    store.default.getters.get_token
+    store.default.getters.getToken
   }
 })

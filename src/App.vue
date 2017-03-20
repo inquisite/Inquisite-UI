@@ -30,7 +30,7 @@
              <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
              <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
 
-             <li v-if="hasRepos">
+             <li v-if="hasRepos()">
               <div class="input-container">
               <div class="input-group">
                 <input type="text" class="form-control" aria-label="Choose a Repository" value="">
@@ -40,7 +40,7 @@
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repository in sharedState.user.repositories"><router-link to="#">{{ repository.name }}</router-link></li>
+                   	<li v-for="repo in sharedState.user.repos"><router-link to="#">{{ repo.name }}</router-link></li>
                   </ul>
 
                 </div>
@@ -98,7 +98,7 @@
 
           <ul class="nav navbar-nav navbar-right">
 
-            <li v-if="hasRepos">
+            <li v-if="hasRepos()">
               <div class="input-container">
               <div class="input-group">
                 <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
@@ -108,7 +108,7 @@
                   </button>
 
                   <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repository in sharedState.user.repositories"><a @click="setActiveRepo(repository)">{{ repository.name }}</a></li>
+                   	<li v-for="repo in sharedState.user.repos"><a @click="setActiveRepo(repo.id)">{{ repo.name }}</a></li>
                   </ul>
 
 
@@ -176,26 +176,16 @@ export default {
     }
   },
   mounted: function() {
-    console.log("mounted");
-    this.getRepositoryList();
+    this.getRepoList();
+    store.commit('setActiveRepo',store.getters.getActiveRepo);
   },
   watch: {
     '$route': 'pageChangeActions'
   },
   computed: {
     isLoggedIn: function() {
-	    return store.getters.is_loggedin;
-	},
-    hasRepos: function() {
-        var length = 0;
-
-        if(store.state.user.repositories !== undefined) {
-          length = store.state.user.repositories.length;
-        }
-
-        return length;
-        
-    }
+	    return store.getters.isLoggedIn;
+	}
   },
   methods: {
     processLogout: function() {
@@ -211,6 +201,17 @@ export default {
       });
 
     },
+    hasRepos: function() {
+        var length = 0;
+
+        if(store.state.user.repos !== undefined) {
+          length = store.state.user.repos.length;
+        }
+
+console.log("exec computed prop hasRepos", length);
+        return length;
+        
+    },
     
     pageChangeActions: function() {
 
@@ -219,21 +220,21 @@ export default {
       // Clear form msg
       store.state.msg = '';
 
-      // Get User Repos if Logged in and we don't have them 
+      // Get User Repos if logged in and we don't have them 
       if( this.isLoggedIn && !this.hasRepos) {
 
         console.log(' getting some repos now');
-        store.dispatch('getRepositories', { token: store.state.token }); 
+        store.dispatch('getRepos', { token: store.state.token }); 
       }
 
     },
 
-    getRepositoryList: function() {
-      store.dispatch('getRepositories', { token: store.state.token });
+    getRepoList: function() {
+      store.dispatch('getRepos', { token: store.state.token });
     },
     
-    setActiveRepo: function(repository) {
-      store.commit('setActiveRepo', repository);
+    setActiveRepo: function(repo_id) {
+      store.commit('setActiveRepo', repo_id);
     }
 
   },

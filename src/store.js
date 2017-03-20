@@ -16,7 +16,7 @@ const state = {
     prefs: {
       default_repo: {}
     },
-    repositories: [] 
+    repos: [] 
   },
   person: {},
   users: [],
