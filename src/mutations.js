@@ -24,7 +24,7 @@ export const setToken = function(state, access_token) {
 export const setRefresh = function(state, refresh_token) { state.refresh = refresh_token }
 
 // User Profile Person Object
-export const setPerson = function(state, person) { state.person = person }
+export const SET_PERSON = function(state, person) { state.person = person }
 
 // User Prefs
 export const setUserName = function(state, newName) { state.user.name = newName }

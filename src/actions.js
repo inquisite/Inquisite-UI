@@ -81,8 +81,8 @@ export const getUserInfo = function(context, data) {
 
 export const setPerson = function(context, data) {
   if (!data.token) return false;
-  return api.post('/people/info', {headers: {'Authorization': 'Bearer ' + data.token}})
-    .then(function(response) { context.commit('SET_PERSON', response) })
+  return api.post('/people/info', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type':'application/x-www-form-urlencoded'}})
+    .then(function(response) { context.commit('SET_PERSON', response.person) })
     .catch(function(error) { context.commit('API_FAILURE', error)  });
 }
 
