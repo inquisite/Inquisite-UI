@@ -71,7 +71,7 @@ v-model="sharedState.user.prefs.default_repo.name">
                      </button>
 
                      <ul class="dropdown-menu dropdown-menu-right">
-                   	   <li v-for="repository in sharedState.users.repositories"><a @click="setDefaultRepo(repository)">{{ repository.name }}</a></li>
+                   	   <li v-for="repository in sharedState.user.repos"><a @click="setDefaultRepo(repository)">{{ repository.name }}</a></li>
                      </ul>
 
                    </div> 
@@ -147,8 +147,8 @@ export default {
     },
     hasRepos: function() {
       var length = 0;
-      if(store.getters.repositories !== undefined) {
-        length = store.getters.repositories.length;
+      if(store.state.user.repos !== undefined) {
+        length = store.state.user.repos.length;
       }
 
       return length;

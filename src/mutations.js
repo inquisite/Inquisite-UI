@@ -8,8 +8,6 @@ export const login =  state => {
 export const logout = state => {
   state.logged_in = false
   state.token = ''
-  state.user_id = ''
-  state.username = ''
   state.user = {}
   state.active_repo = {}
 }
