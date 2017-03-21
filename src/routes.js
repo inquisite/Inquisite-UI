@@ -21,6 +21,9 @@ Vue.component('user-prefs', UserPrefs)
 const UserProfile = require('./UserProfile.vue')
 Vue.component('user-profile', UserProfile)
 
+const MyProfile = require('./MyProfile.vue')
+Vue.component('my-profile', MyProfile)
+
 const UserActivityLog = require('./UserActivityLog.vue')
 Vue.component('user-activity', UserActivityLog)
 
@@ -37,6 +40,7 @@ export default [
   { path: '/upload', name: 'upload-data', component: UploadData },
   { path: '/user/preferences', name: 'user-prefs', component: UserPrefs },
   { path: '/user/profile', name: 'user-profile', component: UserProfile },
+  { path: '/user/my-profile', name: 'my-profile', component: MyProfile },
   { path: '/user/activity', name: 'user-activity', component: UserActivityLog },
   { path: '/add-repo', name: 'add-repo', component: AddRepo },
   { path: '/add-person-repo', name: 'add-person-repo', component: AddPersonRepo }

@@ -136,7 +136,7 @@
               <ul class="dropdown-menu" v-if="isLoggedIn">
 
                 <li><router-link to="/user/preferences" class="item">User Preferences</router-link></li>
-                <li><router-link to="/user/profile" class="item">User Profile</router-link></li>
+                <li><router-link to="/user/my-profile" class="item">User Profile</router-link></li>
                 <li><router-link to="/user/activity" class="item">Activity Log</router-link></li>
                 <li><a @click="processLogout" class="item">Logout</a></li>
               </ul>

@@ -19,11 +19,11 @@
               <div class="panel">
               <div class="panel-body">
 
-              <div>Name: {{sharedState.person.name}}</div>
-              <div>Email: {{sharedState.person.email}}</div>
-              <div>Location: {{sharedState.person.location}}</div>
-              <div>Tagline: {{sharedState.person.tagline}}</div>
-              <div>URL: {{sharedState.person.url}}</div>
+              <div>Name: {{sharedState.user.name}}</div>
+              <div>Email: {{sharedState.user.email}}</div>
+              <div>Location: {{sharedState.user.location}}</div>
+              <div>Tagline: {{sharedState.user.tagline}}</div>
+              <div>URL: {{sharedState.user.url}}</div>
 
               </div>
               </div>
@@ -59,15 +59,20 @@
                         <th>Name</th>
                         <th>URL</th>
                         <th>Created On</th>
+                        <th>Controls</th>
                       </tr>
                       </thead>
      
                       <tbody>
 
-                        <tr v-for="repo in sharedState.person.repositories">
+                        <tr v-for="repo in sharedState.user.repos">
                           <td>{{repo.name}}</td>
                           <td>{{repo.url}}</td>
                           <td>{{repo.created_on}}</td>
+                          <td>
+                            <a @click="editRepo(repo.id)"><span class="glyphicon glyphicon-pencil"></span></a> |
+                            <a @click="deleteRepo(repo.id)"><span class="glyphicon glyphicon-remove"></span></a>
+                          </td>
                         </tr> 
                       </tbody>
                     </table>
@@ -107,6 +112,13 @@ export default {
     }
   },
   methods: {
+    editRepo: function(repo_id) {
+      console.log('edit Repo ' + repo_id);
+    },
+    deleteRepo: function(repo_id) {
+      store.dispatch('deleteRepo', {token: store.state.token, data: { repo_id: repo_id }})
+    }
+
   },
 }
 </script>

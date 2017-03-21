@@ -210,8 +210,16 @@
           userProfile: function(person_id) {
             console.log(' go to user profile ')
 
+            var self = this;
+
             store.dispatch('setPerson', { token: store.state.token, data: { person_id: person_id }})
-            .then(function() { console.log('send me to the user profile!') });
+            .then(function() { 
+
+                // Transition to User Profile if person set
+                if(store.state.person) {
+                  self.$root.$options.router.push('/user/profile')
+                }
+            });
 
           },
           deleteRepo: function(repo_id) {
