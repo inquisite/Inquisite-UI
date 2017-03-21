@@ -72,9 +72,11 @@ export const GET_USER_INFO = function(state, response) {
   state.user = response.person; 
 
   if(!('prefs' in response.person)) {
-    console.log('Adding prefs to user object');
     state.user.prefs = {default_repo: {}};
+  } else {
+    state.user.prefs = JSON.parse(response.person.prefs);
   }
+
   if(!('repositories' in response.person)) {
     state.user.repos = {}
   }
