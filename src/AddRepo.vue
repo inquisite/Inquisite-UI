@@ -30,7 +30,7 @@
 
             <div class="item form-item">
               <div class="ui fluid input content">
-                <textarea class="form-control" :value="readme" @input="updateMarkdown"></textarea>
+                <textarea class="form-control" :value="readme" @input="updateMarkdown" rows="10" cols="80"></textarea>
               </div>
             </div>
 
@@ -89,8 +89,8 @@ export default {
 
     addRepo: function() {
       if(this.name !== '') {
-        store.dispatch('addRepo', { token: store.state.token, data: {name: this.name, readme: this.readme, url: this.url}})
-        .then(function() { store.dispatch('getRepositories', { token: store.state.token }) })
+        store.dispatch('addRepo', { data: {name: this.name, readme: this.readme, url: this.url}})
+        .then(function() { store.dispatch('getRepositories', { }) })
       } else {
         this.sharedState.msg = 'Repository name is a required field';
       }

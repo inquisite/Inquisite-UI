@@ -65,7 +65,6 @@
 
   </div>
 
-  <hr/>   
 
   <div class="row" v-if="isLoggedIn">
     <div class="col-sm-6">
@@ -188,7 +187,7 @@
             repoUsers: function() {
                 var repo_users = {}
                 if(store.state.active_repo) {
-                  store.dispatch('getRepoUsers', {token: store.state.token, data: {repo_id: store.state.active_repo.id}})
+                  store.dispatch('getRepoUsers', {data: {repo_id: store.state.active_repo.id}})
                   repo_users = store.state.active_repo.users;
                 }
     
@@ -212,7 +211,7 @@
 
             var self = this;
 
-            store.dispatch('setPerson', { token: store.state.token, data: { person_id: person_id }})
+            store.dispatch('setPerson', { data: { person_id: person_id }})
             .then(function() { 
 
                 // Transition to User Profile if person set
@@ -223,7 +222,7 @@
 
           },
           deleteRepo: function(repo_id) {
-            store.dispatch('deleteRepo', {token: store.state.token, data: { repo_id: repo_id }})
+            store.dispatch('deleteRepo', { data: { repo_id: repo_id }})
           }
         }
 	}
