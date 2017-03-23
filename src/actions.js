@@ -164,3 +164,12 @@ export const uploadRepoData = function(context, data) {
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
+
+export const getDataNodes = function(context, data) {
+  if(!data.token) return false;
+  
+  return api.post('repositories/data', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { context.commit('REPO_DATA', response) })
+    .catch(function(error) { context.commit('API_FAILURE', error) })
+}
+

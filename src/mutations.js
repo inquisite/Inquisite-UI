@@ -89,4 +89,13 @@ export const EDIT_PERSON = function(state, response) { state.msg = response.msg 
 export const ADD_REPO = function(state, response) { state.msg = response.msg }
 export const ADD_PERSON_REPO = function(state, response) { state.msg = response.msg }
 export const DELETE_REPO = function(state, response) { state.msg = response.msg }
-export const UPLOAD_REPO_DATA = function(state, response) { state.msg = response.msg; state.teaser = response.data }
+export const UPLOAD_REPO_DATA = function(state, response) { 
+  state.msg = response.msg; 
+  state.teaser = response.data;
+  state.upload_row_count = response.row_count;  
+  state.upload_fields = response.fieldnames;
+  state.upload_subfields = response.nestednames;
+}
+export const REPO_DATA = function(state, response) { state.msg = response.msg; state.active_repo.data = response.data }
+
+

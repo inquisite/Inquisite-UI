@@ -3,20 +3,13 @@ export const repos = state => { return state.user.repos }
 export const defaultRepo = state => { 
   var repo = {};
   if(state.user.prefs !== undefined) {
-
-      console.log('in getters.js .. we have a users prefs obj');
-
       repo = state.user.prefs.defaultRepo;
   }
-
-  console.log('getters js returning default repo');
-  console.log( repo );
 
   return repo;
 }
 
 export const getActiveRepo = state => { 
-	//console.log("active repo=", window.sessionStorage.getItem('repo_id'));
 	return window.sessionStorage.getItem('repo_id');
 }
 

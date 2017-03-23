@@ -23,7 +23,7 @@
   <div class="row" v-if="isLoggedIn">
     <div class="col-sm-6">
 
-      <div class="panel panel-primary">
+      <div class="panel panel-primary" v-if="showRepoControls">
         <div class="panel-heading">
           <h3 class="panel-title">Data Sets</h3>
         </div>
@@ -59,7 +59,7 @@
 
     </div>
 
-    <div class="col-sm-6">
+    <div class="col-sm-6" v-if="showRepoControls">
       <div v-html="compiledMarkdown"></div>
     </div>
 
@@ -67,7 +67,7 @@
 
   <hr/>   
 
-  <div class="row" v-if="isLoggedIn">
+  <div class="row" v-if="showRepoControls">
     <div class="col-sm-6">
       <h4>Users in this Repository</h4>
 
@@ -96,7 +96,7 @@
 
     </div>
 
-    <div class="col-sm-6">
+    <div class="col-sm-6" v-if="showRepoControls">
       <h4>Recent Activity</h4>
 
       <ul class="media-list">
@@ -186,13 +186,13 @@
                 }
             },
             repoUsers: function() {
-                var repo_users = {}
-                if(store.state.active_repo) {
+                  var users = []
                   store.dispatch('getRepoUsers', {token: store.state.token, data: {repo_id: store.state.active_repo.id}})
-                  repo_users = store.state.active_repo.users;
-                }
-    
-                return repo_users;
+                  users = store.state.active_repo.users;
+
+                  console.log('repoUsers returned: ');
+                  console.log(users);
+                  return users;
             },
             showRepoControls: function() {
 
