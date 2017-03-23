@@ -116,7 +116,7 @@ export default {
       console.log('edit Repo ' + repo_id);
     },
     deleteRepo: function(repo_id) {
-      store.dispatch('deleteRepo', {token: store.state.token, data: { repo_id: repo_id }})
+      store.dispatch('deleteRepo', { data: { repo_id: repo_id }})
     }
 
   },

@@ -23,7 +23,7 @@
              <li><router-link class="item" to="/searchrefine">Search &amp; Refine</router-link></li>
              <li v-if="isLoggedIn"><router-link class="item" to="/visualize/map">Map</router-link></li>
              <li v-if="isLoggedIn"><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
-             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/sheet">Timeline</router-link></li>
+             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/sheet">Sheet</router-link></li>
              <li v-if="isLoggedIn"><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
              <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
              <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
