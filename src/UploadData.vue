@@ -31,7 +31,7 @@
           </form>
 
           <div id="teaser-container">
-            <p>Uploaded {{sharedState.upload_row_count}} rows</p>
+            <p>Uploading {{sharedState.upload_row_count}} rows</p>
             <div>Fields: 
               <span class="label label-primary" style="display: inline-block; font-size: 14px; margin: 1%"  v-for="field in sharedState.upload_fields">{{field}}</span>
             </div>
