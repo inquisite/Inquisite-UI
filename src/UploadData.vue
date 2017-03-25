@@ -30,8 +30,15 @@
 
           </form>
 
-          <div id="teaser-container" v-show="sharedState.teaser !== ''">
-            {{sharedState.teaser}}
+          <div id="teaser-container">
+            <p>Uploading {{sharedState.upload_row_count}} rows</p>
+            <div>Fields: 
+              <span class="label label-primary" style="display: inline-block; font-size: 14px; margin: 1%"  v-for="field in sharedState.upload_fields">{{field}}</span>
+            </div>
+            <div>Nested Fields:
+              <span class="label label-info" style="display: inline-block; font-size: 14px; margin: 1%" v-for="subfield in sharedState.upload_subfields">{{subfield}}</span>
+            </div>
+
           </div>
 
 

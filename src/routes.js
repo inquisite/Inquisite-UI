@@ -33,6 +33,12 @@ Vue.component('add-repo', AddRepo)
 const AddPersonRepo = require('./AddPersonRepo.vue')
 Vue.component('add-person-repo', AddPersonRepo)
 
+const VisualizeNodes = require('./VisualizeNodes.vue')
+Vue.component('visualize-nodes', VisualizeNodes)
+
+const VisualizeSheets = require('./VisualizeSheets.vue')
+Vue.component('visualise-sheets', VisualizeSheets)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -43,5 +49,7 @@ export default [
   { path: '/user/my-profile', name: 'my-profile', component: MyProfile },
   { path: '/user/activity', name: 'user-activity', component: UserActivityLog },
   { path: '/add-repo', name: 'add-repo', component: AddRepo },
-  { path: '/add-person-repo', name: 'add-person-repo', component: AddPersonRepo }
+  { path: '/add-person-repo', name: 'add-person-repo', component: AddPersonRepo },
+  { path: '/visualize/nodes', name: 'visualize-nodes', component: VisualizeNodes },
+  { path: '/visualize/sheet', name: 'visualize-sheets', component: VisualizeSheets }
 ]
