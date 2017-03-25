@@ -101,19 +101,22 @@ export const getRepos = function(context, data) {
 // Repos
 export const addRepo = function(context, data) {
   if (!context.state.token) return false;
+console.log("addrepo", data);
+  var setAsActive = data.makeActive ? true : false;
   return api.post('/repositories/add', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { 
         context.commit('ADD_REPO', response); 
 
-        console.log('context');
-        console.log( context );
+        var new_repo_id = response.repo.repo_id
 
-        if(context.getters.repos.length == 0) {
+        context.dispatch('getRepos', {}).then(function() { 
+           if((context.getters.repos.length == 0) || setAsActive) {
           console.log('set Active Repo from response here');
-          console.log('Active Repo: ');
-          console.log(response.repo);
-          context.commit('setActiveRepo', response.id);
-        }
+          console.log('Active Repo: ', new_repo_id);
+          context.commit('setActiveRepo', new_repo_id);
+        }     
+          });
+       
 
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
