@@ -166,9 +166,9 @@ export const uploadRepoData = function(context, data) {
 }
 
 export const getDataNodes = function(context, data) {
-  if(!data.token) return false;
+  if(!context.state.token) return false;
   
-  return api.post('repositories/data', data.data, {headers: {'Authorization': 'Bearer ' + data.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+  return api.post('repositories/data', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { context.commit('REPO_DATA', response) })
     .catch(function(error) { context.commit('API_FAILURE', error) })
 }
