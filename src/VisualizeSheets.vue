@@ -14,7 +14,7 @@
         <div class="panel-body">
        
          <p>Displaying Data Sheet for {{sharedState.active_repo.name}} </p> 
-         <div v-html="dataTable"></div>
+         <div v-html="dataTable" style="display:flex; overflow-x: auto;"></div>
 
         </div>  
       </div>
@@ -54,16 +54,12 @@ export default {
 
         html + "</tr>";
 
-
         for(var idx = 0; idx <= store.state.active_data.length; idx++) {
         
           html += "<tr>";
-
-
           for(key in store.state.active_data[idx]) {
             html += "<td>" + store.state.active_data[idx][key] + "</td>";
           }
-
           html += "</tr>";
 
         }
