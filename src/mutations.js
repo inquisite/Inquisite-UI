@@ -96,6 +96,6 @@ export const UPLOAD_REPO_DATA = function(state, response) {
   state.upload_fields = response.fieldnames;
   state.upload_subfields = response.nestednames;
 }
-export const REPO_DATA = function(state, response) { state.msg = response.msg; state.active_repo.data = response.data }
+export const REPO_DATA = function(state, response) { state.msg = response.msg; state.active_data = response.data }
 
 

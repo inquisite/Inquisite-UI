@@ -216,13 +216,13 @@ export default {
       if( this.isLoggedIn && !this.hasRepos) {
 
         console.log(' getting some repos now');
-        store.dispatch('getRepos', { token: store.state.token });
+        store.dispatch('getRepos').then(function() { store.dispatch('getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
       }
 
     },
 
     getRepoList: function() {
-      store.dispatch('getRepos', { token: store.state.token });
+      store.dispatch('getRepos');
     },
     
     setActiveRepo: function(repo_id) {

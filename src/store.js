@@ -22,6 +22,7 @@ const state = {
   users: [],
   msg: '',
   active_repo: {},
+  active_data: []
 }
 
 const store = new Vuex.Store({
