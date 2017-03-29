@@ -70,15 +70,13 @@ export default {
       sharedState: store.state,
     }
   },
-  created: function() {
-    this.getDataNodes()
-  },
+  
   computed: {
     nodesData: function() {
     
       var html = ""
    
-      for(var i = 0; i < store.state.active_data.length; i++) {
+      for(var i = 0; i < store.state.active_repo.data.length; i++) {
 
         var item_class = "item";
         if(i == 0) {
@@ -86,8 +84,8 @@ export default {
         }
 
         html += '<div class="' + item_class + '">' 
-        for(var attr in store.state.active_data[i]) {
-          html += '<div>' + attr + ': ' + store.state.active_data[i][attr] + '</div>'
+        for(var attr in store.state.active_repo.data[i]) {
+          html += '<div>' + attr + ': ' + store.state.active_repo.data[i][attr] + '</div>'
         }
         html += '</div>'
       }
@@ -95,16 +93,7 @@ export default {
       return html;
     }
   },
-  methods: {
-    getDataNodes: function() {
-
-        setTimeout(function() { 
-           console.log(' .. wait .. Repo ID: ' + store.state.active_repo.id);
-           store.dispatch('getDataNodes', { token: store.state.token, data: { repo_id: store.state.active_repo.id }}) }, 1500);
-        
-    }  
-  } 
-  
+  methods: {} 
 }
 </script>
 

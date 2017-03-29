@@ -45,13 +45,11 @@ export const setActiveRepo = function(state, active_repo_id) {
 	state.active_repo_id = active_repo_id;
 	
 	for(var i in state.user.repos) {
-		console.log(state.user.repos[i]);
 		if (state.user.repos[i]['id'] == active_repo_id) {
 			state.active_repo  = state.user.repos[i]
 			break;
 		}
 	}
-	
 }
 
 // API mutations
@@ -73,11 +71,12 @@ export const GET_USER_INFO = function(state, response) {
     state.user.prefs = {default_repo: {}};
   } else {
     state.user.prefs = JSON.parse(response.person.prefs);
+
+    state.active_repo = state.user.prefs.default_repo 
+
   }
 
-  if(!('repositories' in response.person)) {
-    state.user.repos = {}
-  }
+  state.user.repos = response.repos
 
 } 
 

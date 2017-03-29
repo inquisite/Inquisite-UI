@@ -189,11 +189,10 @@ export default {
 
       store.dispatch('doLogout', { token: store.state.token })
       .then(function() {
-
-           // Transition to Home Page if logged out
-           if(!self.sharedState.logged_in) {
-               setTimeout( function() { self.$root.$options.router.push('/') }, 300) 
-           }
+          // Transition to Home Page if logged out
+          if(!self.sharedState.logged_in) {
+              setTimeout( function() { self.$root.$options.router.push('/') }, 300) 
+          }
       });
 
     },
@@ -220,21 +219,11 @@ export default {
       }
 
     },
-
     getRepoList: function() {
       store.dispatch('getRepos');
     },
-    
     setActiveRepo: function(repo_id) {
-      //store.commit('setActiveRepo', repo_id);
-      
-      // TODO: We need to change data sets, users, data nodes for the active repo now
-      //store.dispatch('getDataNodes', { data: { repo_id: store.state.active_repo.id }} );
-
-      console.log('App.vue changing repos');
-      store.dispatch('changeActiveRepo', {data: { repo_id: repo_id }});
-
-
+      store.commit('setActiveRepo', repo_id);
     }
 
   },
