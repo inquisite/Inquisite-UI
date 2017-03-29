@@ -29,7 +29,7 @@
         </div>
         <div class="panel-body">
 
-          <ul class="media-list" v-if="sharedState.active_repo.datasets">
+          <ul class="media-list" v-if="sharedState.active_data">
 
             <li class="media list-item" v-for="set in sharedState.active_repo.datasets">
               <div class="media-left">
@@ -186,10 +186,10 @@
             },
             repoUsers: function() {
                 var repo_users = {}
-                if(store.state.active_repo) {
-                  store.dispatch('getRepoUsers', {data: {repo_id: store.state.active_repo.id}})
+                //if(store.state.active_repo) {
+                //  store.dispatch('getRepoUsers', {data: {repo_id: store.state.active_repo.id}})
                   repo_users = store.state.active_repo.users;
-                }
+                //}
     
                 return repo_users;
             },

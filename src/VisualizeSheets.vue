@@ -14,7 +14,7 @@
         <div class="panel-body">
        
          <p>Displaying Data Sheet for {{sharedState.active_repo.name}} </p> 
-         <div v-html="dataTable"></div>
+         <div v-html="dataTable" style="display:flex; overflow-x: auto;"></div>
 
         </div>  
       </div>
@@ -35,12 +35,6 @@ export default {
       sharedState: store.state,
     }
   },
-  watch: {
-    '$route':'getDataNodes'
-  },
-  created: function() {
-    this.getDataNodes()
-  },
   computed: { 
     dataTable: function() {
 
@@ -48,22 +42,18 @@ export default {
 
         html += "<tr>";
         var key;
-        for(key in store.state.active_data[0]) {
+        for(key in store.state.active_repo.data[0]) {
           html += "<th>" + key + "</th>";  
         }
 
         html + "</tr>";
 
-
-        for(var idx = 0; idx <= store.state.active_data.length; idx++) {
+        for(var idx = 0; idx <= store.state.active_repo.data.length; idx++) {
         
           html += "<tr>";
-
-
-          for(key in store.state.active_data[idx]) {
-            html += "<td>" + store.state.active_data[idx][key] + "</td>";
+          for(key in store.state.active_repo.data[idx]) {
+            html += "<td>" + store.state.active_repo.data[idx][key] + "</td>";
           }
-
           html += "</tr>";
 
         }
@@ -73,16 +63,7 @@ export default {
         return html;
     }
   },
-  methods: {
-    getDataNodes: function() {
-      console.log(' ... getting data nodes')
-      if("" == store.state.active_data || undefined == store.state.active_data) {
-        store.dispatch('getDataNodes', { data: { repo_id: store.state.active_repo.id }});
-      } else {
-        console.log('We already have active data ...');
-      }
-    }  
-  } 
+  methods: {} 
   
 }
 </script>

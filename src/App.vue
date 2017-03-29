@@ -189,11 +189,10 @@ export default {
 
       store.dispatch('doLogout', { token: store.state.token })
       .then(function() {
-
-           // Transition to Home Page if logged out
-           if(!self.sharedState.logged_in) {
-               setTimeout( function() { self.$root.$options.router.push('/') }, 300) 
-           }
+          // Transition to Home Page if logged out
+          if(!self.sharedState.logged_in) {
+              setTimeout( function() { self.$root.$options.router.push('/') }, 300) 
+          }
       });
 
     },
@@ -220,11 +219,9 @@ export default {
       }
 
     },
-
     getRepoList: function() {
       store.dispatch('getRepos');
     },
-    
     setActiveRepo: function(repo_id) {
       store.commit('setActiveRepo', repo_id);
     }
