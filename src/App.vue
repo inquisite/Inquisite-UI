@@ -226,7 +226,15 @@ export default {
     },
     
     setActiveRepo: function(repo_id) {
-      store.commit('setActiveRepo', repo_id);
+      //store.commit('setActiveRepo', repo_id);
+      
+      // TODO: We need to change data sets, users, data nodes for the active repo now
+      //store.dispatch('getDataNodes', { data: { repo_id: store.state.active_repo.id }} );
+
+      console.log('App.vue changing repos');
+      store.dispatch('changeActiveRepo', {data: { repo_id: repo_id }});
+
+
     }
 
   },

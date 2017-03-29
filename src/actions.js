@@ -2,6 +2,27 @@ import api from './store/api.js'
 
 export const setToken = function(context, access_token) { context.commit('setToken', access_token) }
 
+// Wrapper function for a few other store actons
+// -- seemed better to have it in one place than multiple components
+export const changeActiveRepo = function(context, data) {
+
+  console.log('in ChangeActiveRepo Action');
+  context.commit('setActiveRepo', data.data.repo_id);
+
+  console.log('Active Repo Set ...');
+
+  // Get users for active repo
+  context.dispatch('getRepoUsers', data)  
+ 
+  console.log('Get Repo Users')
+
+  // Get data for active Repo
+  context.dispatch('getDataNodes', data);
+
+  console.log('Got Data Nodes ... ');
+
+}
+
 // API Actions:
 export const doLogin = function(context, data) {
   return api.post('/login', data.data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
