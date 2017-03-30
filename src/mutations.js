@@ -60,6 +60,10 @@ export const GET_REPOS = function(state, response) {
 	state.msg = response.msg 
 }
 export const GET_REPO_USERS = function(state, response) { 
+
+    console.log('HEYY .. we got users for a repository');
+    console.log(response);
+
 	state.active_repo.users = response.users; 
 	state.msg = response.msg 
 }
