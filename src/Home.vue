@@ -29,17 +29,19 @@
         </div>
         <div class="panel-body">
 
-          <ul class="media-list" v-if="sharedState.active_data">
+          <ul class="media-list" v-if="sharedState.active_repo.data">
 
-            <li class="media list-item" v-for="set in sharedState.active_repo.datasets">
+            <!--<li class="media list-item" v-for="set in sharedState.active_repo.datasets">-->
+            <li class="media list-item">
               <div class="media-left">
                 <span class="glyphicon glyphicon-folder-close"></span>
               </div>
 
               <div class="media-body">
-                <h5 class="media-heading">{{set.name}}</h5>
+                <!--<h5 class="media-heading">{{set.name}}</h5>-->
+                <h5 class="media-heading">Default Dataset</h5>
                 <div class="description">
-                   <small>by {{set.owner}} {{set.record_count}}, {{set.element_count}} elements</small>
+                   <small>by {{sharedState.active_repo.owner.name}} {{sharedState.active_repo.data.length}} records, {{elementCount}} elements</small>
                 </div> 
               </div>
             </li>
@@ -202,6 +204,11 @@
             
               return show;
 
+            },
+            elementCount: function() {
+              var keys = []
+              keys = Object.keys(store.state.active_repo.data[0]);
+              return keys.length;
             }
 
 		},
