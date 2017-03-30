@@ -207,7 +207,9 @@
             },
             elementCount: function() {
               var keys = []
-              keys = Object.keys(store.state.active_repo.data[0]);
+              if(undefined !== store.state.active_repo.data[0]) {
+                keys = Object.keys(store.state.active_repo.data[0]);
+              }
               return keys.length;
             }
 
