@@ -25,28 +25,32 @@
 
       <div class="panel panel-primary" v-if="showRepoControls">
         <div class="panel-heading">
-          <h3 class="panel-title">Data Sets</h3>
+          <h3 class="panel-title">Repository Stats</h3>
         </div>
         <div class="panel-body">
 
           <ul class="media-list" v-if="sharedState.active_repo.data">
-
-            <!--<li class="media list-item" v-for="set in sharedState.active_repo.datasets">-->
             <li class="media list-item">
-              <div class="media-left">
-                <span class="glyphicon glyphicon-folder-close"></span>
-              </div>
-
               <div class="media-body">
-                <!--<h5 class="media-heading">{{set.name}}</h5>-->
-                <h5 class="media-heading">Default Dataset</h5>
-                <div class="description">
-                   <small>by {{sharedState.active_repo.owner.name}} {{sharedState.active_repo.data.length}} records, {{elementCount}} elements</small>
-                </div> 
+                <div class="row">
+                  <div class="col-xs-4 text-center">
+                    <div class="h1">1</div>
+                    <h5 class="media-heading">Data Types</h5>
+                  </div>             
+ 
+                  <div class="col-xs-4 text-center">
+                    <div class="h1">{{sharedState.active_repo.data.length}}</div>
+                    <h5 class="media-heading">Records</h5>
+                  </div>
+
+                  <div class="col-xs-4 text-center">
+                    <div class="h1">{{elementCount}}</div>
+                    <h5 class="media-heading">Elements</h5>
+                  </div>
+                </div>
               </div>
             </li>
           </ul>
-
           <div v-else>
             <p>It looks like you haven't added any datasets to your repository yet?</p>
 
