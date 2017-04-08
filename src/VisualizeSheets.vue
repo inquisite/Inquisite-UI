@@ -3,7 +3,15 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="page-header">
+
+        <div class="pull-right">
+          <a @click="exportRepo()">
+            <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-download-alt"></span> Export Repository</button>
+          </a>
+        </div>
+
         <h1>Visualize Data Sheets</h1>
+
       </div>
     </div>
   </div>
@@ -13,19 +21,23 @@
       <div class="panel">
         <div class="panel-body">
        
+
+          
+
          <p>Displaying Data Sheet for {{sharedState.active_repo.name}} </p> 
-         <div v-html="dataTable" style="display:flex; overflow-x: auto;"></div>
+         <!--<div v-html="dataTable" style="display:flex; overflow-x: auto;"></div>-->
 
 
          <div class="clusterize">
 
-           <table class="table" style="display: flex; overflow-x: auto;">
-             <thead><tr v-html="headers"></tr></thead>
+           <table class="table"> <!-- style="display: flex; overflow-x: auto;">-->
+             <thead style="display: table-header-group"><tr v-html="headers"></tr></thead>
            </table>
 
             <div id="scrollArea" class="clusterize-scroll">
-             <table class="table table-striped" style="display: flex; overflow-x: auto;">
-               <tbody id="contentArea" class="clusterize-content" v-html="rows"></tbody>
+             <table class="table table-striped"> <!-- style="display: flex; overflow-x: auto;">-->
+               <tbody id="contentArea" class="clusterize-content" v-html="rows">
+               </tbody>
              </table>
            </div>
 
@@ -72,22 +84,20 @@ export default {
     },
     rows: function() {
 
-      var data_rows = [];
-
       var rw = '';
       var key;
+      var data_rows = [];
+
       for(var idx = 0; idx < store.state.active_repo.data.length; idx++) {
 
         rw = "<tr>";
         for(key in store.state.active_repo.data[idx]) {
-
           if(store.state.active_repo.data[idx].hasOwnProperty(key)) {
             rw += "<td>" + store.state.active_repo.data[idx][key] + "</td>";
           } 
-
         } 
 
-        rw += "<tr/>"
+        rw += "<tr/>";
 
         data_rows.push( rw );
       }
