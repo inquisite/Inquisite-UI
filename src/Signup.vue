@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="page-header">
-        <h1>Signup with Inquisite</h1>
+        <h1>Sign up to manage your data with Inquisite</h1>
       </div>
     </div>
   </div>
@@ -64,7 +64,7 @@
             </div>
 
           </form>
-
+            Already have an account? <router-link class="item" to="/login">Login here</router-link>
         </div>  
       </div>
     </div>

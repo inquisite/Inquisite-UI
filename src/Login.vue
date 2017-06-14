@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="page-header">
-        <h1>Inquisite Login</h1>
+        <h1>Login to Inquisite</h1>
       </div>
     </div>
   </div>
@@ -36,6 +36,7 @@
 
             <div class="item" style="padding: 10px 0">
               <button v-on:submit.prevent="processLogin" v-on:click.prevent="processLogin" class="btn btn-primary">Login</button>
+              Don't have a login? <router-link class="item" to="/signup">Sign up</router-link>
             </div>
 
           </form>

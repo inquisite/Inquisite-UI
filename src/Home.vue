@@ -14,7 +14,22 @@
         <h1>Dashboard - {{sharedState.active_repo.name}}</h1>
       </div>
       <div class="page-header" v-else>
-        <h1>Welcome to Inquisite</h1>
+        <h1>Data got you down? Try Inquisite.</h1>
+        <p>
+            <h3>What is it?</h3>
+            Inquisite is a tool for collaboratively organizing, analyzing and assembling research data. 
+            It is designed to streamline and encourage the formation of open research communities.
+        </p>
+        <p>
+            <h3>How does it work?</h3>
+            Inquisite users create repositories where research data can be shared and explored. 
+            Inquisite processes and classifies data as it is imported, establishing links between common elements 
+            in disparate sources. These links provide researchers the opportunity to contextualize and expand their 
+            findings by leveraging the data of colleagues and peers into merged super-datasets.
+        </p>
+        <p>
+            <h3><router-link class="item" to="/signup">Sign up</router-link> to get started!</h3>
+        </p>
       </div>
 
     </div>

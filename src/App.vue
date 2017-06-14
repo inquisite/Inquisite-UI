@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
      <!-- Mobile Nav -->
      <nav role="navigation" class="navbar navbar-static-top visible-sm visible-xs">
        <div class="container-fluid">
