@@ -22,7 +22,8 @@ const state = {
   users: [],
   msg: '',
   active_repo: {},
-  active_data: []
+  active_data: [],
+  router: null
 }
 
 const store = new Vuex.Store({

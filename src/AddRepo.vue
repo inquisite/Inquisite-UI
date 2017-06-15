@@ -15,7 +15,7 @@
         <div class="panel-body">
 
           <div class="alert alert-info" v-show="repositoryCount == 0">
-            This looks like your first repository. It will be set as your Active Repository!
+            This looks like your first repository. It will be set as your active repository!
           </div>
 
           <div id="repo-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
@@ -89,8 +89,11 @@ export default {
 
     addRepo: function() {
       if(this.name !== '') {
-        store.dispatch('addRepo', { data: {name: this.name, readme: this.readme, url: this.url}})
-        .then(function() { store.dispatch('getRepos', { }) })
+        var self = this;
+        store.dispatch('addRepo', { data: {name: this.name, readme: this.readme, url: this.url}, makeActive: true})
+        .then(function(response) { 
+             self.$router.push("/");
+        })
       } else {
         this.sharedState.msg = 'Repository name is a required field';
       }

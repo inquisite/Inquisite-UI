@@ -121,27 +121,25 @@ export const getRepos = function(context, data) {
 
 // Repos
 /**
+ * Create new repository
  *
+ * @param context
+ * @param data An object with options + new repository metadata. Repository metadata should be put in an object for key "data". Options include:
+ *          makeActive = Make newly created repository the user's active repository [Default is false]
  */
 export const addRepo = function(context, data) {
   if (!context.state.token) return false;
-console.log("addrepo", data);
   var setAsActive = data.makeActive ? true : false;
   return api.post('/repositories/add', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { 
         context.commit('ADD_REPO', response); 
-
-        var new_repo_id = response.repo.repo_id
+        var new_repo_id = response.repo.id
 
         context.dispatch('getRepos', {}).then(function() { 
-           if((context.getters.repos.length == 0) || setAsActive) {
-          console.log('set Active Repo from response here');
-          console.log('Active Repo: ', new_repo_id);
-          context.commit('setActiveRepo', new_repo_id);
-        }     
-          });
-       
-
+            if((context.getters.repos.length == 0) || setAsActive) {
+                context.commit('setActiveRepo', new_repo_id);
+            }     
+        });
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }

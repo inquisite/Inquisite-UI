@@ -56,44 +56,20 @@
               </div>
             </div>
 
-            <div class="item form-item form-group">
-              <div class="ui">Default Repository:</div>
- 
-              <div v-if="hasRepos"> 
-                <div class="input-group">
+            <div v-if="hasRepos == 0"> 
+                <div class="item form-item form-group">
+                    <div class="alert alert-info" role="alert">
+                        <p>It looks like you have yet to create any repositories. Click here to get started!</p> 
 
-                  <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a Repository" :value="sharedState.user.prefs.default_repo.name"
-v-model="sharedState.user.prefs.default_repo.name">
-                            
-                   <div class="input-group-btn">
-                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                       Repos <span class="caret"></span>
-                     </button>
+                        <br/>
 
-                     <ul class="dropdown-menu dropdown-menu-right">
-                   	   <li v-for="repository in sharedState.user.repos"><a @click="setDefaultRepo(repository)">{{ repository.name }}</a></li>
-                     </ul>
-
-                   </div> 
-
+                        <button type="button" class="btn btn-default">
+                            <router-link to="/add-repo" class="item">
+                                <span class="glyphicon glyphicon-plus"></span> Add a Repository
+                            </router-link>
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div v-else>
- 
-                <div class="alert alert-info" role="alert">
-                  <p>It looks like you have yet to create any repositories. Click here to get started!</p> 
-
-                  <br/>
-
-                  <button type="button" class="btn btn-default">
-                    <router-link to="/add-repo" class="item">
-                      <span class="glyphicon glyphicon-plus"></span> Add a Repository
-                    </router-link>
-                  </button>
-                </div>
-
-              </div>
-
             </div>
 
             <div class="item" style="padding: 10px 0">
@@ -142,16 +118,19 @@ export default {
       set: function(value) { store.commit('setUserUrl', value) }
     },
     default_repo: {
-      get: function() { return store.getters.default_repo; },
+      get: function() { 
+        return store.getters.default_repo; 
+     },
       set: function(value) { store.commit('setDefaultRepo', value) }
     },
-    hasRepos: function() {
-      var length = 0;
-      if(store.state.user.repos !== undefined) {
-        length = store.state.user.repos.length;
-      }
-
-      return length;
+    hasRepos: {
+        get: function() {
+          var length = 0;
+          if(store.state.user.repos !== undefined) {
+            length = store.state.user.repos.length;
+          }
+          return length;
+        }
     }
 
   },
@@ -164,12 +143,8 @@ export default {
         })      
 
     },
-    setDefaultRepo: function(repository) {
- 
-      console.log('setting default repo');
-      console.log( repository.name );
-
-      store.commit('setDefaultRepo', repository);
+    setDefaultRepo: function(repository_id) {
+      store.commit('setDefaultRepo', repository_id);
     }
   }
 }

@@ -107,7 +107,7 @@ export const GET_USER_INFO = function(state, response) {
     state.user.prefs = (typeof response.person.prefs === 'object') ? response.person.prefs : JSON.parse(response.person.prefs);
     
     if (response.repos.length > 0) {
-        state.active_repo = response.repos[0] //state.user.prefs.default_repo 
+        state.active_repo = response.repos[0];
         //store.commit('setDefaultRepo', response.repos[0]);
     }
   }
@@ -143,7 +143,20 @@ export const ADD_PERSON_REPO = function(state, response) { state.msg = response.
 /**
  *
  */
-export const DELETE_REPO = function(state, response) { state.msg = response.msg }
+export const DELETE_REPO = function(state, response) { 
+    state.msg = response.msg 
+    var deleted_repo_id = response.repository_id;
+    
+    // remove deleted repo from repolist
+    for(var i in state.user.repos) {
+        if (state.user.repos[i].id && (parseInt(state.user.repos[i].id) == parseInt(deleted_repo_id))) {
+            state.user.repos.splice(i, 1);
+        }
+    }
+    if (state.user.repos.length > 0) {
+        setActiveRepo(state, state.user.repos[0]['id']);
+    }
+}
 
 /**
  *
@@ -160,5 +173,3 @@ export const UPLOAD_REPO_DATA = function(state, response) {
  *
  */
 export const REPO_DATA = function(state, response) { state.msg = response.msg; state.active_data = response.data }
-
-
