@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import axios from 'axios'
+import ClickConfirm from 'click-confirm'
 
 Vue.use(VueRouter, axios);
 
@@ -25,3 +26,4 @@ new Vue({
     store.default.getters.getToken
   }
 })
+Vue.component('clickConfirm', ClickConfirm);

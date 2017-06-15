@@ -10,8 +10,8 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
        
          <p> Displaying nodes for {{sharedState.active_repo.name}} </p> 
        
@@ -36,12 +36,12 @@
 
            <!-- Controls -->
            <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
-             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+             <i class="fa fa-chevron-left" aria-hidden="true"></i>
              <span class="sr-only">Previous</span>
            </a>
 
            <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
-             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+             <i class="fa fa-chevron-rifgr" aria-hidden="true"></i>
              <span class="sr-only">Next</span>
            </a>
 

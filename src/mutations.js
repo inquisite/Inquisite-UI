@@ -173,3 +173,5 @@ export const UPLOAD_REPO_DATA = function(state, response) {
  *
  */
 export const REPO_DATA = function(state, response) { state.msg = response.msg; state.active_data = response.data }
+
+

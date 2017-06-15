@@ -11,8 +11,8 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
 
           <div id="signup-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
 

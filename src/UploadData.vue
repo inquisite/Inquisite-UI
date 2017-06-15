@@ -10,8 +10,8 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
        
           <p>Adding data to {{sharedState.active_repo.name}} - Select a data file and the upload will begin automatically</p>
 

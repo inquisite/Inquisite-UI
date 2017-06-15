@@ -1,155 +1,86 @@
 <template>
   <div id="app">
-     <!-- Mobile Nav -->
-     <nav role="navigation" class="navbar navbar-static-top visible-sm visible-xs">
-       <div class="container-fluid">
-         <div class="navbar-header">
-           <router-link to="/" class="navbar-brand">
-             <img class="logo" src="assets/images/logo.png">
-           </router-link>
-         </div>
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-white">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#"><router-link to="/" class="header item logo navbar-brand">
+            <img class="logo" src="assets/images/logo.png" style="height: 100%;">
+        </router-link></a>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li v-if="isLoggedIn"><router-link to="/upload" class="item">Upload Data</router-link></li>
+                <li v-if="isLoggedIn"><router-link to="/searchrefine" class="item">Search &amp; Refine</router-link></li>
+                <li class="dropdown" v-if="isLoggedIn">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                     Visualize <span class="caret"></span>
+                   </a>
 
-         <div class="navbar navbar-right mobile-btn-container">
-           <button type="button" data-toggle="collapse" data-target="#mobileNav-container" aria-expanded="false" aria-controls="mobileNav-container" class="btn btn-default btn-lg">
-             <span class="glyphicon glyphicon-menu-hamburger"></span>
-           </button>
-         </div>
-       </div>
+                   <ul class="dropdown-menu">
+                     <li><router-link class="item" to="/visualize/map">Map</router-link></li>
+                     <li><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
+                     <li><router-link class="item" to="/visualize/sheet">Sheet</router-link></li>
+                     <li><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
+                   </ul>
 
-         <div id="mobileNav-container" class="container collapse">
-           <ul id="mobileNav" class="nav nav-pills nav-stacked">
-             <li v-if="isLoggedIn"><router-link class="item" to="/upload">Upload Data</router-link></li>
-             <li><router-link class="item" to="/searchrefine">Search &amp; Refine</router-link></li>
-             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/map">Map</router-link></li>
-             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
-             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/sheet">Sheet</router-link></li>
-             <li v-if="isLoggedIn"><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
-             <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
-             <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
+                </li>
 
-             <li v-if="hasRepos()">
-              <div class="input-container">
-              <div class="input-group">
-                <input type="text" class="form-control" aria-label="Choose a Repository" value="">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Choose a Repository <span class="caret"></span>
-                  </button>
+                <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
+                <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
 
-                  <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repo in sharedState.user.repos"><router-link to="#">{{ repo.name }}</router-link></li>
-                  </ul>
+            </ul>
+            <ul class="navbar-nav mr-auto">
+                <li v-if="hasRepos()">
+                    <div class="input-container">
+                        <div class="input-group">
+                            <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Repos <span class="caret"></span>
+                                </button>
 
-                </div>
-              </div>
-              </div>
-            </li>
-            <li v-else></li>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li v-for="repo in sharedState.user.repos"><a @click="setActiveRepo(repo.id)">{{ repo.name }}</a></li>
+                                </ul>
+                            </div>
+                            
+                            <button type="button" class="btn btn-secondary">
+                                <router-link to="/add-repo" class="item"><i class="fa fa-plus-square" aria-hidden="true"></i></router-link>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+                <li v-else-if="isLoggedIn" style="border-left: none;">
+                    <div class="input-container text-right">
+                        <button type="button" class="btn btn-secondary">
+                            <router-link to="/add-repo" class="item">Add a Repository</router-link>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span>
+                    </a>
 
-            <li v-if="isLoggedIn">
-               <router-link to="/user/preferences" class="item">User Preferences</router-link>
-            </li>
-            <li v-if="isLoggedIn">
-               <router-link to="/user/profile" class="item">User Profile</router-link>
-            </li>
-            <li v-if="isLoggedIn">
-               <router-link to="/user/activity" class="item">Activity Log</router-link>
-            </li>
-            <li v-if="isLoggedIn"><a @click="processLogout" class="item">Logout</a></li>
-            <li v-if="!isLoggedIn"><router-link to="/login" class="item">Login</router-link></li>
-           </ul>
-         </div>
+                    <ul class="dropdown-menu" v-if="isLoggedIn">
+                        <li><router-link to="/user/preferences" class="item">User Preferences</router-link></li>
+                        <li><router-link to="/user/my-profile" class="item">User Profile</router-link></li>
+                        <!--<li><router-link to="/user/activity" class="item">Activity Log</router-link></li>-->
+                        <li><a @click="processLogout" class="item">Logout</a></li>
+                    </ul>
 
-     </nav>
-
-     <!-- Desktop Nav -->
-     <nav role="navigation" class="navbar navbar-default navbar-static-top hidden-sm hidden-xs">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <router-link to="/" class="header item logo navbar-brand">
-              <img class="logo" src="assets/images/logo.png" style="height: 100%;">
-            </router-link>
-          </div>
-
-          <ul class="nav navbar-nav navbar-left">
-            <li v-if="isLoggedIn"><router-link to="/upload" class="item">Upload Data</router-link></li>
-            <li v-if="isLoggedIn"><router-link to="/searchrefine" class="item">Search &amp; Refine</router-link></li>
-            <li class="dropdown" v-if="isLoggedIn">
-               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                 Visualize <span class="caret"></span>
-               </a>
-
-               <ul class="dropdown-menu">
-                 <li><router-link class="item" to="/visualize/map">Map</router-link></li>
-                 <li><router-link class="item" to="/visualize/timeline">Timeline</router-link></li>
-                 <li><router-link class="item" to="/visualize/sheet">Sheet</router-link></li>
-                 <li><router-link class="item" to="/visualize/nodes">Nodes</router-link></li>
-               </ul>
-
-            </li>
-
-            <li v-if="isLoggedIn"><router-link class="item" to="/schema">Schema</router-link></li>
-            <li v-if="!isLoggedIn"><router-link class="item" to="/signup">Sign up</router-link></li>
-
-          </ul>
-
-          <ul class="nav navbar-nav navbar-right">
-
-            <li v-if="hasRepos()">
-              <div class="input-container">
-              <div class="input-group">
-                <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
-                <div class="input-group-btn">
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Repos <span class="caret"></span>
-                  </button>
-
-                  <ul class="dropdown-menu dropdown-menu-right">
-                   	<li v-for="repo in sharedState.user.repos"><a @click="setActiveRepo(repo.id)">{{ repo.name }}</a></li>
-                  </ul>
-
-
-                  <button type="button" class="btn btn-default">
-                    <router-link to="/add-repo" class="item"><span class="glyphicon glyphicon-plus"></span></router-link>
-                  </button>
-
-                </div>
-              </div>
-              </div>
-            </li>
-            <li v-else-if="isLoggedIn" style="border-left: none;">
-              <div class="input-container text-right">
-                <button type="button" class="btn btn-default">
-                  <router-link to="/add-repo" class="item">Add a Repository</router-link>
-                </button>
-              </div>
-            </li>
+                    <ul class="dropdown-menu" v-else>
+                        <li><router-link to="/login" class="item">Login</router-link></li>
+                    </ul>
+                </li>
+            </ul>
             
-
-
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <span class="glyphicon glyphicon-user"></span><span class="caret"></span>
-              </a>
-
-              <ul class="dropdown-menu" v-if="isLoggedIn">
-
-                <li><router-link to="/user/preferences" class="item">User Preferences</router-link></li>
-                <li><router-link to="/user/my-profile" class="item">User Profile</router-link></li>
-                <!--<li><router-link to="/user/activity" class="item">Activity Log</router-link></li>-->
-                <li><a @click="processLogout" class="item">Logout</a></li>
-              </ul>
-
-              <ul class="dropdown-menu" v-else>
-                <li><router-link to="/login" class="item">Login</router-link></li>
-              </ul>
-
-            </li>
-          </ul>
-
         </div>
-      </nav>
+    </nav>
     
+   
 
       <!-- Start of Home page content -->
       <div id="page" class="ui pageContent container">

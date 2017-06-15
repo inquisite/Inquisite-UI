@@ -10,8 +10,8 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
 
          <form id="signup-form" name="signup-form" method="POST" action="">
 
@@ -63,9 +63,9 @@
 
                         <br/>
 
-                        <button type="button" class="btn btn-default">
+                        <button type="button" class="btn btn-secondary">
                             <router-link to="/add-repo" class="item">
-                                <span class="glyphicon glyphicon-plus"></span> Add a Repository
+                                <i class="fa fa-square-plus" aria-hidden="true"></i> Add a Repository
                             </router-link>
                         </button>
                     </div>

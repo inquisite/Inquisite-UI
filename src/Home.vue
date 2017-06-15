@@ -5,9 +5,11 @@
     <div class="col-sm-12">
 
       <div class="pull-right" v-if="showRepoControls">
+      <click-confirm>
         <a @click="deleteRepo(sharedState.active_repo.id)">
-          <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete Repository</button>
+          <button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>
         </a>
+        </click-confirm>
       </div>
 
       <div class="page-header" v-if="isLoggedIn">
@@ -38,11 +40,11 @@
   <div class="row" v-if="isLoggedIn">
     <div class="col-sm-6">
 
-      <div class="panel panel-primary" v-if="showRepoControls">
-        <div class="panel-heading">
-          <h3 class="panel-title">Repository Stats</h3>
+      <div class="card card-primary" v-if="showRepoControls">
+        <div class="card-header">
+          <h3 class="card-title">Repository Stats</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-block">
 
           <ul class="media-list" v-if="sharedState.active_repo.data">
             <li class="media list-item">
@@ -71,7 +73,7 @@
 
 
             <router-link to="/upload">
-              <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add Dataset</button>
+              <button type="button" class="btn btn-secondary"><i class="fa fa-plus-square" aria-hidden="true"></i> Add Dataset</button>
             </router-link>
           </div>
 
@@ -94,7 +96,7 @@
       <ul class="media-list">
         <li class="media list-item" v-for="user in repoUsers">
           <div class="media-left">
-            <span class="glyphicon glyphicon-user"></span>
+            <i class="fa fa-user" aria-hidden="true"></i>
           </div>
   
           <div class="media-body">
@@ -104,14 +106,14 @@
 
           <div class="media-right">
             <a @click="userProfile(user.id)">
-              <button type="button" class="btn btn-default text-right">Profile</button>
+              <button type="button" class="btn btn-secondary text-right">Profile</button>
             </a>
           </div>
         </li>
       </ul>
 
       <router-link to="/add-person-repo">
-        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Add People</button>
+        <button type="button" class="btn btn-secondary"><i class="fa fa-square-plus" aria-hidden="true"></i> Add People</button>
       </router-link>
 
     </div>
@@ -124,7 +126,7 @@
         <li class="media list-item">
           <div class="media-left">
             <a href="#">
-              <span class="glyphicon glyphicon-user"></span>
+              <i class="fa fa-user" aria-hidden="true"></i>
             </a>
           </div>
 
@@ -137,7 +139,7 @@
         <li class="media list-item">
           <div class="media-left">
             <a href="#">
-              <span class="glyphicon glyphicon-upload"></span>
+              <i class="fa fa-upload" aria-hidden="true"></i>
             </a>
           </div>
 
@@ -150,7 +152,7 @@
         <li class="media list-item">
           <div class="media-left">
             <a href="#">
-              <span class="glyphicon glyphicon-edit"></span>
+              <i class="fa fa-pencil" aria-hidden="true"></i>
             </a>
           </div>
 
@@ -163,7 +165,7 @@
         <li class="media list-item">
           <div class="media-left">
             <a href="#">
-              <span class="glyphicon glyphicon-duplicate"></span>
+                <i class="fa fa-files-o" aria-hidden="true"></i>
             </a>
           </div>
 
@@ -185,6 +187,7 @@
 
 <script>
 	import store from './store.js'
+	
     var marked = require('marked'); 
 
 	export default { 

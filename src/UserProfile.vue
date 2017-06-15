@@ -10,14 +10,14 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
         
           <div class="row">
             <div class="col-sm-6">  
 
-              <div class="panel">
-              <div class="panel-body">
+              <div class="card">
+              <div class="card-block">
 
               <div>Name: {{sharedState.person.name}}</div>
               <div>Email: {{sharedState.person.email}}</div>
@@ -46,9 +46,9 @@
               <div id="useritems" class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="repos">
  
-                  <div class="panel panel-default">
-                    <div class="panel-heading">Repositories</div>
-                    <div class="panel-body">
+                  <div class="card ">
+                    <div class="card-header">Repositories</div>
+                    <div class="card-block">
                       <p>Optional Descriptive area for User Repositories and associated actions</p> 
                     </div>
 

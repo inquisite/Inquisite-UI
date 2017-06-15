@@ -11,8 +11,8 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
 
           <div class="alert alert-info" v-show="repositoryCount == 0">
             This looks like your first repository. It will be set as your active repository!

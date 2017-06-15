@@ -11,8 +11,8 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
 
           <div class="alert alert-info">
             <p>Optional notes about adding people to your repository?</p>
@@ -22,7 +22,7 @@
           <ul class="media-list">
             <li class="media" v-for="user in sharedState.users">
               <div class="media-left">
-                <span class="glyphicon glyphicon-user"></span>
+                <i class="fa fa-user" aria-hidden="true"></i>
               </div>
 
               <div class="media-body">
@@ -32,7 +32,7 @@
 
               <div class="media-right">
                 <a @click="addToRepo(user.id)">
-                  <button type="button" class="btn btn-default text-right">Add User</button>
+                  <button type="button" class="btn btn-secondary text-right">Add User</button>
                 </a>
               </div>
             </li>

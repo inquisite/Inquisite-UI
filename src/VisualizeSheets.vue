@@ -6,7 +6,7 @@
 
         <div class="pull-right">
           <a @click="exportRepo()">
-            <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-download-alt"></span> Export Repository</button>
+            <button type="button" class="btn btn-info"><i class="fa fa-download" aria-hidden="true"></i>Export Repository</button>
           </a>
         </div>
 
@@ -18,8 +18,8 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <div class="panel">
-        <div class="panel-body">
+      <div class="card">
+        <div class="card-block">
        
 
           
