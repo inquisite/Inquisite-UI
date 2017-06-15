@@ -5,7 +5,7 @@
     <div class="col-sm-12">
 
       <div class="pull-right" v-if="showRepoControls">
-      <click-confirm>
+      <click-confirm placement="bottom">
         <a @click="deleteRepo(sharedState.active_repo.id)">
           <button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>
         </a>
