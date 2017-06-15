@@ -69,7 +69,6 @@ export default {
           var self = this;
           store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
           .then(function() {
-
               // Transition to Home Page if logged in
               if(self.sharedState.logged_in) {
                   setTimeout( function() { self.$root.$options.router.push('/') }, 1500) 

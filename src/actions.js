@@ -1,8 +1,14 @@
 import api from './store/api.js'
 
+/**
+ *
+ */
 export const setToken = function(context, access_token) { context.commit('setToken', access_token) }
 
 // API Actions:
+/**
+ *
+ */
 export const doLogin = function(context, data) {
   return api.post('/login', data.data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { 
@@ -17,10 +23,7 @@ export const doLogin = function(context, data) {
           
           // Get User Data -- now sets repos with users and data
           context.dispatch('getUserInfo', {token: response.access_token});
-
-
         } else {
-          // Error is in here
           context.commit('API_FAILURE', response.response.data.msg );
         }
     })
@@ -29,6 +32,9 @@ export const doLogin = function(context, data) {
     });
 }
 
+/**
+ *
+ */
 export const doRefresh = function(context, data) {
 	if (!data.refresh) { return false; }
     return api.post('/refresh', null, {headers: {'Authorization': 'Bearer ' + data.refresh}})
@@ -44,6 +50,9 @@ export const doRefresh = function(context, data) {
     	.catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const doLogout = function(context, data) {
   if (!context.state.token) return false;
   return api.get('/logout', {headers: {'Authorization': 'Bearer ' + context.state.token}})
@@ -56,6 +65,9 @@ export const doLogout = function(context, data) {
 }
 
 // People
+/**
+ *
+ */
 export const addPerson = function(context, data) {
   if (!context.state.token) return false;
   return api.post('/people/add', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
@@ -63,6 +75,9 @@ export const addPerson = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const editPerson = function(context, data) {
   if (!context.state.token) return false;
   return api.post('/people/edit', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
@@ -70,6 +85,9 @@ export const editPerson = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const getUserInfo = function(context, data) {
   if (!context.state.token) return false;
   return api.get('/people/info', {headers: {'Authorization': 'Bearer ' + context.state.token}})
@@ -77,6 +95,9 @@ export const getUserInfo = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const setPerson = function(context, data) {
   if (!context.state.token) return false;
   return api.post('/people/info', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type':'application/x-www-form-urlencoded'}})
@@ -84,7 +105,9 @@ export const setPerson = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error)  });
 }
 
-
+/**
+ *
+ */
 export const getRepos = function(context, data) {
   if (!context.state.token) return false;
   return api.get('/people/repos', {headers: {'Authorization': 'Bearer ' + context.state.token}})
@@ -97,6 +120,9 @@ export const getRepos = function(context, data) {
 }
 
 // Repos
+/**
+ *
+ */
 export const addRepo = function(context, data) {
   if (!context.state.token) return false;
 console.log("addrepo", data);
@@ -120,6 +146,9 @@ console.log("addrepo", data);
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const deleteRepo = function(context, data) {
   if (!context.state.token) return false;
   return api.post('/repositories/delete', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded' }})
@@ -129,6 +158,9 @@ export const deleteRepo = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const getRepoUsers = function(context, data) {
   if (!context.state.token) return false;
   return api.post('/repositories/users', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded' }})
@@ -136,6 +168,9 @@ export const getRepoUsers = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const getPeople = function(context, data) {
   if (!context.state.token) return false;
   return api.get('/people', {headers: {'Authorization': 'Bearer ' + context.state.token}})
@@ -143,6 +178,9 @@ export const getPeople = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const addPersonRepo = function(context, data) {
   if (!context.state.token) return false;
   return api.post('/repositories/add_collaborator', data.data,
@@ -153,6 +191,9 @@ export const addPersonRepo = function(context, data) {
 
 
 // Repo Data
+/**
+ *
+ */
 export const uploadRepoData = function(context, data) {
   if (!context.state.token) return false;
   var fd = new FormData();
@@ -166,6 +207,9 @@ export const uploadRepoData = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
 
+/**
+ *
+ */
 export const getDataNodes = function(context, data) {
   if(!context.state.token) return false;
   

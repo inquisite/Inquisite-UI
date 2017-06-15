@@ -14,7 +14,7 @@ const state = {
   teaser: '... uploading file',
   user: {
     prefs: {
-      default_repo: {}
+      default_repo_id: null
     },
     repos: [] 
   },

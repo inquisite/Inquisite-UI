@@ -28,7 +28,7 @@
             findings by leveraging the data of colleagues and peers into merged super-datasets.
         </p>
         <p>
-            <h3><router-link class="item" to="/signup">Sign up</router-link> to get started!</h3>
+            <h3><router-link class="item" to="/signup">Sign up</router-link> or <router-link class="item" to="/login">login</router-link> to get started!</h3>
         </p>
       </div>
 
