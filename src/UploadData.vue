@@ -13,7 +13,7 @@
       <div class="panel">
         <div class="panel-body">
        
-          <p>Adding data to {{sharedState.active_repo.name}}</p>
+          <p>Adding data to {{sharedState.active_repo.name}} - Select a data file and the upload will begin automatically</p>
 
           <div id="data-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
 
