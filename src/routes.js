@@ -1,5 +1,6 @@
 // Vue Routes Config
 import Vue from 'vue'
+import store from './store.js'
 
 
 // Load Template Components
@@ -39,17 +40,20 @@ Vue.component('visualize-nodes', VisualizeNodes)
 const VisualizeSheets = require('./VisualizeSheets.vue')
 Vue.component('visualise-sheets', VisualizeSheets)
 
+var sharedState = store.state;
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
   { path: '/login', name: 'login', component: Login },
-  { path: '/upload', name: 'upload-data', component: UploadData },
-  { path: '/user/preferences', name: 'user-prefs', component: UserPrefs },
-  { path: '/user/profile', name: 'user-profile', component: UserProfile },
-  { path: '/user/my-profile', name: 'my-profile', component: MyProfile },
-  { path: '/user/activity', name: 'user-activity', component: UserActivityLog },
-  { path: '/add-repo', name: 'add-repo', component: AddRepo },
-  { path: '/add-person-repo', name: 'add-person-repo', component: AddPersonRepo },
-  { path: '/visualize/nodes', name: 'visualize-nodes', component: VisualizeNodes },
-  { path: '/visualize/sheet', name: 'visualize-sheets', component: VisualizeSheets }
+  { path: '/upload', name: 'upload-data', component: UploadData, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/user/preferences', name: 'user-prefs', component: UserPrefs, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/user/profile', name: 'user-profile', component: UserProfile, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/user/my-profile', name: 'my-profile', component: MyProfile, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/user/activity', name: 'user-activity', component: UserActivityLog, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/add-repo', name: 'add-repo', component: AddRepo, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/add-person-repo', name: 'add-person-repo', component: AddPersonRepo, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/visualize/nodes', name: 'visualize-nodes', component: VisualizeNodes, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/visualize/sheet', name: 'visualize-sheets', component: VisualizeSheets, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '*', redirect: '/' }
 ]
