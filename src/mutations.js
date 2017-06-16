@@ -79,7 +79,6 @@ export const API_FAILURE = function(state, error) { state.msg = error }
  */
 export const GET_REPOS = function(state, response) { 
 	state.user.repos = response.repos; 
-	console.log("set state.user.repos", response.repos);
 	state.msg = response.msg 
 }
 
@@ -87,10 +86,6 @@ export const GET_REPOS = function(state, response) {
  *
  */
 export const GET_REPO_USERS = function(state, response) { 
-
-    console.log('HEYY .. we got users for a repository');
-    console.log(response);
-
 	state.active_repo.users = response.users; 
 	state.msg = response.msg 
 }
@@ -99,8 +94,8 @@ export const GET_REPO_USERS = function(state, response) {
  *
  */
 export const GET_USER_INFO = function(state, response) { 
-  state.user = response.person; 
-
+  state.user = response.person;
+  
   if(!('prefs' in response.person)) {
     state.user.prefs = {default_repo_id: null};
   } else {

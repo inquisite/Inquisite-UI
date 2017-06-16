@@ -132,11 +132,9 @@ export default {
           return length;
         }
     }
-
   },
   methods: {
     editUser: function() {
-
         store.dispatch('editPerson', {
           token: store.state.token, 
           data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url, default_repo: this.default_repo}

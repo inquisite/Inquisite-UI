@@ -42,8 +42,8 @@
                                 </ul>
                             </div>
                             
-                            <button type="button" class="btn btn-secondary">
-                                <router-link to="/add-repo" class="nav-link"><i class="fa fa-plus-square" aria-hidden="true"></i></router-link>
+                            <button type="button" class="btn btn-secondary btn-no-padding">
+                                <router-link to="/add-repo" class="nav-link"><i class="fa fa-plus-square fa-2x" aria-hidden="true"></i></router-link>
                             </button>
                         </div>
                     </div>
@@ -101,6 +101,7 @@ export default {
   },
   mounted: function() {
     this.getRepoList();
+    store.dispatch('getUserInfo');
   },
   watch: {
     '$route': 'pageChangeActions'
