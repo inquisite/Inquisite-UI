@@ -145,6 +145,25 @@ export const addRepo = function(context, data) {
 }
 
 /**
+ * Edit repository metadata
+ *
+ * @param context
+ * @param data An object with options + new repository metadata. Repository metadata should be put in an object for key "data". Options include:
+ *          makeActive = Make newly created repository the user's active repository [Default is false]
+ */
+export const editRepo = function(context, data) {
+  if (!context.state.token) return false;
+  var setAsActive = data.makeActive ? true : false;
+  console.log("edit repo [action]", data);
+  return api.post('/repositories/' +  data['id'] + '/edit', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { 
+        context.commit('EDIT_REPO', response); 
+    })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
+
+/**
  *
  */
 export const deleteRepo = function(context, data) {

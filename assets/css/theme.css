@@ -32,7 +32,7 @@
 .input-container {
   display: inline-block;
   width: 450px;
-  padding: 8px 15px 0 15px;
+  padding: 0px 10px 0 10px;
 }
 
 .mobile-btn-container {
@@ -45,4 +45,8 @@
 
 .navbar-nav li {
   border-left: 1px solid rgba(34,36,38,.15);
+}
+
+.btn-no-padding {
+    padding: 0px !important;
 }

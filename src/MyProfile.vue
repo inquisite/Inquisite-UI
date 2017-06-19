@@ -18,7 +18,7 @@
 
               <div class="card">
               <div class="card-block">
-
+                
               <div>Name: {{sharedState.user.name}}</div>
               <div>Email: {{sharedState.user.email}}</div>
               <div>Location: {{sharedState.user.location}}</div>
@@ -37,10 +37,10 @@
             <div class="col-sm-12">
 
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#repos" aria-controls="repos" role="tab" data-toggle="tab">Repositories</a></li>
-                <li role="presentation"><a href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Organizations</a></li>
-                <li role="presentation"><a href="#following" aria-controls="following" role="tab" data-toggle="tab">Following</a></li>
-                <li role="presentation"><a href="#followers" aria-controls="followers" role="tab" data-toggle="tab">Followers</a></li>
+                <li role="presentation" class="nav-item active"><a href="#repos" aria-controls="repos" role="tab" data-toggle="tab" class="nav-link">Repositories</a></li>
+                <!--<li role="presentation" class="nav-item"><a href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab" class="nav-link">Organizations</a></li>-->
+                <li role="presentation" class="nav-item"><a href="#following" aria-controls="following" role="tab" data-toggle="tab" class="nav-link">Following</a></li>
+                <li role="presentation" class="nav-item"><a href="#followers" aria-controls="followers" role="tab" data-toggle="tab" class="nav-link">Followers</a></li>
               </ul>
 
               <div id="useritems" class="tab-content">
@@ -49,11 +49,10 @@
                   <div class="card ">
                     <div class="card-header">Repositories</div>
                     <div class="card-block">
-                      <p>Optional Descriptive area for User Repositories and associated actions</p> 
+                      <p></p> 
                     </div>
 
                     <table class="table table-hover">
-
                       <thead>
                       <tr>
                         <th>Name</th>
@@ -70,8 +69,10 @@
                           <td>{{repo.url}}</td>
                           <td>{{repo.created_on}}</td>
                           <td>
-                            <a @click="editRepo(repo.id)"><i class="fa fa-pencil" aria-hidden="true"></i></a> |
-                            <a @click="deleteRepo(repo.id)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <router-link class="item" :to="{path: '/edit-repo/' + repo.id, params: {id: repo.name}}"><i class="fa fa-pencil" aria-hidden="true"></i></router-link> |
+                            <click-confirm placement="top" style="display: inline;">
+                                <a @click="deleteRepo(repo.id)"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </click-confirm>
                           </td>
                         </tr> 
                       </tbody>
@@ -80,9 +81,9 @@
                   </div>
 
                 </div>
-                <div role="tabpanel" class="tab-pane" id="orgs"> Orgs List Coming ..</div>
-                <div role="tabpanel" class="tab-pane" id="following"> Following List Coming .. </div>
-                <div role="tabpanel" class="tab-pane" id="followers"> Followers List Coming .. </div>
+                <div role="tabpanel" class="tab-pane" id="orgs"> Orgs list to come ...</div>
+                <div role="tabpanel" class="tab-pane" id="following"> Following list to come ... </div>
+                <div role="tabpanel" class="tab-pane" id="followers"> Followers list to come ... </div>
               </div>
 
             </div>
@@ -112,9 +113,6 @@ export default {
     }
   },
   methods: {
-    editRepo: function(repo_id) {
-      console.log('edit Repo ' + repo_id);
-    },
     deleteRepo: function(repo_id) {
       store.dispatch('deleteRepo', { data: { repo_id: repo_id }})
     }
@@ -124,8 +122,6 @@ export default {
 </script>
 
 <style>
-.form-item { padding: 5px 0; }
-
-#useritems div { padding: 2%; }
-
+    .form-item { padding: 5px 0; }
+    #useritems div { padding: 2%; }
 </style>

@@ -8,6 +8,7 @@
     </div>
   </div>
 
+    <div id="pref-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
@@ -15,7 +16,7 @@
 
          <form id="signup-form" name="signup-form" method="POST" action="">
 
-            <div id="signup-msg" class="ui msessage" style="display: none;">
+            <div id="signup-msg" class="ui message" style="display: none;">
               <div class="header"></div>
               <div class="msg"></div>
             </div>

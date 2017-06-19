@@ -133,6 +133,11 @@ export const ADD_REPO = function(state, response) { state.msg = response.msg }
 /**
  *
  */
+export const EDIT_REPO = function(state, response) { state.msg = response.msg }
+
+/**
+ *
+ */
 export const ADD_PERSON_REPO = function(state, response) { state.msg = response.msg }
 
 /**

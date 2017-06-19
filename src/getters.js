@@ -18,6 +18,21 @@ export const getRepoList = state => {
 }
 
 /**
+ * Get info for repository with id. Repository must be accessible to the current user.
+ * 
+ * @param id integer repository id
+ * @return Object with repository data or null if no repository is found
+ *
+ */
+export const getRepoByID = state => {
+	return function(id) {
+	    var repo_id = parseInt(id);
+	    var matches = $.grep(state.user.repos, function(repo) { return parseInt(repo.id) === repo_id; });
+	    return (matches.length > 0) ? matches[0] : null;
+	};
+}
+
+/**
  * Return repo_id for user's default repository
  */
 export const defaultRepo = state => { 

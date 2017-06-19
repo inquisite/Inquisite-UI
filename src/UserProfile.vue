@@ -15,19 +15,17 @@
         
           <div class="row">
             <div class="col-sm-6">  
-
               <div class="card">
-              <div class="card-block">
+                  <div class="card-block">
 
-              <div>Name: {{sharedState.person.name}}</div>
-              <div>Email: {{sharedState.person.email}}</div>
-              <div>Location: {{sharedState.person.location}}</div>
-              <div>Tagline: {{sharedState.person.tagline}}</div>
-              <div>URL: {{sharedState.person.url}}</div>
+                  <div>Name: {{sharedState.person.name}}</div>
+                  <div>Email: {{sharedState.person.email}}</div>
+                  <div>Location: {{sharedState.person.location}}</div>
+                  <div>Tagline: {{sharedState.person.tagline}}</div>
+                  <div>URL: {{sharedState.person.url}}</div>
 
+                  </div>
               </div>
-              </div>
-
             </div> 
           </div>
 
