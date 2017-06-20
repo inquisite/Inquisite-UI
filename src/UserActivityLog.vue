@@ -35,7 +35,3 @@ export default {
   
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

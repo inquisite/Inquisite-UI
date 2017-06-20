@@ -20,11 +20,7 @@
     <div class="col-sm-12">
       <div class="card">
         <div class="card-block">
-       
-
-          
-
-         <p>Displaying Data Sheet for {{sharedState.active_repo.name}} </p> 
+         <p>Displaying Data Sheet for {{activeRepo.name}} </p> 
          <!--<div v-html="dataTable" style="display:flex; overflow-x: auto;"></div>-->
 
 
@@ -60,7 +56,7 @@ export default {
   name: 'visualize-data-sheets',
   data: function() {
     return {
-      sharedState: store.state,
+      state: store.state
     }
   },
   mounted: function() {
@@ -71,7 +67,7 @@ export default {
       })
   },
   computed: { 
-
+    activeRepo: function() { return store.state.active_repo; },
     headers: function() {
 
         var headers = ''
@@ -136,7 +132,3 @@ export default {
   
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

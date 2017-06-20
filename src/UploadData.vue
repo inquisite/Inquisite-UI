@@ -13,9 +13,9 @@
       <div class="card">
         <div class="card-block">
        
-          <p>Adding data to {{sharedState.active_repo.name}} - Select a data file and the upload will begin automatically</p>
+          <p>Adding data to {{activeRepo.name}} - Select a data file and the upload will begin automatically</p>
 
-          <div id="data-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+          <div id="data-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="signup-form" name="signup-form" method="POST" action="">
             <div class="item form-item">
@@ -31,12 +31,12 @@
           </form>
 
           <div id="teaser-container">
-            <p>Uploading {{sharedState.upload_row_count}} rows</p>
+            <p>Uploading {{uploadRowCount}} rows</p>
             <div>Fields: 
-              <span class="label label-primary" style="display: inline-block; font-size: 14px; margin: 1%"  v-for="field in sharedState.upload_fields">{{field}}</span>
+              <span class="label label-primary" style="display: inline-block; font-size: 14px; margin: 1%"  v-for="field in uploadFields">{{field}}</span>
             </div>
             <div>Nested Fields:
-              <span class="label label-info" style="display: inline-block; font-size: 14px; margin: 1%" v-for="subfield in sharedState.upload_subfields">{{subfield}}</span>
+              <span class="label label-info" style="display: inline-block; font-size: 14px; margin: 1%" v-for="subfield in uploadSubfields">{{subfield}}</span>
             </div>
 
           </div>
@@ -58,9 +58,22 @@ export default {
   name: 'upload-data',
   data: function() {
     return {
-      sharedState: store.state,
+      state: store.state
     }
   },
+  computed: {
+    isLoggedIn: function() {
+	    return store.getters.isLoggedIn;
+	},
+	message: function() { return store.state.msg; },
+	repos: function() { return store.state.user.repos; },
+	user: function() { return store.state.user; },
+	activeRepo: function() { return store.state.active_repo; },
+	uploadRowCount: function() { return store.state.upload_row_count; },
+	uploadFields: function() { return store.state.upload_fields; },
+	uploadSubfields: function() { return store.state.upload_subfields; },
+   
+  }, 
   methods: {
     onFileChange: function(e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -77,7 +90,3 @@ export default {
   
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

@@ -18,11 +18,11 @@
               <div class="card">
                   <div class="card-block">
 
-                  <div>Name: {{sharedState.person.name}}</div>
-                  <div>Email: {{sharedState.person.email}}</div>
-                  <div>Location: {{sharedState.person.location}}</div>
-                  <div>Tagline: {{sharedState.person.tagline}}</div>
-                  <div>URL: {{sharedState.person.url}}</div>
+                  <div>Name: {{person.name}}</div>
+                  <div>Email: {{person.email}}</div>
+                  <div>Location: {{person.location}}</div>
+                  <div>Tagline: {{person.tagline}}</div>
+                  <div>URL: {{person.url}}</div>
 
                   </div>
               </div>
@@ -62,7 +62,7 @@
      
                       <tbody>
 
-                        <tr v-for="repo in sharedState.person.repositories">
+                        <tr v-for="repo in person.repositories">
                           <td>{{repo.name}}</td>
                           <td>{{repo.url}}</td>
                           <td>{{repo.created_on}}</td>
@@ -96,22 +96,19 @@ export default {
   name: 'user-profile',
   data: function() {
     return {
-      sharedState: store.state,
       name: '',
       email: '',
       location: '',
       tagline: '',
       url: '',
+      
+      state: store.state
     }
+  },
+  computed: {
+    person: function() { return store.state.person; }
   },
   methods: {
   },
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-
-#useritems div { padding: 2%; }
-
-</style>

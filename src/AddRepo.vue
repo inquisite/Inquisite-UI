@@ -18,7 +18,7 @@
             This looks like your first repository. It will be set as your active repository!
           </div>
 
-          <div id="repo-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+          <div id="repo-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="addRepo-form" name="addRepo-form" method="POST" action="#">
 
@@ -74,19 +74,26 @@ export default {
       name: '',
       readme: '# Hello \n this is your new repository',
       url: '',
-      sharedState: store.state
+      
+      state: store.state
     }
   },
   computed: {
+    isLoggedIn: function() {
+	    return store.getters.isLoggedIn;
+	},
+	repos: function() { return store.state.user.repos; },
+	user: function() { return store.state.user; },
+	activeRepo: function() { return store.state.active_repo; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
       return store.state.repositories;
-    }
+    },
+	message: function() { return store.state.msg; }
   }, 
   methods: {
-
     addRepo: function() {
       if(this.name !== '') {
         var self = this;
@@ -95,7 +102,7 @@ export default {
              self.$router.push("/");
         })
       } else {
-        this.sharedState.msg = 'Repository name is a required field';
+        this.msg = 'Repository name is a required field';
       }
     },
 
@@ -106,7 +113,3 @@ export default {
   
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="page-header">
-        <h1>Add People to {{sharedState.active_repo.name}}</h1>
+        <h1>Add People to {{activeRepo.name}}</h1>
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@
 
           <!-- List of Users -->
           <ul class="media-list">
-            <li class="media" v-for="user in sharedState.users">
+            <li class="media" v-for="user in users">
               <div class="media-left">
                 <i class="fa fa-user" aria-hidden="true"></i>
               </div>
@@ -55,9 +55,23 @@ export default {
   name: 'home',
   data: function() {
     return {
-      sharedState: store.state
+        state: store.state
     }
   },
+  computed: {
+    isLoggedIn: function() {
+	    return store.getters.isLoggedIn;
+	},
+	repos: function() { return store.state.user.repos; },
+	users: function() { return store.state.users; },
+	activeRepo: function() { return store.state.active_repo; },
+    compiledMarkdown: function() {
+      return marked(this.readme, { sanitize: true})
+    },
+    repositoryCount: function() {
+      return store.state.repositories;
+    }
+  }, 
   mounted: function() {
     console.log('mounted .. getting people');
     store.dispatch('getPeople', { token: store.state.token })
@@ -71,7 +85,3 @@ export default {
   
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

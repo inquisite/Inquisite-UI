@@ -31,14 +31,14 @@
                 <li class="navbar-item" v-if="hasRepos()">
                     <div class="input-container">
                         <div class="input-group">
-                            <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a repository" :value="sharedState.active_repo.name" v-model="sharedState.active_repo.name">
+                            <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a repository" :value="activeRepo.name" v-model="activeRepo.name">
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Repos <span class="caret"></span>
                                 </button>
 
                                 <ul class="dropdown-menu dropdown-menu-right">
-                                    <li class="dropdown-item" v-for="repo in sharedState.user.repos"><a @click="setActiveRepo(repo.id)">{{ repo.name }}</a></li>
+                                    <li class="dropdown-item" v-for="repo in state.user.repos"><a @click="setActiveRepo(repo.id)">{{ repo.name }}</a></li>
                                 </ul>
                             </div>
                             
@@ -95,8 +95,7 @@ export default {
   name: 'app',
   data: function() {
     return {
-      msg: 'Inquisite',
-      sharedState: store.state,
+        state: store.state
     }
   },
   mounted: function() {
@@ -109,7 +108,10 @@ export default {
   computed: {
     isLoggedIn: function() {
 	    return store.getters.isLoggedIn;
-	}
+	},
+	repos: function() { return store.state.user.repos; },
+	user: function() { return store.state.user; },
+	activeRepo: function() { return store.state.active_repo; }
   },
   methods: {
     processLogout: function() {
@@ -118,7 +120,7 @@ export default {
       store.dispatch('doLogout', { token: store.state.token })
       .then(function() {
           // Transition to Home Page if logged out
-          if(!self.sharedState.logged_in) {
+          if(!self.isLoggedIn) {
               setTimeout( function() { self.$root.$options.router.push('/') }, 300) 
           }
       });
@@ -141,8 +143,6 @@ export default {
 
       // Get User Repos if logged in and we don't have them 
       if( this.isLoggedIn && !this.hasRepos) {
-
-        console.log(' getting some repos now');
         store.dispatch('getRepos').then(function() { store.dispatch('getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
       }
 
@@ -154,7 +154,6 @@ export default {
       store.commit('setActiveRepo', repo_id);
       this.$router.push("/");   // force back to dashboard for new repo
     }
-
   },
 }
 </script>

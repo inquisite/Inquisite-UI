@@ -50,3 +50,6 @@
 .btn-no-padding {
     padding: 0px !important;
 }
+
+.form-item { padding: 5px 0; }
+#useritems div { padding: 2%; }

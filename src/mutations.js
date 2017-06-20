@@ -150,7 +150,8 @@ export const DELETE_REPO = function(state, response) {
     // remove deleted repo from repolist
     for(var i in state.user.repos) {
         if (state.user.repos[i].id && (parseInt(state.user.repos[i].id) == parseInt(deleted_repo_id))) {
-            state.user.repos.splice(i, 1);
+            var z = state.user.repos.splice(i, 1);
+            console.log("remove repo", i, z);
         }
     }
     if (state.user.repos.length > 0) {

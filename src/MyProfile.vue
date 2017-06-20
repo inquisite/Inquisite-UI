@@ -18,14 +18,14 @@
               <div class="card">
                   <div class="card-block">
                         <div class="pull-right">
-                            <button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Edit</button>
+                            <button v-on:submit.prevent="editPrefs" v-on:click.prevent="editPrefs" class="btn btn-primary">Edit</button>
                         </div>
                 
-                      <div>Name: {{sharedState.user.name}}</div>
-                      <div>Email: {{sharedState.user.email}}</div>
-                      <div>Location: {{sharedState.user.location}}</div>
-                      <div>Tagline: {{sharedState.user.tagline}}</div>
-                      <div>URL: {{sharedState.user.url}}</div>
+                      <div>Name: {{user.name}}</div>
+                      <div>Email: {{user.email}}</div>
+                      <div>Location: {{user.location}}</div>
+                      <div>Tagline: {{user.tagline}}</div>
+                      <div>URL: {{user.url}}</div>
 
                   </div>
               </div>
@@ -66,7 +66,7 @@
      
                       <tbody>
 
-                        <tr v-for="repo in sharedState.user.repos">
+                        <tr v-for="repo in repos">
                           <td>{{repo.name}}</td>
                           <td>{{repo.url}}</td>
                           <td>{{repo.created_on}}</td>
@@ -106,24 +106,36 @@ export default {
   name: 'user-profile',
   data: function() {
     return {
-      sharedState: store.state,
       name: '',
       email: '',
       location: '',
       tagline: '',
       url: '',
+      
+      state: store.state
     }
   },
-  methods: {
-    deleteRepo: function(repo_id) {
-      store.dispatch('deleteRepo', { data: { repo_id: repo_id }})
+  computed: {
+    isLoggedIn: function() {
+	    return store.getters.isLoggedIn;
+	},
+	repos: function() { return store.state.user.repos; },
+	user: function() { return store.state.user; },
+	activeRepo: function() { return store.state.active_repo; },
+    compiledMarkdown: function() {
+      return marked(this.readme, { sanitize: true})
+    },
+    repositoryCount: function() {
+      return store.state.repositories;
     }
-
+  }, 
+  methods: {
+    editPrefs: function() {
+      this.$router.push("/user/preferences");
+    },
+    deleteRepo: function(repo_id) {
+      store.dispatch('deleteRepo', { data: { repo_id: repo_id }});
+    }
   },
 }
 </script>
-
-<style>
-    .form-item { padding: 5px 0; }
-    #useritems div { padding: 2%; }
-</style>

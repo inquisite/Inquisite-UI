@@ -13,7 +13,7 @@
       <div class="card">
         <div class="card-block">
        
-         <p> Displaying nodes for {{sharedState.active_repo.name}} </p> 
+         <p> Displaying nodes for {{activeRepo.name}} </p> 
        
 
 
@@ -67,11 +67,12 @@ export default {
   name: 'visualize-data-nodes',
   data: function() {
     return {
-      sharedState: store.state,
+        state: store.state
     }
   },
   
   computed: {
+	activeRepo: function() { return store.state.active_repo; },
     nodesData: function() {
     
       var html = ""
@@ -96,7 +97,3 @@ export default {
   methods: {} 
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

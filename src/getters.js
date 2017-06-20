@@ -1,6 +1,11 @@
 /**
  * Is user logged in?
  */
+export const getMessage = state => { return state.msg }
+
+/**
+ * Is user logged in?
+ */
 export const isLoggedIn = state => { return state.logged_in }
 
 /**

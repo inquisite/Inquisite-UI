@@ -13,7 +13,7 @@
       <div class="card">
         <div class="card-block">
        
-          <div id="login-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+          <div id="login-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="login-form" name="login-form" method="POST" action="">
 
@@ -58,8 +58,12 @@ export default {
     return {
       email: '',
       password: '',
-      sharedState: store.state,
+      
+      state: store.state
     }
+  },
+  computed: {
+    message: function() { return store.state.msg; }
   },
   methods: {
     processLogin: function() {
@@ -70,20 +74,16 @@ export default {
           store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
           .then(function() {
               // Transition to Home Page if logged in
-              if(self.sharedState.logged_in) {
+              if(store.getters.isLoggedIn) {
                   setTimeout( function() { self.$router.push('/') }, 1500) 
               }
           });
         
       } else {
-          this.sharedState.msg = 'Email and Password are required fields';
+          store.state.msg = 'Email and Password are required fields';
       }
 
     }
   }
 } 
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

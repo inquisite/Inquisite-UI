@@ -4,13 +4,13 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="pull-right" v-if="showRepoControls">
-        <router-link :to="{path: '/edit-repo/' + sharedState.active_repo.id}">
+        <router-link :to="{path: '/edit-repo/' + activeRepo.id}">
             <button type="button" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></span> Edit Repository</button>
         </router-link>
       </div>
 
       <div class="page-header" v-if="showRepoControls">
-        <h1>{{sharedState.active_repo.name}}</h1>
+        <h1>{{activeRepo.name}}</h1>
           
         <div  v-if="showRepoControls">
           <div v-html="compiledMarkdown"></div>
@@ -44,7 +44,7 @@
         <div class="card-header">
           <h4 class="card-title">Repository Stats</h4>
         </div>
-          <div v-if="sharedState.active_repo.data" class="card-block">
+          <div v-if="activeRepo.data" class="card-block">
             <div class="row">
               <div class="col-4 text-center">
                 <div class="h1">1</div>
@@ -52,7 +52,7 @@
               </div>             
 
               <div class="col-4 text-center">
-                <div class="h1">{{sharedState.active_repo.data.length}}</div>
+                <div class="h1">{{activeRepo.data.length}}</div>
                 <h5 class="media-heading">Records</h5>
               </div>
 
@@ -118,7 +118,7 @@
 		name: 'home',
         data: function() {
           return {
-            sharedState: store.state
+                state: store.state
           }
         },
 		computed: {
@@ -157,32 +157,23 @@
                 keys = Object.keys(store.state.active_repo.data[0]);
               }
               return keys.length;
-            }
-
+            },
+            activeRepo: function() { return store.state.active_repo; }
 		},
         methods: {
           userProfile: function(person_id) {
-            console.log(' go to user profile ')
-
             var self = this;
 
             store.dispatch('setPerson', { data: { person_id: person_id }})
             .then(function() { 
-
                 // Transition to User Profile if person set
                 if(store.state.person) {
                   self.$root.$options.router.push('/user/profile')
                 }
             });
 
-          },
-          deleteRepo: function(repo_id) {
-            store.dispatch('deleteRepo', { data: { repo_id: repo_id }})
           }
         }
 	}
 	
 </script>
-
-<style>
-</style>

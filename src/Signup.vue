@@ -14,7 +14,7 @@
       <div class="card">
         <div class="card-block">
 
-          <div id="signup-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+          <div id="signup-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="signup-form" name="signup-form" method="POST" action="">
 
@@ -87,14 +87,15 @@ export default {
       tagline: '',
       url: '',
       password: '',
-      sharedState: store.state
+      
+      state: store.state
     }
   },
-  
+  computed: {
+	message: function() { return store.state.msg; }
+  },
   methods: {
     processSignup: function() {
-
-
       if( this.name !== '' && this.email !== '' && this.password !== '') {
         store.dispatch('addPerson', 
           { data: {name: this.name, 
@@ -105,16 +106,10 @@ export default {
             password: this.password
         }});
       } else {
-
-        this.sharedState.msg = "Name, Email, and Password are required fields"   
-
+        store.state.msg = "Name, Email, and Password are required fields"   
       }
     }
   } 
   
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

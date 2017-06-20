@@ -8,7 +8,7 @@
     </div>
   </div>
 
-    <div id="pref-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+    <div id="pref-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
@@ -94,7 +94,7 @@ export default {
   name: 'user-prefs',
   data: function() {
     return {
-      sharedState: store.state,
+        state: store.state
     }
   },
   computed: {
@@ -118,12 +118,6 @@ export default {
       get: function() { return store.state.user.url; },
       set: function(value) { store.commit('setUserUrl', value) }
     },
-    default_repo: {
-      get: function() { 
-        return store.getters.default_repo; 
-     },
-      set: function(value) { store.commit('setDefaultRepo', value) }
-    },
     hasRepos: {
         get: function() {
           var length = 0;
@@ -132,23 +126,17 @@ export default {
           }
           return length;
         }
-    }
+    },
+	message: function() { return store.state.msg; }
   },
   methods: {
     editUser: function() {
         store.dispatch('editPerson', {
           token: store.state.token, 
-          data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url, default_repo: this.default_repo}
+          data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
         })      
 
-    },
-    setDefaultRepo: function(repository_id) {
-      store.commit('setDefaultRepo', repository_id);
     }
   }
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

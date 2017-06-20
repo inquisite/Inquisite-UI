@@ -13,7 +13,7 @@
       <div class="card">
         <div class="card-block">
 
-          <div id="repo-msg" class="alert alert-warning" role="alert" v-show="sharedState.msg !== ''">{{sharedState.msg}}</div>
+          <div id="repo-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="editRepo-form" name="editRepo-form" method="POST" action="#">
 
@@ -37,7 +37,7 @@
 
             <div class="item form-item pull-right">
                 <click-confirm placement="bottom" style="display: inline;">
-                    <a @click="deleteRepo(sharedState.active_repo.id)">
+                    <a @click="deleteRepo(activeRepo.id)">
                         <button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>
                         </a>
                 </click-confirm>
@@ -74,7 +74,9 @@ export default {
   data: function() {
     var repo_id = this.$route.params.id;
     var repo = jQuery.extend({}, store.getters.getRepoByID(repo_id));
-    repo['sharedState'] = store.state;
+    
+    repo['state'] = store.state;
+    
     return repo;
   },
   computed: {
@@ -83,7 +85,14 @@ export default {
     },
     repositoryCount: function() {
       return store.state.repositories;
-    }
+    },
+    isLoggedIn: function() {
+	    return store.getters.isLoggedIn;
+	},
+	repos: function() { return store.state.user.repos; },
+	user: function() { return store.state.user; },
+	activeRepo: function() { return store.state.active_repo; },
+	message: function() { return store.state.msg; }
   }, 
   methods: {
     editRepo: function() {
@@ -101,10 +110,12 @@ export default {
             }
         })
       } else {
-        this.sharedState.msg = 'Repository name is a required field';
+        store.stage.msg = 'Repository name is a required field';
       }
     },
-
+    deleteRepo: function(repo_id) {
+        store.dispatch('deleteRepo', { data: { repo_id: repo_id }, router: this.$router});
+    },
     updateMarkdown: _.debounce(function(e) {
       this.readme = e.target.value
     }, 300) 
@@ -112,7 +123,3 @@ export default {
   
 }
 </script>
-
-<style>
-.form-item { padding: 5px 0; }
-</style>

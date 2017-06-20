@@ -43,8 +43,6 @@ Vue.component('visualize-nodes', VisualizeNodes)
 const VisualizeSheets = require('./VisualizeSheets.vue')
 Vue.component('visualise-sheets', VisualizeSheets)
 
-var sharedState = store.state;
-
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },

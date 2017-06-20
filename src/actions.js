@@ -166,11 +166,13 @@ export const editRepo = function(context, data) {
 /**
  *
  */
-export const deleteRepo = function(context, data) {
+export const deleteRepo = function(context, data, router) {
   if (!context.state.token) return false;
+  var router = data['router'];
   return api.post('/repositories/delete', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded' }})
     .then(function(response) {
       context.commit('DELETE_REPO', response);
+      if (router) { router.push("/"); }
     })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 }
