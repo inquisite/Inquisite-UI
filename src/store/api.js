@@ -43,14 +43,13 @@ export default {
       	
       	if(response.data.status == 401) {
         	console.log("[POST] Token expired", store.getters.getToken);
-          	store.dispatch('doRefresh', {'refresh': store.getters.getRWT, 'callback': {
+          	return store.dispatch('doRefresh', {'refresh': store.getters.getRWT, 'callback': {
           		'instance': instance,
           		'method': 'post',
           		'url': url,
           		'data': d,
           		'config': req_config
           	}});
-          	return false;
         }
       	return response.data;
       }).catch(function(error) { 
@@ -67,13 +66,12 @@ export default {
       	
       	if(response.data.status == 401) {
         	console.log("[PUT] Token expired", store.getters.getToken);
-          	store.dispatch('doRefresh', {'refresh': store.getters.getRWT, 'callback': {
+          	return store.dispatch('doRefresh', {'refresh': store.getters.getRWT, 'callback': {
           		'instance': instance,
           		'method': 'put',
           		'url': url,
           		'config': req_config
           	}});
-          	return true;
         }
       	return response.data;
       }).catch(function(error) { 

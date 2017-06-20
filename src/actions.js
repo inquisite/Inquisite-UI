@@ -45,8 +45,9 @@ export const doRefresh = function(context, data) {
 			if(data && data['callback'] && data['callback']['instance'][data['callback']['method']]) {
 			    // set new token
 			    data['callback']['config']['headers']['Authorization'] = 'Bearer ' + response.access_token;
-				api[data['callback']['method']](data['callback']['url'], data['callback']['data'], data['callback']['config']);
+				return api[data['callback']['method']](data['callback']['url'], data['callback']['data'], data['callback']['config']);
 			}
+			return null;
 		})
     	.catch(function(error) { context.commit('API_FAILURE', error) });
 }
