@@ -15,7 +15,6 @@ export default {
     return instance.get(url, req_config)
       .then(function(response) { 
       	console.log('API GET SUCCESS', response); 
-      	console.log(response.data);
       	Promise.resolve(response.data); 
       	
       	if(response.data.status == 401) {
@@ -36,10 +35,8 @@ export default {
   },
 
   post(url, data, req_config) {
-
-    data = qs.stringify(data);
-
-    return instance.post(url, data, req_config)
+    var d = data;
+    return instance.post(url, qs.stringify(data), req_config)
       .then(function(response) { 
       	console.log('API POST SUCCESS', response); 
       	Promise.resolve(response); 
@@ -48,8 +45,9 @@ export default {
         	console.log("[POST] Token expired", store.getters.getToken);
           	store.dispatch('doRefresh', {'refresh': store.getters.getRWT, 'callback': {
           		'instance': instance,
-          		'method': 'get',
+          		'method': 'post',
           		'url': url,
+          		'data': d,
           		'config': req_config
           	}});
           	return false;

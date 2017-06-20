@@ -60,7 +60,7 @@
             </div>
 
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="btn btn-primary">Submit</button>
+              <button v-on:submit.prevent="processSignup" v-on:click.prevent="processSignup" class="btn btn-primary">Register</button>
             </div>
 
           </form>

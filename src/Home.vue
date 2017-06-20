@@ -65,28 +65,24 @@
           <div v-else>
             <p>It looks like you haven't added any datasets to your repository yet?</p>
 
-
             <router-link to="/upload">
               <button type="button" class="btn btn-secondary"><i class="fa fa-plus-square" aria-hidden="true"></i> Add Dataset</button>
             </router-link>
           </div>
-
-            
       </div>
 
     </div>
     <div class="col-sm-6" v-if="showRepoControls">
-       <div class="col-sm-6">
           <h4>Users in this Repository</h4>
 
           <ul class="media-list">
             <li class="media list-item" v-for="user in repoUsers">
-              <div class="media-left">
+              <div class="d-flex mr-3" >
                 <i class="fa fa-user" aria-hidden="true"></i>
               </div>
   
               <div class="media-body">
-                <h5 class="media-heading">{{user.name}}</h5>
+                <h5 class="mt-0">{{user.name}}</h5>
                 <small>{{user.role}}</small>
               </div>
 
@@ -101,8 +97,6 @@
           <router-link to="/add-person-repo">
             <button type="button" class="btn btn-secondary"><i class="fa fa-square-plus" aria-hidden="true"></i> Add People</button>
           </router-link>
-
-        </div>
   </div>
   </div>
 </div>
@@ -133,13 +127,7 @@
                 }
             },
             repoUsers: function() {
-                var repo_users = {}
-                //if(store.state.active_repo) {
-                //  store.dispatch('getRepoUsers', {data: {repo_id: store.state.active_repo.id}})
-                  repo_users = store.state.active_repo.users;
-                //}
-    
-                return repo_users;
+                return store.state.active_repo.users;
             },
             showRepoControls: function() {
 

@@ -28,7 +28,7 @@
 
             </ul>
             <ul class="navbar-nav mr-auto">
-                <li class="navbar-item" v-if="hasRepos()">
+                <li class="navbar-item" v-if="isLoggedIn && hasRepos()">
                     <div class="input-container">
                         <div class="input-group">
                             <input type="text" class="form-control" aria-label="Choose a Repository" placeholder="Choose a repository" :value="activeRepo.name" v-model="activeRepo.name">

@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="page-header">
-        <h1>User Preferences</h1>
+        <h1>Your Preferences</h1>
       </div>
     </div>
   </div>

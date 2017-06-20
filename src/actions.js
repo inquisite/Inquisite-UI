@@ -40,11 +40,12 @@ export const doRefresh = function(context, data) {
     return api.post('/refresh', null, {headers: {'Authorization': 'Bearer ' + data.refresh}})
 		.then(function(response) {
 			if (! response.access_token) { return false; }
-			console.log('doRefresh GOT TOKEN ', response.access_token); 
+			console.log('doRefresh GOT TOKEN ', response.access_token, data); 
 			context.commit('setToken', response.access_token);
 			if(data && data['callback'] && data['callback']['instance'][data['callback']['method']]) {
-				consol.log("call ", data['callback']['method']);
-				data['callback']['instance'][data['callback']['method']](data['callback']['url'], data['callback']['config']);
+			    // set new token
+			    data['callback']['config']['headers']['Authorization'] = 'Bearer ' + response.access_token;
+				api[data['callback']['method']](data['callback']['url'], data['callback']['data'], data['callback']['config']);
 			}
 		})
     	.catch(function(error) { context.commit('API_FAILURE', error) });
@@ -69,7 +70,7 @@ export const doLogout = function(context, data) {
  *
  */
 export const addPerson = function(context, data) {
-  if (!context.state.token) return false;
+  //if (!context.state.token) return false;
   return api.post('/people/add', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { context.commit('ADD_PERSON', response); })
     .catch(function(error) { context.commit('API_FAILURE', error) });
@@ -154,7 +155,6 @@ export const addRepo = function(context, data) {
 export const editRepo = function(context, data) {
   if (!context.state.token) return false;
   var setAsActive = data.makeActive ? true : false;
-  console.log("edit repo [action]", data);
   return api.post('/repositories/' +  data['id'] + '/edit', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { 
         context.commit('EDIT_REPO', response); 
