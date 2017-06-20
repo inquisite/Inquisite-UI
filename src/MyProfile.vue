@@ -15,17 +15,19 @@
         
           <div class="row">
             <div class="col-sm-6">  
-
               <div class="card">
-              <div class="card-block">
+                  <div class="card-block">
+                        <div class="pull-right">
+                            <button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Edit</button>
+                        </div>
                 
-              <div>Name: {{sharedState.user.name}}</div>
-              <div>Email: {{sharedState.user.email}}</div>
-              <div>Location: {{sharedState.user.location}}</div>
-              <div>Tagline: {{sharedState.user.tagline}}</div>
-              <div>URL: {{sharedState.user.url}}</div>
+                      <div>Name: {{sharedState.user.name}}</div>
+                      <div>Email: {{sharedState.user.email}}</div>
+                      <div>Location: {{sharedState.user.location}}</div>
+                      <div>Tagline: {{sharedState.user.tagline}}</div>
+                      <div>URL: {{sharedState.user.url}}</div>
 
-              </div>
+                  </div>
               </div>
 
             </div> 

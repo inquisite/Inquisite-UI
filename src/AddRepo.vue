@@ -41,7 +41,7 @@
             </div>
 
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="addRepo" v-on:click.prevent="addRepo" class="btn btn-primary">Submit</button>
+              <button v-on:submit.prevent="addRepo" v-on:click.prevent="addRepo" class="btn btn-primary">Save</button>
             </div>
 
           </form>

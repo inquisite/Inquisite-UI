@@ -38,7 +38,7 @@
                                 </button>
 
                                 <ul class="dropdown-menu dropdown-menu-right">
-                                    <li class="navbar-item" v-for="repo in sharedState.user.repos"><a @click="setActiveRepo(repo.id)">{{ repo.name }}</a></li>
+                                    <li class="dropdown-item" v-for="repo in sharedState.user.repos"><a @click="setActiveRepo(repo.id)">{{ repo.name }}</a></li>
                                 </ul>
                             </div>
                             

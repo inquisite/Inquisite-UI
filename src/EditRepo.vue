@@ -8,7 +8,6 @@
     </div>
   </div>
 
-
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
@@ -36,8 +35,15 @@
               </div>
             </div>
 
+            <div class="item form-item pull-right">
+                <click-confirm placement="bottom" style="display: inline;">
+                    <a @click="deleteRepo(sharedState.active_repo.id)">
+                        <button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>
+                        </a>
+                </click-confirm>
+            </div>
             <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Submit</button>
+              <button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Save</button>
             </div>
 
           </form>
@@ -67,8 +73,7 @@ export default {
   name: 'home',
   data: function() {
     var repo_id = this.$route.params.id;
-    
-    var repo = store.getters.getRepoByID(repo_id);
+    var repo = jQuery.extend({}, store.getters.getRepoByID(repo_id));
     repo['sharedState'] = store.state;
     return repo;
   },
@@ -86,7 +91,14 @@ export default {
         var self = this;
         store.dispatch('editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
         .then(function(response) { 
-             //self.$router.push("/");
+            // Copy saved field values to model             
+            var repo_id = self.$route.params.id;
+            var repo = store.getters.getRepoByID(repo_id);
+            
+            var f = ['name', 'readme', 'url'];
+            for(var k in f) {
+                repo[f[k]] = self[f[k]];
+            }
         })
       } else {
         this.sharedState.msg = 'Repository name is a required field';
