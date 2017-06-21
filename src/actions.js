@@ -201,11 +201,22 @@ export const getPeople = function(context, data) {
 /**
  *
  */
-export const addPersonRepo = function(context, data) {
+export const addPersonToRepo = function(context, data) {
   if (!context.state.token) return false;
   return api.post('/repositories/add_collaborator', data.data,
     {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
     .then(function(response) { context.commit('ADD_PERSON_REPO', response); })
+    .catch(function(error) { context.commit('API_FAILURE', error) });
+}
+
+/**
+ *
+ */
+export const removePersonFromRepo = function(context, data) {
+  if (!context.state.token) return false;
+  return api.post('/repositories/remove_collaborator', data.data,
+    {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { context.commit('REMOVE_PERSON_REPO', response); })
     .catch(function(error) { context.commit('API_FAILURE', error) });
 } 
 
@@ -238,3 +249,15 @@ export const getDataNodes = function(context, data) {
     .catch(function(error) { context.commit('API_FAILURE', error) })
 }
 
+/**
+ * Search for users
+ */
+export const findPeople = function(context, data) {
+  if(!context.state.token) return false;
+  
+  return api.post('people/find', data.data, {headers: {'Authorization': 'Bearer ' + context.state.token, 'Content-Type': 'application/x-www-form-urlencoded'}})
+    .then(function(response) { 
+        return response;
+    })
+    .catch(function(error) { context.commit('API_FAILURE', error) })
+}

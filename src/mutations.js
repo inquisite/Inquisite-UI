@@ -143,15 +143,19 @@ export const ADD_PERSON_REPO = function(state, response) { state.msg = response.
 /**
  *
  */
+export const REMOVE_PERSON_REPO = function(state, response) { state.msg = response.msg }
+
+/**
+ *
+ */
 export const DELETE_REPO = function(state, response) { 
     state.msg = response.msg 
-    var deleted_repo_id = response.repository_id;
+    var deleted_repo_id = response.repo_id;
     
     // remove deleted repo from repolist
     for(var i in state.user.repos) {
         if (state.user.repos[i].id && (parseInt(state.user.repos[i].id) == parseInt(deleted_repo_id))) {
-            var z = state.user.repos.splice(i, 1);
-            console.log("remove repo", i, z);
+            state.user.repos.splice(i, 1);
         }
     }
     if (state.user.repos.length > 0) {

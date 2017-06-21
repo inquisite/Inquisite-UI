@@ -27,3 +27,4 @@ new Vue({
   }
 })
 Vue.component('clickConfirm', ClickConfirm);
+Vue.component('autocomplete',require('./ui/Autocomplete.vue'));

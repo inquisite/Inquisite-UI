@@ -73,7 +73,7 @@
 
     </div>
     <div class="col-sm-6" v-if="showRepoControls">
-          <h4>Users in this Repository</h4>
+          <h4>Your collaborators</h4>
 
           <ul class="media-list">
             <li class="media list-item" v-for="user in repoUsers">
@@ -95,7 +95,7 @@
           </ul>
 
           <router-link to="/add-person-repo">
-            <button type="button" class="btn btn-secondary"><i class="fa fa-square-plus" aria-hidden="true"></i> Add People</button>
+            <button type="button" class="btn btn-secondary"><i class="fa fa-square-plus" aria-hidden="true"></i> Manage collaborators</button>
           </router-link>
   </div>
   </div>

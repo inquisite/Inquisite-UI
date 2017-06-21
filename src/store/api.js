@@ -61,7 +61,7 @@ export default {
   put(url, data, req_config) {
     return instance.put(url, data, req_config)
       .then(function(response) { 
-      	console.log('API PUT SUCESS'); 
+      	console.log('API PUT SUCCESS', response); 
       	Promise.resolve(response); 
       	
       	if(response.data.status == 401) {
