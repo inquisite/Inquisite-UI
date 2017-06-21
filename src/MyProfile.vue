@@ -41,8 +41,8 @@
               <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="nav-item active"><a href="#repos" aria-controls="repos" role="tab" data-toggle="tab" class="nav-link">Repositories</a></li>
                 <!--<li role="presentation" class="nav-item"><a href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab" class="nav-link">Organizations</a></li>-->
-                <li role="presentation" class="nav-item"><a href="#following" aria-controls="following" role="tab" data-toggle="tab" class="nav-link">Following</a></li>
                 <li role="presentation" class="nav-item"><a href="#followers" aria-controls="followers" role="tab" data-toggle="tab" class="nav-link">Followers</a></li>
+                <li role="presentation" class="nav-item"><a href="#following" aria-controls="following" role="tab" data-toggle="tab" class="nav-link">Following</a></li>
               </ul>
 
               <div id="useritems" class="tab-content">
@@ -84,8 +84,8 @@
 
                 </div>
                 <div role="tabpanel" class="tab-pane" id="orgs"> Orgs list to come ...</div>
-                <div role="tabpanel" class="tab-pane" id="following"> Following list to come ... </div>
                 <div role="tabpanel" class="tab-pane" id="followers"> Followers list to come ... </div>
+                <div role="tabpanel" class="tab-pane" id="following"> Following list to come ... </div>
               </div>
 
             </div>
