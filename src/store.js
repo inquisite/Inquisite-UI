@@ -10,6 +10,7 @@ Vue.use(Vuex)
 
 const state = {
   logged_in: false,
+  loading: true,
   token: '',
   teaser: '... uploading file',
   user: {
@@ -22,8 +23,7 @@ const state = {
   users: [],
   msg: '',
   active_repo: {},
-  active_data: [],
-  router: null
+  active_data: []
 }
 
 const store = new Vuex.Store({

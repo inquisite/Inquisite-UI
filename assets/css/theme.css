@@ -127,14 +127,6 @@
   display: none;
 }
 
-.autocomplete-people-wrapper {
-    display: inline;
-}
-
 .autocomplete-people-input {
-    width: 240px;
-}
-
-.autocomplete-people-list {
-    width: 240px;
+    width: 200px;
 }

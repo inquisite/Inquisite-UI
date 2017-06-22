@@ -318,6 +318,13 @@ import store from '../store.js'
                 // Callback Event
                 self.onAjaxLoaded ? self.onAjaxLoaded(response['results']) : null;
                 self.json = self.process ? self.process(response) : response['results'];
+                
+                if (self.json.length == 0) {
+                    self.json = [{
+                        'name': "No match found",
+                        'id': 0
+                    }];
+                }
             });
         }
       },

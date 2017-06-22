@@ -79,7 +79,8 @@ export const API_FAILURE = function(state, error) { state.msg = error }
  */
 export const GET_REPOS = function(state, response) { 
 	state.user.repos = response.repos; 
-	state.msg = response.msg 
+	state.msg = response.msg;
+	state.loading = false;
 }
 
 /**

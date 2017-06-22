@@ -29,6 +29,7 @@
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-block">
+                    <div class="pull-right"><a @click="addToRepo(last_user_id)"><button type="button" class="btn btn-secondary text-right" :disabled='(last_user_id == null)'>Add User</button></a></div>
                     <autocomplete
                         service="findPeople"
                         anchor="name" 
@@ -37,7 +38,6 @@
                         :on-select="selectUser"
                         :on-ajax-loaded="filterUsers"
                         ></autocomplete>
-                        <a @click="addToRepo(last_user_id)"><button type="button" class="btn btn-secondary text-right" :disabled='(last_user_id == null)'>Add User</button></a>
                 </div>  
             </div>
         </div>
@@ -91,7 +91,7 @@ export default {
        .then(function() { store.dispatch('getRepoUsers', { data: { repo_id: store.state.active_repo.id }}) });
     },
     selectUser: function(u) {
-        this.last_user_id = u.id;
+        if (u.id > 0) { this.last_user_id = u.id; }
     },
     filterUsers: function(list) {
         var owner_id = this.activeRepo.owner.id;

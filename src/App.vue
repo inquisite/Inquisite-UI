@@ -145,7 +145,6 @@ export default {
       if( this.isLoggedIn && !this.hasRepos) {
         store.dispatch('getRepos').then(function() { store.dispatch('getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
       }
-
     },
     getRepoList: function() {
       store.dispatch('getRepos');

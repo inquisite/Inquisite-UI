@@ -9,7 +9,12 @@
         </router-link>
       </div>
 
-      <div class="page-header" v-if="showRepoControls">
+      <div class="jumbotron" v-if="isLoaded">
+        <h1 class="display-3">
+            <i class="fa fa-cog fa-spin" aria-hidden="true"></i> Loading
+        </h1>
+      </div>
+      <div class="page-header" v-else-if="showRepoControls">
         <h1>{{activeRepo.name}}</h1>
           
         <div  v-if="showRepoControls">
@@ -119,6 +124,9 @@
 			isLoggedIn() {
 				return store.getters.isLoggedIn;
 			},
+			isLoaded() {
+				return store.state.loading;
+			},
             compiledMarkdown: function() {
                 if(store.state.active_repo.readme) {
                   return marked(store.state.active_repo.readme, { sanitize: true})
@@ -137,7 +145,6 @@
               }
             
               return show;
-
             },
             elementCount: function() {
               var keys = []
