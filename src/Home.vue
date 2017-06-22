@@ -9,19 +9,19 @@
         </router-link>
       </div>
 
-      <div class="jumbotron" v-if="isLoaded">
+      <div class="jumbotron" v-if="!isLoaded && !isLoggedIn">
         <h1 class="display-3">
             <i class="fa fa-cog fa-spin" aria-hidden="true"></i> Loading
         </h1>
       </div>
-      <div class="page-header" v-else-if="showRepoControls">
+      <div class="page-header" v-else-if="isLoggedIn && showRepoControls">
         <h1>{{activeRepo.name}}</h1>
           
         <div  v-if="showRepoControls">
           <div v-html="compiledMarkdown"></div>
         </div>
       </div>
-      <div class="page-header" v-else>
+      <div class="page-header" v-else-if="!isLoggedIn">
         <h1>Data got you down? Try Inquisite.</h1>
         <p>
             <h3>What is it?</h3>
@@ -99,7 +99,7 @@
             </li>
           </ul>
 
-          <router-link to="/add-person-repo">
+          <router-link to="/manage-collaborators">
             <button type="button" class="btn btn-secondary"><i class="fa fa-square-plus" aria-hidden="true"></i> Manage collaborators</button>
           </router-link>
   </div>

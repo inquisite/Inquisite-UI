@@ -34,8 +34,8 @@ Vue.component('add-repo', AddRepo)
 const EditRepo = require('./EditRepo.vue')
 Vue.component('edit-repo', EditRepo)
 
-const AddPersonRepo = require('./AddPersonRepo.vue')
-Vue.component('add-person-repo', AddPersonRepo)
+const ManageRepoCollaborators = require('./ManageRepoCollaborators.vue')
+Vue.component('manage-collaborators', ManageRepoCollaborators)
 
 const VisualizeNodes = require('./VisualizeNodes.vue')
 Vue.component('visualize-nodes', VisualizeNodes)
@@ -54,7 +54,7 @@ export default [
   { path: '/user/activity', name: 'user-activity', component: UserActivityLog, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/add-repo', name: 'add-repo', component: AddRepo, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/edit-repo/:id', props: true, name: 'edit-repo', component: EditRepo, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
-  { path: '/add-person-repo', name: 'add-person-repo', component: AddPersonRepo, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/manage-collaborators', name: 'manage-collaborators', component: ManageRepoCollaborators, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/nodes', name: 'visualize-nodes', component: VisualizeNodes, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/sheet', name: 'visualize-sheets', component: VisualizeSheets, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '*', redirect: '/' }

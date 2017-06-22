@@ -1,4 +1,4 @@
 export default {
-  api_endpoint: "http://api.inquisite.org",
+  api_endpoint: "http://localhost:5000",
   environment: "local"
 }
