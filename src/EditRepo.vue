@@ -1,49 +1,48 @@
 <template>
-<div id="editRepo">
   <div class="row">
-    <div class="col-sm-12">
-      <div class="page-header">
-        <h1>Edit Repository Details</h1>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm-6">
-      <div class="card">
+    <div class="col-sm-6 offset-sm-3">
+      <div class="card card-form">
+        <div class="card-header text-center">
+			Edit Repository Details
+		 </div>
         <div class="card-block">
 
           <div id="repo-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="editRepo-form" name="editRepo-form" method="POST" action="#">
 
-            <div class="item form-item">
-              <div class="ui fluid input content">
-                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
-              </div>
-            </div>
+            <div class="form-group row">
+				<label for="name" class="col-3 col-form-label">Name</label>
+				<div class="col-9">
+					<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="name" class="col-3 col-form-label">Description</label>
+				<div class="col-9">
+					<textarea class="form-control" :value="readme" @input="updateMarkdown" rows="10" cols="80"></textarea>
+				</div>
+			</div>
 
-            <div class="item form-item">
-              <div class="ui fluid input content">
-                <textarea class="form-control" :value="readme" @input="updateMarkdown" rows="10" cols="80"></textarea>
-              </div>
-            </div>
+			<div class="form-group row">
+				<label for="name" class="col-3 col-form-label">URL</label>
+				<div class="col-9">
+					<input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
+				</div>
+			</div>
 
-            <div class="item form-item">
-              <div class="ui fluid input content">
-                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
-              </div>
-            </div>
-
-            <div class="item form-item pull-right">
-                <click-confirm placement="bottom" style="display: inline;">
-                    <a @click="deleteRepo(activeRepo.id)">
-                        <button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>
-                        </a>
-                </click-confirm>
-            </div>
-            <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Save</button>
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Save</button>
+				</div>
+				<div class="col-sm-6 text-right">
+					<click-confirm placement="bottom" style="display: inline;">
+						<a @click="deleteRepo(activeRepo.id)">
+							<button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>
+							</a>
+					</click-confirm>
+				</div>
             </div>
 
           </form>
@@ -52,13 +51,6 @@
         </div>  
       </div>
     </div>
-
-    <div class="col-sm-6">
-        <!-- Realtime Markdown Example -->
-        <div v-html="compiledMarkdown"></div>
-    </div>
-
-  </div>
 </div>
 
 </template>

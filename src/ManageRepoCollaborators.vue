@@ -1,35 +1,27 @@
 <template>
 <div id="addPersonRepo">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="page-header">
-                <h1>Your collaborators</h1>
-            </div>
-        </div>
-    </div>
-
-    <ul class="media-list">
-        <li class="media" v-for="user in users">
-            <div class="media-left">
-                <i class="fa fa-user" aria-hidden="true"></i>
-            </div>
-
-            <div class="media-body">
-                <h5 class="media-heading">{{user.name}} ({{user.role}})</h5>
-                <small>{{user.location}}</small>
-            </div>
-
-            <div class="media-right">
-                <a v-if="user.role != 'owner'" @click="removeFromRepo(user.id)"><button type="button" class="btn btn-secondary text-right">Remove</button></a>
-            </div>
-        </li>
-    </ul>
-
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="card card-gray">
+				<div class="card-header text-center">
+					Your collaborators
+			 	</div>
+				<ul class="list-group list-group-flush" v-if="users.length">
+					<li class="list-group-item justify-content-between" v-for="user in users">
+						<div>{{user.name}} ({{user.email}}) {{user.role}}
+						<small>{{user.location}}</small></div>
+						<a v-if="user.role != 'owner'" @click="removeFromRepo(user.id)""><button type="button" class="btn btn-orange-reverse"><i class="fa fa-times-circle" aria-hidden="true"></i></button></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-6">
+            <div class="card card-form">
+            	<div class="card-header text-center">
+					Add collaborators
+			 	</div>
                 <div class="card-block">
-                    <div class="pull-right"><a @click="addToRepo(last_user_id)"><button type="button" class="btn btn-secondary text-right" :disabled='(last_user_id == null)'>Add User</button></a></div>
+                    <div class="float-right"><a @click="addToRepo(last_user_id)"><button type="button" class="btn btn-primary" :disabled='(last_user_id == null)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button></a></div>
                     <autocomplete
                         service="findPeople"
                         anchor="name" 

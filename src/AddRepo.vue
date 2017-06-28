@@ -18,7 +18,7 @@
             This looks like your first repository. It will be set as your active repository!
           </div>
 
-          <div id="repo-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
+          <div id="repo-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="addRepo-form" name="addRepo-form" method="POST" action="#">
 

@@ -1,17 +1,10 @@
 <template>
-<div id="user-preferences">
   <div class="row">
-    <div class="col-sm-12">
-      <div class="page-header">
-        <h1>Your Preferences</h1>
-      </div>
-    </div>
-  </div>
-
-    <div id="pref-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
-  <div class="row">
-    <div class="col-sm-6">
-      <div class="card">
+    <div class="col-sm-6 offset-sm-3">
+      <div class="card card-form">
+        <div class="card-header text-center">
+			Your Preferences
+		 </div>
         <div class="card-block">
 
          <form id="signup-form" name="signup-form" method="POST" action="">
@@ -21,60 +14,63 @@
               <div class="msg"></div>
             </div>
 
-            <div class="item form-item form-group">
-              <div class="ui fluid labeled input content">
-                <input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
-              </div>
-            </div>
+            <div class="form-group row">
+				<label for="name" class="col-2 col-form-label">Name</label>
+				<div class="col-10">
+					<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="email" class="col-2 col-form-label">Email</label>
+				<div class="col-10">
+					<input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="location" class="col-2 col-form-label">Location</label>
+				<div class="col-10">
+					<input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="location">
+				</div>
+			</div>
+            
+            <div class="form-group row">
+				<label for="tagline" class="col-2 col-form-label">Tagline</label>
+				<div class="col-10">
+					<input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
+				</div>
+			</div>
 
-            <div class="item form-item form-group">
-              <div class="ui fluid labeled input content">
-                <input type="text" class="form-control" id="email" name="email" placeholder="Email" v-model="email">
-              </div>
-            </div>
+            <div class="form-group row">
+				<label for="url" class="col-2 col-form-label">URL</label>
+				<div class="col-10">
+					<input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="password" class="col-2 col-form-label">Password</label>
+				<div class="col-10">
+					<input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
+				</div>
+			</div>
 
-            <div class="item form-item form-group">
-              <div class="ui fluid labeled input content">
-                <input type="text" class="form-control" id="location" name="location" placeholder="Location" v-model="location">
-              </div>
-            </div>
-
-            <div class="item form-item form-group">
-              <div class="ui fluid labeled input content">
-                <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" v-model="tagline">
-              </div>
-            </div>
-
-            <div class="item form-item form-group">
-              <div class="ui fluid labeled input content">
-                <input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
-              </div>
-            </div>
-
-            <div class="item form-item form-group">
-              <div class="ui fluid labeled input content">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
-              </div>
+            <div class="form-group text-center">
+              <button v-on:submit.prevent="editUser()" v-on:click.prevent="editUser()" class="btn btn-primary">Save</button>
             </div>
 
             <div v-if="hasRepos == 0"> 
-                <div class="item form-item form-group">
+                <div class="form-group text-center">
                     <div class="alert alert-info" role="alert">
                         <p>It looks like you have yet to create any repositories. Click here to get started!</p> 
-
-                        <br/>
-
-                        <button type="button" class="btn btn-secondary">
+						<button type="button" class="btn btn-secondary">
                             <router-link to="/add-repo" class="item">
                                 <i class="fa fa-square-plus" aria-hidden="true"></i> Add a Repository
                             </router-link>
                         </button>
                     </div>
                 </div>
-            </div>
-
-            <div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="editUser()" v-on:click.prevent="editUser()" class="btn btn-primary">Submit</button>
             </div>
 
           </form>
