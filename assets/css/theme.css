@@ -75,6 +75,9 @@ a{
     background-color: #FFF !important;
     border-color: #FFF !important;
 }
+.btn-orange-reverse .fa{
+	font-size:1.4rem !important;
+}
 .btn-icon {
 	color: #fff !Important;
     background-color: #666 !important;
@@ -127,7 +130,7 @@ a{
 .card{
 	min-height:200px;
 }
-.card.card-gray, .card.card-form{
+.card, .card.card-gray, .card.card-form{
 	background-color: #ffffff;
 	border-radius:0px;
 	border:0px !Important;
@@ -135,6 +138,9 @@ a{
 	-moz-box-shadow: 1px 2px 4px 0px rgba(102,102,102,0.35);
 	box-shadow: 1px 2px 4px 0px rgba(102,102,102,0.35);
 	margin-bottom:50px;
+}
+.card .card-header{
+	border-radius:0px !important;
 }
 .card-form .card-header{
 	background-color: #178998;
@@ -163,6 +169,28 @@ a{
 	text-transform:uppercase;
 	font-weight:600;
 	font-size:1.2rem;
+}
+
+/* tabs */
+/*.nav-tabs .nav-link{
+	border-radius:0px !important;
+}*/
+.nav-tabs .nav-link{
+	color:#FFF !important;
+	border:0px !Important;
+    padding: .35em 1em !Important;
+}
+.nav-tabs .nav-link:hover{
+	background-color:#222 !important;
+	border:0px !Important;
+}
+.nav-tabs .nav-link.active{
+	color:#1CB2C6 !important;
+	border:0px !Important;
+}
+.nav-tabs .nav-link.active:hover{
+	background-color:#FFF !important;
+	border:0px !Important;
 }
 .navbar{
 	background-color:#FFF;
