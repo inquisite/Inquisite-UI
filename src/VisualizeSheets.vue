@@ -2,25 +2,24 @@
 <div id="visualize-data-sheets">
   <div class="row">
     <div class="col-sm-12">
-      <div class="page-header">
 
         <div class="pull-right">
           <a @click="exportRepo()">
-            <button type="button" class="btn btn-info"><i class="fa fa-download" aria-hidden="true"></i>Export Repository</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true"></i> Export Repository</button>
           </a>
         </div>
 
         <h1>Visualize Data Sheets</h1>
-
-      </div>
     </div>
   </div>
 
   <div class="row">
     <div class="col-sm-12">
-      <div class="card">
-        <div class="card-block">
-         <p>Displaying Data Sheet for {{activeRepo.name}} </p> 
+      <div class="card card-gray">
+        <div class="card-header">
+			Displaying Data Sheet for {{activeRepo.name}}
+		 </div>
+        <div class="card-block" style="display:flex; overflow-x: auto;">
          <!--<div v-html="dataTable" style="display:flex; overflow-x: auto;"></div>-->
 
 
