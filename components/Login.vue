@@ -64,18 +64,16 @@ export default {
   },
   methods: {
     processLogin: function() {
-
       if( this.email !== '' && this.password !== '') {
-
           var self = this;
+          var store = this.$store;
           this.$store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
           .then(function() {
               // Transition to Home Page if logged in
-              if(this.$store.getters.isLoggedIn) {
+              if(store.getters.isLoggedIn) {
                   setTimeout( function() { self.$router.push('/') }, 1500) 
               }
           });
-        
       } else {
           this.$store.state.msg = 'Email and Password are required fields';
       }
