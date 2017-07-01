@@ -1,5 +1,5 @@
 import config from '../config.js'
-import store from '../store.js'
+import store from './store.js'
 import axios from 'axios'
 
 var qs = require('qs')

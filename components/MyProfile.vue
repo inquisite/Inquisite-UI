@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import store from './store.js'
 
 export default { 
   name: 'user-profile',
@@ -72,21 +71,21 @@ export default {
       tagline: '',
       url: '',
       
-      state: store.state
+      state: this.$store.state
     }
   },
   computed: {
     isLoggedIn: function() {
-	    return store.getters.isLoggedIn;
+	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return store.state.user.repos; },
-	user: function() { return store.state.user; },
-	activeRepo: function() { return store.state.active_repo; },
+	repos: function() { return this.$store.state.user.repos; },
+	user: function() { return this.$store.state.user; },
+	activeRepo: function() { return this.$store.state.active_repo; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return store.state.repositories;
+      return this.$store.state.repositories;
     }
   }, 
   methods: {
@@ -94,7 +93,7 @@ export default {
       this.$router.push("/user/preferences");
     },
     deleteRepo: function(repo_id) {
-      store.dispatch('deleteRepo', { data: { repo_id: repo_id }});
+      this.$store.dispatch('deleteRepo', { data: { repo_id: repo_id }});
     }
   },
 }

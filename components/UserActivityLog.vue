@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import store from './store.js'
-
 export default { 
   name: 'user-activity',
   data: function() {

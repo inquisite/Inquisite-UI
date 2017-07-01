@@ -49,8 +49,6 @@
 </template>
 
 <script>
-import store from './store.js'
-
 export default { 
   name: 'login',
   data: function() {
@@ -58,11 +56,11 @@ export default {
       email: '',
       password: '',
       
-      state: store.state
+      state: this.$store.state
     }
   },
   computed: {
-    message: function() { return store.state.msg; }
+    message: function() { return this.$store.state.msg; }
   },
   methods: {
     processLogin: function() {
@@ -70,16 +68,16 @@ export default {
       if( this.email !== '' && this.password !== '') {
 
           var self = this;
-          store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
+          this.$store.dispatch('doLogin', {data: {username: this.email, password: this.password}})
           .then(function() {
               // Transition to Home Page if logged in
-              if(store.getters.isLoggedIn) {
+              if(this.$store.getters.isLoggedIn) {
                   setTimeout( function() { self.$router.push('/') }, 1500) 
               }
           });
         
       } else {
-          store.state.msg = 'Email and Password are required fields';
+          this.$store.state.msg = 'Email and Password are required fields';
       }
 
     }

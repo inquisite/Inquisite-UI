@@ -79,8 +79,6 @@
 
 <script>
 
-import store from './store.js'
-
 export default { 
   name: 'home',
   data: function() {
@@ -92,16 +90,16 @@ export default {
       url: '',
       password: '',
       
-      state: store.state
+      state: this.$store.state
     }
   },
   computed: {
-	message: function() { return store.state.msg; }
+	message: function() { return this.$store.state.msg; }
   },
   methods: {
     processSignup: function() {
       if( this.name !== '' && this.email !== '' && this.password !== '') {
-        store.dispatch('addPerson', 
+        this.$store.dispatch('addPerson', 
           { data: {name: this.name, 
             email: this.email, 
             location: this.location, 
@@ -110,7 +108,7 @@ export default {
             password: this.password
         }});
       } else {
-        store.state.msg = "Name, Email, and Password are required fields"   
+        this.$store.state.msg = "Name, Email, and Password are required fields"   
       }
     }
   } 

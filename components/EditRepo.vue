@@ -56,8 +56,6 @@
 </template>
 
 <script>
-
-import store from './store.js'
 import _ from 'lodash'
 var marked = require('marked');
 
@@ -65,9 +63,9 @@ export default {
   name: 'home',
   data: function() {
     var repo_id = this.$route.params.id;
-    var repo = jQuery.extend({}, store.getters.getRepoByID(repo_id));
+    var repo = jQuery.extend({}, this.$store.getters.getRepoByID(repo_id));
     
-    repo['state'] = store.state;
+    repo['state'] = this.$store.state;
     
     return repo;
   },
@@ -76,25 +74,25 @@ export default {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return store.state.repositories;
+      return this.$store.state.repositories;
     },
     isLoggedIn: function() {
-	    return store.getters.isLoggedIn;
+	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return store.state.user.repos; },
-	user: function() { return store.state.user; },
-	activeRepo: function() { return store.state.active_repo; },
-	message: function() { return store.state.msg; }
+	repos: function() { return this.$store.state.user.repos; },
+	user: function() { return this.$store.state.user; },
+	activeRepo: function() { return this.$store.state.active_repo; },
+	message: function() { return this.$store.state.msg; }
   }, 
   methods: {
     editRepo: function() {
       if(this.name !== '') {
         var self = this;
-        store.dispatch('editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
+        this.$store.dispatch('editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
         .then(function(response) { 
             // Copy saved field values to model             
             var repo_id = self.$route.params.id;
-            var repo = store.getters.getRepoByID(repo_id);
+            var repo = this.$store.getters.getRepoByID(repo_id);
             
             var f = ['name', 'readme', 'url'];
             for(var k in f) {
@@ -102,11 +100,11 @@ export default {
             }
         })
       } else {
-        store.stage.msg = 'Repository name is a required field';
+        this.$store.stage.msg = 'Repository name is a required field';
       }
     },
     deleteRepo: function(repo_id) {
-        store.dispatch('deleteRepo', { data: { repo_id: repo_id }, router: this.$router});
+        this.$store.dispatch('deleteRepo', { data: { repo_id: repo_id }, router: this.$router});
     },
     updateMarkdown: _.debounce(function(e) {
       this.readme = e.target.value

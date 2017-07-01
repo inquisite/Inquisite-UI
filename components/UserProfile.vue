@@ -56,7 +56,6 @@
 </template>
 
 <script>
-import store from './store.js'
 
 export default { 
   name: 'user-profile',
@@ -68,11 +67,11 @@ export default {
       tagline: '',
       url: '',
       
-      state: store.state
+      state: this.$store.state
     }
   },
   computed: {
-    person: function() { return store.state.person; }
+    person: function() { return this.$store.state.person; }
   },
   methods: {
   },

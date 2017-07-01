@@ -1,46 +1,46 @@
 // Vue Routes Config
 import Vue from 'vue'
-import store from './store.js'
+import store from './store/store.js'
 
 
 // Load Template Components
-const Home = require('./Home.vue')
+const Home = require('./components/Home.vue')
 Vue.component('home', Home)
 
-const Signup = require('./Signup.vue')
+const Signup = require('./components/Signup.vue')
 Vue.component('signup', Signup)
 
-const Login = require('./Login.vue')
+const Login = require('./components/Login.vue')
 Vue.component('login', Login)
 
-const UploadData = require('./UploadData.vue')
+const UploadData = require('./components/UploadData.vue')
 Vue.component('upload-data', UploadData)
 
-const UserPrefs = require('./UserPrefs.vue')
+const UserPrefs = require('./components/UserPrefs.vue')
 Vue.component('user-prefs', UserPrefs)
 
-const UserProfile = require('./UserProfile.vue')
+const UserProfile = require('./components/UserProfile.vue')
 Vue.component('user-profile', UserProfile)
 
-const MyProfile = require('./MyProfile.vue')
+const MyProfile = require('./components/MyProfile.vue')
 Vue.component('my-profile', MyProfile)
 
-const UserActivityLog = require('./UserActivityLog.vue')
+const UserActivityLog = require('./components/UserActivityLog.vue')
 Vue.component('user-activity', UserActivityLog)
 
-const AddRepo = require('./AddRepo.vue')
+const AddRepo = require('./components/AddRepo.vue')
 Vue.component('add-repo', AddRepo)
 
-const EditRepo = require('./EditRepo.vue')
+const EditRepo = require('./components/EditRepo.vue')
 Vue.component('edit-repo', EditRepo)
 
-const ManageRepoCollaborators = require('./ManageRepoCollaborators.vue')
+const ManageRepoCollaborators = require('./components/ManageRepoCollaborators.vue')
 Vue.component('manage-collaborators', ManageRepoCollaborators)
 
-const VisualizeNodes = require('./VisualizeNodes.vue')
+const VisualizeNodes = require('./components/VisualizeNodes.vue')
 Vue.component('visualize-nodes', VisualizeNodes)
 
-const VisualizeSheets = require('./VisualizeSheets.vue')
+const VisualizeSheets = require('./components/VisualizeSheets.vue')
 Vue.component('visualise-sheets', VisualizeSheets)
 
 export default [

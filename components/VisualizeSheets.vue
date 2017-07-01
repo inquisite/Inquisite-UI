@@ -47,15 +47,13 @@
 </template>
 
 <script>
-
-import store from './store.js'
 import Clusterize from 'clusterize.js'
 
 export default { 
   name: 'visualize-data-sheets',
   data: function() {
     return {
-      state: store.state
+      state: this.$store.state
     }
   },
   mounted: function() {
@@ -66,12 +64,12 @@ export default {
       })
   },
   computed: { 
-    activeRepo: function() { return store.state.active_repo; },
+    activeRepo: function() { return this.$store.state.active_repo; },
     headers: function() {
 
         var headers = ''
         var key;
-        for(key in store.state.active_repo.data[0]) {
+        for(key in this.$store.state.active_repo.data[0]) {
           headers += "<th>" + key + "</th>";
         }
 
@@ -83,12 +81,12 @@ export default {
       var key;
       var data_rows = [];
 
-      for(var idx = 0; idx < store.state.active_repo.data.length; idx++) {
+      for(var idx = 0; idx < this.$store.state.active_repo.data.length; idx++) {
 
         rw = "<tr>";
-        for(key in store.state.active_repo.data[idx]) {
-          if(store.state.active_repo.data[idx].hasOwnProperty(key)) {
-            rw += "<td>" + store.state.active_repo.data[idx][key] + "</td>";
+        for(key in this.$store.state.active_repo.data[idx]) {
+          if(this.$store.state.active_repo.data[idx].hasOwnProperty(key)) {
+            rw += "<td>" + this.$store.state.active_repo.data[idx][key] + "</td>";
           } 
         } 
 
@@ -105,18 +103,18 @@ export default {
 
         html += "<tr>";
         var key;
-        for(key in store.state.active_repo.data[0]) {
+        for(key in this.$store.state.active_repo.data[0]) {
           html += "<th>" + key + "</th>";  
         }
 
 
         html + "</tr>";
 
-        for(var idx = 0; idx <= store.state.active_repo.data.length; idx++) {
+        for(var idx = 0; idx <= this.$store.state.active_repo.data.length; idx++) {
         
           html += "<tr>";
-          for(key in store.state.active_repo.data[idx]) {
-            html += "<td>" + store.state.active_repo.data[idx][key] + "</td>";
+          for(key in this.$store.state.active_repo.data[idx]) {
+            html += "<td>" + this.$store.state.active_repo.data[idx][key] + "</td>";
           }
           html += "</tr>";
 

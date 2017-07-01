@@ -1,6 +1,6 @@
 {
   "name": "inquisite-ui",
-  "description": "frontend for inqusite core",
+  "description": "Frontend for inqusite core",
   "author": "Seth <seth@inquisite.org>",
   "private": true,
   "scripts": {

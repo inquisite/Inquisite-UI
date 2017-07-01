@@ -61,23 +61,21 @@
 
 <script>
 
-import store from './store.js'
-
 export default { 
   name: 'visualize-data-nodes',
   data: function() {
     return {
-        state: store.state
+        state: this.$store.state
     }
   },
   
   computed: {
-	activeRepo: function() { return store.state.active_repo; },
+	activeRepo: function() { return this.$store.state.active_repo; },
     nodesData: function() {
     
       var html = ""
    
-      for(var i = 0; i < store.state.active_repo.data.length; i++) {
+      for(var i = 0; i < this.$store.state.active_repo.data.length; i++) {
 
         var item_class = "item";
         if(i == 0) {
@@ -85,8 +83,8 @@ export default {
         }
 
         html += '<div class="' + item_class + '">' 
-        for(var attr in store.state.active_repo.data[i]) {
-          html += '<div>' + attr + ': ' + store.state.active_repo.data[i][attr] + '</div>'
+        for(var attr in this.$store.state.active_repo.data[i]) {
+          html += '<div>' + attr + ': ' + this.$store.state.active_repo.data[i][attr] + '</div>'
         }
         html += '</div>'
       }

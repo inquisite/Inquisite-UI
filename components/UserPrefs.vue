@@ -84,51 +84,49 @@
 </template>
 
 <script>
-import store from './store.js'
-
 export default { 
   name: 'user-prefs',
   data: function() {
     return {
-        state: store.state
+        state: this.$store.state
     }
   },
   computed: {
     name: {
-      get: function() { return store.state.user.name; },
-      set: function(value) { store.commit('setUserName', value) }
+      get: function() { return this.$store.state.user.name; },
+      set: function(value) { this.$store.commit('setUserName', value) }
     },
     email: {
-      get: function() { return store.state.user.email; },
-      set: function(value) { store.commit('setUserEmail', value) }
+      get: function() { return this.$store.state.user.email; },
+      set: function(value) { this.$store.commit('setUserEmail', value) }
     },
     location: {
-      get: function() { return store.state.user.location; },
-      set: function(value) { store.commit('setUserLocation', value) }
+      get: function() { return this.$store.state.user.location; },
+      set: function(value) { this.$store.commit('setUserLocation', value) }
     },
     tagline: {
-      get: function() { return store.state.user.tagline; },
-      set: function(value) { store.commit('setUserTagline', value) }
+      get: function() { return this.$store.state.user.tagline; },
+      set: function(value) { this.$store.commit('setUserTagline', value) }
     },
     url: {
-      get: function() { return store.state.user.url; },
-      set: function(value) { store.commit('setUserUrl', value) }
+      get: function() { return this.$store.state.user.url; },
+      set: function(value) { this.$store.commit('setUserUrl', value) }
     },
     hasRepos: {
         get: function() {
           var length = 0;
-          if(store.state.user.repos !== undefined) {
-            length = store.state.user.repos.length;
+          if(this.$store.state.user.repos !== undefined) {
+            length = this.$store.state.user.repos.length;
           }
           return length;
         }
     },
-	message: function() { return store.state.msg; }
+	message: function() { return this.$store.state.msg; }
   },
   methods: {
     editUser: function() {
-        store.dispatch('editPerson', {
-          token: store.state.token, 
+        this.$store.dispatch('editPerson', {
+          token: this.$store.state.token, 
           data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
         })      
 

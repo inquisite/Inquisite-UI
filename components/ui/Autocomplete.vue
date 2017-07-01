@@ -34,7 +34,7 @@
 
 
 <script>
-import store from '../store.js'
+import store from '../../store/store.js'
 
   /*! Copyright (c) 2016 Naufal Rabbani (http://github.com/BosNaufal)
   * Licensed Under MIT (http://opensource.org/licenses/MIT)

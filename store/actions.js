@@ -1,4 +1,4 @@
-import api from './store/api.js'
+import api from './api.js'
 
 /**
  *

@@ -40,38 +40,38 @@
 
 <script>
 
-import store from './store.js'
-
 export default { 
   name: 'home',
   data: function() {
     return {
-        state: store.state,
+        state: this.$store.state,
         last_user_id: null
     }
   },
   computed: {
     isLoggedIn: function() {
-	    return store.getters.isLoggedIn;
+	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return store.state.user.repos; },
-	users: function() { return store.state.active_repo.users; },
-	activeRepo: function() { return store.state.active_repo; },
+	repos: function() { return this.$store.state.user.repos; },
+	users: function() { return this.$store.state.active_repo.users; },
+	activeRepo: function() { return this.$store.state.active_repo; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return store.state.repositories;
+      return this.$store.state.repositories;
     }
   }, 
   mounted: function() {
-    store.dispatch('getPeople', { token: store.state.token })
+    this.$store.dispatch('getPeople', { token: this.$store.state.token })
   }, 
   methods: {
     addToRepo: function(user_id) {
         var self = this;
+        var store = this.$store;
         if (!user_id) { return false; }
-        store.dispatch('addPersonToRepo', { data: { person_id: user_id, repo_id: store.state.active_repo.id }}).then(function() { 
+        
+        this.$store.dispatch('addPersonToRepo', { data: { person_id: user_id, repo_id: store.state.active_repo.id }}).then(function() { 
             store.dispatch('getRepoUsers', { data: { repo_id: store.state.active_repo.id }});
             $('.autocomplete-people-input').val('');
             self.last_user_id = null;
@@ -79,7 +79,8 @@ export default {
     },
     removeFromRepo: function(user_id) {
         if (!user_id) { return false; }
-       store.dispatch('removePersonFromRepo', { data: { person_id: user_id, repo_id: store.state.active_repo.id }})
+        var store = this.$store;
+       this.$store.dispatch('removePersonFromRepo', { data: { person_id: user_id, repo_id: store.state.active_repo.id }})
        .then(function() { store.dispatch('getRepoUsers', { data: { repo_id: store.state.active_repo.id }}) });
     },
     selectUser: function(u) {

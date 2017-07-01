@@ -62,8 +62,6 @@
 </template>
 
 <script>
-
-import store from './store.js'
 import _ from 'lodash'
 var marked = require('marked');
 
@@ -75,29 +73,29 @@ export default {
       readme: '# Hello \n this is your new repository',
       url: '',
       
-      state: store.state
+      state: this.$store.state
     }
   },
   computed: {
     isLoggedIn: function() {
-	    return store.getters.isLoggedIn;
+	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return store.state.user.repos; },
-	user: function() { return store.state.user; },
-	activeRepo: function() { return store.state.active_repo; },
+	repos: function() { return this.$store.state.user.repos; },
+	user: function() { return this.$store.state.user; },
+	activeRepo: function() { return this.$store.state.active_repo; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return store.state.repositories;
+      return this.$store.state.repositories;
     },
-	message: function() { return store.state.msg; }
+	message: function() { return this.$store.state.msg; }
   }, 
   methods: {
     addRepo: function() {
       if(this.name !== '') {
         var self = this;
-        store.dispatch('addRepo', { data: {name: this.name, readme: this.readme, url: this.url}, makeActive: true})
+        this.$store.dispatch('addRepo', { data: {name: this.name, readme: this.readme, url: this.url}, makeActive: true})
         .then(function(response) { 
              self.$router.push("/");
         })

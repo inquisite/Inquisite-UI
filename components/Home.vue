@@ -135,38 +135,38 @@
 </template>
 
 <script>
-	import store from './store.js'
-	
     var marked = require('marked'); 
 
 	export default { 
 		name: 'home',
         data: function() {
           return {
-                state: store.state
+                state: this.$store.state
           }
         },
 		computed: {
 			isLoggedIn() {
-				return store.getters.isLoggedIn;
+			    console.log("FEH", this.$store.getters);
+				return this.$store.getters.isLoggedIn;
 			},
 			isLoaded() {
-				return store.state.loading;
+			    console.log("LLL", this, this.$store.state);
+				return this.$store.state.loading;
 			},
             compiledMarkdown: function() {
-                if(store.state.active_repo.readme) {
-                  return marked(store.state.active_repo.readme, { sanitize: true})
+                if(this.$store.state.active_repo.readme) {
+                  return marked(this.$store.state.active_repo.readme, { sanitize: true})
                 } else {
                   return ''
                 }
             },
             repoUsers: function() {
-                return store.state.active_repo.users;
+                return this.$store.state.active_repo.users;
             },
             showRepoControls: function() {
 
               var show = false;
-              if( this.isLoggedIn && store.state.active_repo.id ) {
+              if( this.isLoggedIn && this.$store.state.active_repo.id ) {
                 show = true;
               }
             
@@ -174,21 +174,21 @@
             },
             elementCount: function() {
               var keys = []
-              if(undefined !== store.state.active_repo.data[0]) {
-                keys = Object.keys(store.state.active_repo.data[0]);
+              if(undefined !== this.$store.state.active_repo.data[0]) {
+                keys = Object.keys(this.$store.state.active_repo.data[0]);
               }
               return keys.length;
             },
-            activeRepo: function() { return store.state.active_repo; }
+            activeRepo: function() { return this.$store.state.active_repo; }
 		},
         methods: {
           userProfile: function(person_id) {
             var self = this;
 
-            store.dispatch('setPerson', { data: { person_id: person_id }})
+            this.$store.dispatch('setPerson', { data: { person_id: person_id }})
             .then(function() { 
                 // Transition to User Profile if person set
-                if(store.state.person) {
+                if(this.$store.state.person) {
                   self.$root.$options.router.push('/user/profile')
                 }
             });

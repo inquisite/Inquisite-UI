@@ -45,26 +45,24 @@
 
 <script>
 
-import store from './store.js'
-
 export default { 
   name: 'upload-data',
   data: function() {
     return {
-      state: store.state
+      state: this.$store.state
     }
   },
   computed: {
     isLoggedIn: function() {
-	    return store.getters.isLoggedIn;
+	    return this.$store.getters.isLoggedIn;
 	},
-	message: function() { return store.state.msg; },
-	repos: function() { return store.state.user.repos; },
-	user: function() { return store.state.user; },
-	activeRepo: function() { return store.state.active_repo; },
-	uploadRowCount: function() { return store.state.upload_row_count; },
-	uploadFields: function() { return store.state.upload_fields; },
-	uploadSubfields: function() { return store.state.upload_subfields; },
+	message: function() { return this.$store.state.msg; },
+	repos: function() { return this.$store.state.user.repos; },
+	user: function() { return this.$store.state.user; },
+	activeRepo: function() { return this.$store.state.active_repo; },
+	uploadRowCount: function() { return this.$store.state.upload_row_count; },
+	uploadFields: function() { return this.$store.state.upload_fields; },
+	uploadSubfields: function() { return this.$store.state.upload_subfields; },
    
   }, 
   methods: {
@@ -77,7 +75,7 @@ export default {
       this.processData(files[0]);
     },
     processData: function(repo_data) {
-      store.dispatch('uploadRepoData', {token: store.state.token, form: { repo_file: repo_data, repo_id: store.state.active_repo.id }});
+      this.$store.dispatch('uploadRepoData', {token: this.$store.state.token, form: { repo_file: repo_data, repo_id: this.$store.state.active_repo.id }});
     }
   } 
   

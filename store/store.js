@@ -26,7 +26,7 @@ const state = {
   active_data: []
 }
 
-const store = new Vuex.Store({
+export default new Vuex.Store({
   state,
   getters,
   mutations,
@@ -49,5 +49,3 @@ if(module.hot) {
 
   })
 }
-
-export default store
