@@ -146,11 +146,9 @@
         },
 		computed: {
 			isLoggedIn() {
-			    console.log("FEH", this.$store.getters);
 				return this.$store.getters.isLoggedIn;
 			},
 			isLoaded() {
-			    console.log("LLL", this, this.$store.state);
 				return this.$store.state.loading;
 			},
             compiledMarkdown: function() {
