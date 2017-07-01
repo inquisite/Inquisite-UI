@@ -1,21 +1,23 @@
 # inquisite-ui
 
-> frontend for inqusite core
+> Frontend for inqusite core
 
 ## Build Setup
 
 
 ``` bash
-# setup inqusite config with local settings
-mv inqusite-sample-config.json inqusite-local-config.json
+# setup Inquisite config with local settings
+cp config.js-dist config.js
 
-# install dependencies
+# ... then edit to point to Inquisite-core services (https://github.com/inquisite/Inquisite-Core)
+
+# Install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# Serve with hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
+# ... or build for production with minification
 npm run build
 ```
 
