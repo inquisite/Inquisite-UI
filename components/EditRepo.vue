@@ -37,7 +37,7 @@
 					<button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Save</button>
 				</div>
 				<div class="col-sm-6 text-right">
-					<click-confirm placement="bottom" style="display: inline;">
+					<click-confirm placement="top" style="display: inline;">
 						<a @click="deleteRepo(activeRepo.id)">
 							<button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>
 							</a>
@@ -88,11 +88,12 @@ export default {
     editRepo: function() {
       if(this.name !== '') {
         var self = this;
+        var store = this.$store;
         this.$store.dispatch('editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
         .then(function(response) { 
             // Copy saved field values to model             
             var repo_id = self.$route.params.id;
-            var repo = this.$store.getters.getRepoByID(repo_id);
+            var repo = store.getters.getRepoByID(repo_id);
             
             var f = ['name', 'readme', 'url'];
             for(var k in f) {
