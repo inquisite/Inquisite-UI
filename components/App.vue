@@ -57,9 +57,9 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <H6 class="dropdown-header" v-if="user.repos.length > 1 && activeRepo.id">Change Repository:</H6>
-                        <H6 class="dropdown-header" v-if="user.repos.length && !activeRepo.id">Choose Repository:</H6>
-                        <li class="dropdown-item" v-for="repo in state.user.repos" v-if="activeRepo.id != repo.id"><a @click="setActiveRepo(repo.id)" class="nav-link">{{ repo.name }}</a></li>
+                        <H6 class="dropdown-header" v-if="repos.length > 1 && activeRepo.id">Change Repository:</H6>
+                        <H6 class="dropdown-header" v-if="repos.length && !activeRepo.id">Choose Repository:</H6>
+                        <li class="dropdown-item" v-for="repo in repos" v-if="activeRepo.id != repo.id"><a @click="setActiveRepo(repo.id)" class="nav-link">{{ repo.name }}</a></li>
                         <div class="dropdown-divider"></div>
                         <li class="dropdown-item"><router-link to="/add-repo" class="nav-link"><i class="fa fa-plus" aria-hidden="true"></i> New Repository</router-link></li>
                     </ul>
@@ -102,19 +102,21 @@ export default {
     }
   },
   mounted: function() {
-    this.getRepoList();
-    store.dispatch('getUserInfo');
+    this.$store.dispatch('people/getRepos');
   },
   watch: {
     '$route': 'pageChangeActions'
   },
   computed: {
     isLoggedIn: function() {
-	    return store.getters.isLoggedIn;
+	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return store.state.user.repos; },
-	user: function() { return store.state.user; },
-	activeRepo: function() { return store.state.active_repo; }
+	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	user: function() { return this.$store.getters['people/getUserInfo']; },
+	activeRepo: function() { 
+	    var repo = this.$store.getters['repos/getActiveRepo'];
+	    return repo ? repo : {}; 
+	}
   },
   methods: {
     processLogout: function() {
@@ -132,8 +134,8 @@ export default {
     hasRepos: function() {
         var length = 0;
 
-        if(store.state.user.repos !== undefined) {
-          length = store.state.user.repos.length;
+        if(this.repos !== undefined) {
+          length = store.getters['people/users/repos'].length;
         }
 
         return length;
@@ -146,14 +148,12 @@ export default {
 
       // Get User Repos if logged in and we don't have them 
       if( this.isLoggedIn && !this.hasRepos) {
-        store.dispatch('getRepos').then(function() { store.dispatch('getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
+        store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
       }
     },
-    getRepoList: function() {
-      store.dispatch('getRepos');
-    },
     setActiveRepo: function(repo_id) {
-      store.commit('setActiveRepo', repo_id);
+        console.log("set active repo", repo_id);
+      store.commit('repos/SET_ACTIVE_REPO', repo_id);
       this.$router.push("/");   // force back to dashboard for new repo
     }
   },

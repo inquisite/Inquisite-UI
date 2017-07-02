@@ -2,49 +2,44 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as getters from './getters'
-import * as mutations from './mutations'
-import * as actions from './actions'
+import {getters, mutations, actions} from './root'
+import people from './modules/people'
+import repos from './modules/repos'
+import data from './modules/data'
 
 Vue.use(Vuex)
 
 const state = {
-  logged_in: false,
-  loading: true,
-  token: '',
-  teaser: '... uploading file',
-  user: {
-    prefs: {
-      default_repo_id: null
-    },
-    repos: [] 
-  },
-  person: {},
-  users: [],
-  msg: '',
-  active_repo: {},
-  active_data: []
+  msg: '',                      // flash message
+  logged_in: false,             // user is logged in
+  loading: true,                // loading data flag
+  token: '',                    // current JWT token
+  refresh: '',                  // JWT refresh token
+  teaser: '... uploading file', // for data component
 }
 
 export default new Vuex.Store({
   state,
   getters,
   mutations,
-  actions
+  actions,
+  modules: {
+    people,
+    repos,
+    data
+  }
 })
 
 if(module.hot) {
 
   module.hot.accept([
-    './getters',
-    './actions',
-    './mutations'
+    './root'
   ], () => {
 
     store.hotUpdate({
-      getters: require('./getters'),
-      actions: require('./actions'),
-      mutations: require('./mutations')
+      getters: require('./root'),
+      actions: require('./root'),
+      mutations: require('./root')
     })
 
   })

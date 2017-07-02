@@ -152,38 +152,41 @@
 				return this.$store.state.loading;
 			},
             compiledMarkdown: function() {
-                if(this.$store.state.active_repo.readme) {
-                  return marked(this.$store.state.active_repo.readme, { sanitize: true})
+              var ar = this.$store.getters['repos/getActiveRepo'];
+                if(ar.readme) {
+                  return marked(ar.readme, { sanitize: true})
                 } else {
                   return ''
                 }
             },
             repoUsers: function() {
-                return this.$store.state.active_repo.users;
+                return []; // this.$store.getters['repos/getActiveRepo'].users;
             },
             showRepoControls: function() {
-
               var show = false;
-              if( this.isLoggedIn && this.$store.state.active_repo.id ) {
+              var ar = this.$store.getters['repos/getActiveRepo'];
+              console.log("show repo", this.$store.getters['repos/getActiveRepo']);
+              if( this.isLoggedIn && (ar.id > 0) ) {
                 show = true;
               }
             
               return show;
             },
             elementCount: function() {
-              var keys = []
-              if(undefined !== this.$store.state.active_repo.data[0]) {
-                keys = Object.keys(this.$store.state.active_repo.data[0]);
+              var keys = [];
+              var ar = this.$store.getters['repos/getActiveRepo'];
+              if((undefined !== ar.data) && (undefined !== ar.data[0])) {
+                keys = Object.keys(ar.data[0]);
               }
               return keys.length;
             },
-            activeRepo: function() { return this.$store.state.active_repo; }
+            activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; }
 		},
         methods: {
           userProfile: function(person_id) {
             var self = this;
 
-            this.$store.dispatch('setPerson', { data: { person_id: person_id }})
+            this.$store.dispatch('people/setPerson', { data: { person_id: person_id }})
             .then(function() { 
                 // Transition to User Profile if person set
                 if(this.$store.state.person) {
