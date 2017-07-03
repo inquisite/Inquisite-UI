@@ -57,12 +57,12 @@ export default {
 	    return this.$store.getters.isLoggedIn;
 	},
 	message: function() { return this.$store.state.msg; },
-	repos: function() { return this.$store.state.user.repos; },
-	user: function() { return this.$store.state.user; },
-	activeRepo: function() { return this.$store.state.active_repo; },
-	uploadRowCount: function() { return this.$store.state.upload_row_count; },
-	uploadFields: function() { return this.$store.state.upload_fields; },
-	uploadSubfields: function() { return this.$store.state.upload_subfields; },
+	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	user: function() { return this.$store.getters['people/getUserInfo']; },
+	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
+	uploadRowCount: function() { return this.$store.getters['data/getUploadRowCount']; },
+	uploadFields: function() { return this.$store.getters['data/getUploadFields']; },
+	uploadSubfields: function() { return this.$store.getters['data/getUploadSubfields']; },
    
   }, 
   methods: {
@@ -75,7 +75,7 @@ export default {
       this.processData(files[0]);
     },
     processData: function(repo_data) {
-      this.$store.dispatch('uploadRepoData', {token: this.$store.state.token, form: { repo_file: repo_data, repo_id: this.$store.state.active_repo.id }});
+      this.$store.dispatch('data/uploadRepoData', {form: { repo_file: repo_data, repo_id: this.activeRepo.id }});
     }
   } 
   

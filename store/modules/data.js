@@ -4,12 +4,17 @@ import { apiHeaders } from '../../lib/utils.js'
 
 // initial state
 const state = {
-  active_data: []               // for data component
+  active_data: [],               // for data component
+  upload_row_count: 0,
+  upload_fields: [],
+  upload_subfields: []
 }
 
 // getters
 const getters = {
-
+     getUploadRowCount: state => { return state.upload_row_count; },
+     getUploadFields: state => { return state.upload_fields; },
+     getUploadSubfields: state => { return state.upload_subfields; }
 }
 
 // actions
@@ -18,7 +23,7 @@ const actions = {
      *
      */
     uploadRepoData: function(context, data) {
-        if (!context.state.token) return false;
+        if (!context.rootState.token) return false;
         var fd = new FormData();
         fd.append('repo_file', data.form.repo_file);  
         fd.append('repo_id', data.form.repo_id);
@@ -27,7 +32,7 @@ const actions = {
             .then(function(response) {
                 context.commit('UPLOAD_REPO_DATA', response)
             })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
+            .catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) });
     },
 
     /**
@@ -38,7 +43,7 @@ const actions = {
 
         return api.post('repositories/data', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('REPO_DATA', response) })
-            .catch(function(error) { context.commit('API_FAILURE', error) })
+            .catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
     }
 }
 
