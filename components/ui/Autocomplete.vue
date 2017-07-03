@@ -255,7 +255,6 @@ import store from '../../store/store.js'
         * Callback Event
         * Deep clone of the original object
         */
-        console.log("meth", this.onSelect);
         this.onSelect ? this.onSelect(clean) : null
       },
 
@@ -314,7 +313,8 @@ import store from '../../store/store.js'
                   params[key] = this.customParams[key];
                 })
               }
-            store.dispatch(this.service, {data: params}).then(function(response) {
+              
+            store.dispatch(this.service, {data: params}, {'root': true}).then(function(response) {
                 // Callback Event
                 self.onAjaxLoaded ? self.onAjaxLoaded(response['results']) : null;
                 self.json = self.process ? self.process(response) : response['results'];

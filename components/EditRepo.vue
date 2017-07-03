@@ -63,7 +63,7 @@ export default {
   name: 'home',
   data: function() {
     var repo_id = this.$route.params.id;
-    var repo = jQuery.extend({}, this.$store.getters.getRepoByID(repo_id));
+    var repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](repo_id));
     
     repo['state'] = this.$store.state;
     
@@ -74,14 +74,14 @@ export default {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return this.$store.state.repositories;
+      return this.$store.getters['people/getUserRepoCount'];
     },
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return this.$store.state.user.repos; },
-	user: function() { return this.$store.state.user; },
-	activeRepo: function() { return this.$store.state.active_repo; },
+	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	user: function() { return this.$store.getters['people/getUserInfo']; },
+	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
 	message: function() { return this.$store.state.msg; }
   }, 
   methods: {
@@ -89,11 +89,11 @@ export default {
       if(this.name !== '') {
         var self = this;
         var store = this.$store;
-        this.$store.dispatch('editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
+        this.$store.dispatch('repos/editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
         .then(function(response) { 
             // Copy saved field values to model             
             var repo_id = self.$route.params.id;
-            var repo = store.getters.getRepoByID(repo_id);
+            var repo = self.$store.getters['repos/getRepoByID'](repo_id);
             
             var f = ['name', 'readme', 'url'];
             for(var k in f) {
@@ -105,7 +105,7 @@ export default {
       }
     },
     deleteRepo: function(repo_id) {
-        this.$store.dispatch('deleteRepo', { data: { repo_id: repo_id }, router: this.$router});
+        this.$store.dispatch('repos/deleteRepo', { data: { repo_id: repo_id }, router: this.$router});
     },
     updateMarkdown: _.debounce(function(e) {
       this.readme = e.target.value

@@ -4,7 +4,7 @@ import { apiHeaders } from '../../lib/utils.js'
 
 // initial state
 const state = {
-  user: {                       // Info for currently logged in user
+  user: {                      // Info for currently logged in user
     info: {},
     prefs: {},                      // current user's preferences
     repos: []                       // current user's repositories
@@ -15,7 +15,12 @@ const state = {
 // getters
 const getters = {
     getUserInfo: state => { return state.user.info; },
-    getUserRepos: state => { return state.user.repos; }
+    getUserRepos: state => { 
+        return state.user.repos; 
+    },
+    getUserRepoCount: state => { 
+        return state.user.repos ? state.user.repos.length : 0; 
+    }
 }
 
 // actions
@@ -63,13 +68,13 @@ const actions = {
      *
      */
     findPeople: function(context, data) {
-        if(!context.state.token) return false;
+        if(!context.rootState.token) return false;
 
         return api.post('people/find', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 return response;
             })
-            .catch(function(error) { context.commit('API_FAILURE', error) })
+            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) })
     }
 }
 
@@ -99,7 +104,18 @@ const mutations = {
         state.user.info = response.userinfo; 
         state.msg = response.msg;
         state.loading = false;
-    }
+    },
+    
+
+    // User Prefs
+    /**
+     *
+     */
+    setUserName: function(state, newName) { state.user.info.name = newName },
+    setUserEmail: function(state, newEmail) { state.user.info.email = newEmail },
+    setUserLocation: function(state, newLocation) { state.user.info.location = newLocation },
+    setUserTagline: function(state, newTagline) { state.user.info.tagline = newTagline },
+    setUserUrl: function(state, newUrl) { state.user.info.url = newUrl }
 }
 
 

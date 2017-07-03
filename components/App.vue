@@ -152,7 +152,6 @@ export default {
       }
     },
     setActiveRepo: function(repo_id) {
-        console.log("set active repo", repo_id);
       store.commit('repos/SET_ACTIVE_REPO', repo_id);
       this.$router.push("/");   // force back to dashboard for new repo
     }

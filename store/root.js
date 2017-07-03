@@ -4,7 +4,6 @@ import { apiHeaders } from '../lib/utils.js'
 
 // getters
 export const getters = {
-    getUserInfo: state => { return state.user.info; },
     /**
      * Is user logged in?
      */
@@ -110,23 +109,20 @@ export const actions = {
 
 // mutations
 export const mutations = {
-    GET_PEOPLE: function(state, response) { state.users = response.people },
     /**
      * Record login
      */
     login:  state => { 
-      state.logged_in = true 
-      state.msg = "Success!"
+      state.logged_in = true ;
+      state.msg = "Success!";
     },
 
     /**
      * Record logout
      */
     logout: state => {
-      state.logged_in = false
-      state.token = ''
-      state.user = {}
-      state.active_repo = {}
+      state.logged_in = false;
+      state.token = '';
     },
 
     /**
@@ -141,16 +137,6 @@ export const mutations = {
      * Set current JWT refresh token
      */
     setRefresh: function(state, refresh_token) { state.refresh = refresh_token },
-
-    // User Prefs
-    /**
-     *
-     */
-    setUserName: function(state, newName) { state.user.name = newName },
-    setUserEmail: function(state, newEmail) { state.user.email = newEmail },
-    setUserLocation: function(state, newLocation) { state.user.location = newLocation },
-    setUserTagline: function(state, newTagline) { state.user.tagline = newTagline },
-    setUserUrl: function(state, newUrl) { state.user.url = newUrl },
 
     /**
      *

@@ -78,14 +78,14 @@ export default {
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return this.$store.state.user.repos; },
-	user: function() { return this.$store.state.user; },
-	activeRepo: function() { return this.$store.state.active_repo; },
+	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	user: function() { return this.$store.getters['people/getUserInfo']; },
+	activeRepo: function() { return his.$store.getters['repos/getActiveRepo']; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return this.$store.state.repositories;
+      return this.repos ? this.repos.length:  0;
     }
   }, 
   methods: {
@@ -93,7 +93,7 @@ export default {
       this.$router.push("/user/preferences");
     },
     deleteRepo: function(repo_id) {
-      this.$store.dispatch('deleteRepo', { data: { repo_id: repo_id }});
+      this.$store.dispatch('repos/deleteRepo', { data: { repo_id: repo_id }});
     }
   },
 }

@@ -23,7 +23,7 @@
                 <div class="card-block">
                     <div class="float-right"><a @click="addToRepo(last_user_id)"><button type="button" class="btn btn-primary" :disabled='(last_user_id == null)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button></a></div>
                     <autocomplete
-                        service="findPeople"
+                        service="people/findPeople"
                         anchor="name" 
                         placeholder="Find user"
                         class-name="autocomplete-people"
@@ -52,18 +52,18 @@ export default {
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return this.$store.state.user.repos; },
-	users: function() { return this.$store.state.active_repo.users; },
-	activeRepo: function() { return this.$store.state.active_repo; },
+	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	users: function() { console.log(this.$store.getters['repos/getActiveRepo'].users); return this.$store.getters['repos/getActiveRepo'].users; },
+	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return this.$store.state.repositories;
+      return this.$store.getters['people/getUserRepoCount'];
     }
   }, 
   mounted: function() {
-    this.$store.dispatch('getPeople', { token: this.$store.state.token })
+ 
   }, 
   methods: {
     addToRepo: function(user_id) {
@@ -71,8 +71,8 @@ export default {
         var store = this.$store;
         if (!user_id) { return false; }
         
-        this.$store.dispatch('addPersonToRepo', { data: { person_id: user_id, repo_id: store.state.active_repo.id }}).then(function() { 
-            store.dispatch('getRepoUsers', { data: { repo_id: store.state.active_repo.id }});
+        this.$store.dispatch('repos/addPersonToRepo', { data: { person_id: user_id, repo_id: store.getters['repos/getActiveRepoID'] }}).then(function() { 
+            store.dispatch('repos/getRepoUsers', { data: { repo_id: store.getters['repos/getActiveRepoID'] }});
             $('.autocomplete-people-input').val('');
             self.last_user_id = null;
         });
@@ -80,8 +80,8 @@ export default {
     removeFromRepo: function(user_id) {
         if (!user_id) { return false; }
         var store = this.$store;
-       this.$store.dispatch('removePersonFromRepo', { data: { person_id: user_id, repo_id: store.state.active_repo.id }})
-       .then(function() { store.dispatch('getRepoUsers', { data: { repo_id: store.state.active_repo.id }}) });
+       this.$store.dispatch('repos/removePersonFromRepo', { data: { person_id: user_id, repo_id: store.getters['repos/getActiveRepoID'] }})
+       .then(function() { store.dispatch('repos/getRepoUsers', { data: { repo_id: store.getters['repos/getActiveRepoID'] }}) });
     },
     selectUser: function(u) {
         if (u.id > 0) { this.last_user_id = u.id; }

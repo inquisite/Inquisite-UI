@@ -80,14 +80,14 @@ export default {
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
 	},
-	repos: function() { return this.$store.state.user.repos; },
-	user: function() { return this.$store.state.user; },
-	activeRepo: function() { return this.$store.state.active_repo; },
+	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	user: function() { return this.$store.getters['people/getUserInfo']; },
+	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})
     },
     repositoryCount: function() {
-      return this.$store.state.repositories;
+      return this.$store.getters['people/getUserRepoCount'];
     },
 	message: function() { return this.$store.state.msg; }
   }, 
@@ -95,7 +95,7 @@ export default {
     addRepo: function() {
       if(this.name !== '') {
         var self = this;
-        this.$store.dispatch('addRepo', { data: {name: this.name, readme: this.readme, url: this.url}, makeActive: true})
+        this.$store.dispatch('repos/addRepo', { data: {name: this.name, readme: this.readme, url: this.url}, makeActive: true})
         .then(function(response) { 
              self.$router.push("/");
         })

@@ -49,20 +49,23 @@ const actions = {
      *          makeActive = Make newly created repository the user's active repository [Default is false]
      */
     addRepo: function(context, data) {
-        if (!context.state.token) return false;
+        console.log("ADD REPO", context, data, context.rootState.token);
+        if (!context.rootState.token) return false;
         var setAsActive = data.makeActive ? true : false;
         return api.post('/repositories/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('ADD_REPO', response); 
-                var new_repo_id = response.repo.id
+                console.log("got new repo", response);
+                var new_repo_id = response.repo.id;
 
-                context.dispatch('people/getRepos', {}).then(function() { 
-                    if((context.getters.repos.length == 0) || setAsActive) {
+                context.dispatch('people/getRepos', {}, { 'root': true }).then(function() { 
+                    if((context.state.user_repos.length == 0) || setAsActive) {
                       context.commit('SET_ACTIVE_REPO', new_repo_id);
+                      console.log("SET ACTIVE REPORT ON NEW", new_repo_id);
                     }     
             });
         })
-        .catch(function(error) { context.commit('API_FAILURE', error) });
+        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
 
     /**
@@ -73,13 +76,13 @@ const actions = {
      *          makeActive = Make newly created repository the user's active repository [Default is false]
      */
     editRepo: function(context, data) {
-        if (!context.state.token) return false;
+        if (!context.rootState.token) return false;
         var setAsActive = data.makeActive ? true : false;
         return api.post('/repositories/' +  data['id'] + '/edit', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('EDIT_REPO', response); 
             })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
+            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
 
 
@@ -87,54 +90,44 @@ const actions = {
      *
      */
     deleteRepo: function(context, data, router) {
-        if (!context.state.token) return false;
+        if (!context.rootState.token) return false;
         var router = data['router'];
         return api.post('/repositories/delete', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {
                 context.commit('DELETE_REPO', response);
                 if (router) { router.push("/"); }
             })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
+            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
 
     /**
      *
      */
     getRepoUsers: function(context, data) {
-        if (!context.state.token) return false;
+        if (!context.rootState.token) return false;
         return api.post('/repositories/users', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('GET_REPO_USERS', response); })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
-    },
-
-    /**
-     *
-     */
-    getPeople: function(context, data) {
-        if (!context.state.token) return false;
-        return api.get('/people', {headers: apiHeaders({"auth": true})})
-            .then(function(response) { context.commit('GET_PEOPLE', response); })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
+            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
 
     /**
      *
      */
     addPersonToRepo: function(context, data) {
-        if (!context.state.token) return false;
+        if (!context.rootState.token) return false;
         return api.post('/repositories/add_collaborator', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('ADD_PERSON_REPO', response); })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
+            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
 
     /**
     *
     */
     removePersonFromRepo: function(context, data) {
-        if (!context.state.token) return false;
+        if (!context.rootState.token) return false;
         return api.post('/repositories/remove_collaborator', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('REMOVE_PERSON_REPO', response); })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
+            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     }   
 }
 
@@ -147,7 +140,7 @@ const mutations = {
     DELETE_REPO: function(state, response) { 
         state.msg = response.msg 
         var deleted_repo_id = response.repo_id;
-    
+        
         // remove deleted repo from repolist
         for(var i in state.user_repos) {
             if (state.user_repos[i].id && (parseInt(state.user_repos[i].id) == parseInt(deleted_repo_id))) {
@@ -155,7 +148,16 @@ const mutations = {
             }
         }
         if (state.user_repos.length > 0) {
-            state.dispatch('setActiveRepo', state.user_repos[0]['id']);
+            var active_repo_id = state.user_repos[0]['id'];
+            window.sessionStorage.setItem('repo_id', active_repo_id);
+            state.active_repo_id = active_repo_id;
+    
+            for(var i in state.user_repos) {
+                if (state.user_repos[i]['id'] == active_repo_id) {
+                    state.active_repo  = state.user_repos[i];
+                    break;
+                }
+            }
         }
     },
     GET_REPO_USERS: function(state, response) { 
@@ -182,7 +184,8 @@ const mutations = {
     
         for(var i in state.user_repos) {
             if (state.user_repos[i]['id'] == active_repo_id) {
-                state.active_repo  = state.user_repos[i]
+                state.active_repo  = state.user_repos[i];
+                console.log("found active repo = ",state.user_repos[i], i);
                 break;
             }
         }

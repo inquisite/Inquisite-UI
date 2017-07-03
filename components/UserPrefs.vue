@@ -93,30 +93,31 @@ export default {
   },
   computed: {
     name: {
-      get: function() { return this.$store.state.user.name; },
-      set: function(value) { this.$store.commit('setUserName', value) }
+      get: function() { return this.$store.getters['people/getUserInfo'].name; },
+      set: function(value) { this.$store.commit('people/setUserName', value) }
     },
     email: {
-      get: function() { return this.$store.state.user.email; },
-      set: function(value) { this.$store.commit('setUserEmail', value) }
+      get: function() { return this.$store.getters['people/getUserInfo'].email; },
+      set: function(value) { this.$store.commit('people/setUserEmail', value) }
     },
     location: {
-      get: function() { return this.$store.state.user.location; },
-      set: function(value) { this.$store.commit('setUserLocation', value) }
+      get: function() { return this.$store.getters['people/getUserInfo'].location; },
+      set: function(value) { this.$store.commit('people/setUserLocation', value) }
     },
     tagline: {
-      get: function() { return this.$store.state.user.tagline; },
-      set: function(value) { this.$store.commit('setUserTagline', value) }
+      get: function() { return this.$store.getters['people/getUserInfo'].tagline; },
+      set: function(value) { this.$store.commit('people/setUserTagline', value) }
     },
     url: {
-      get: function() { return this.$store.state.user.url; },
-      set: function(value) { this.$store.commit('setUserUrl', value) }
+      get: function() { return this.$store.getters['people/getUserInfo'].url; },
+      set: function(value) { this.$store.commit('people/setUserUrl', value) }
     },
     hasRepos: {
         get: function() {
           var length = 0;
-          if(this.$store.state.user.repos !== undefined) {
-            length = this.$store.state.user.repos.length;
+          var repos = this.$store.getters['people/getUserRepos'];
+          if(repos !== undefined) {
+            length = repos.length;
           }
           return length;
         }
@@ -125,7 +126,7 @@ export default {
   },
   methods: {
     editUser: function() {
-        this.$store.dispatch('editPerson', {
+        this.$store.dispatch('people/editPerson', {
           token: this.$store.state.token, 
           data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
         })      
