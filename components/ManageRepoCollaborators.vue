@@ -53,7 +53,7 @@ export default {
 	    return this.$store.getters.isLoggedIn;
 	},
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
-	users: function() { console.log(this.$store.getters['repos/getActiveRepo'].users); return this.$store.getters['repos/getActiveRepo'].users; },
+	users: function() { return this.$store.getters['repos/getActiveRepo'].users; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     compiledMarkdown: function() {
       return marked(this.readme, { sanitize: true})

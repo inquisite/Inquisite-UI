@@ -57,19 +57,17 @@ export default {
     }
   },
   mounted: function() {
-
       var clusterize = new Clusterize({
         scrollId: 'scrollArea',
         contentId: 'contentArea'
       })
   },
   computed: { 
-    activeRepo: function() { return this.$store.state.active_repo; },
+    activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     headers: function() {
-
         var headers = ''
         var key;
-        for(key in this.$store.state.active_repo.data[0]) {
+        for(key in this.activeRepo.data[0]) {
           headers += "<th>" + key + "</th>";
         }
 
@@ -81,12 +79,11 @@ export default {
       var key;
       var data_rows = [];
 
-      for(var idx = 0; idx < this.$store.state.active_repo.data.length; idx++) {
-
+      for(var idx = 0; idx < this.activeRepo.data.length; idx++) {
         rw = "<tr>";
-        for(key in this.$store.state.active_repo.data[idx]) {
-          if(this.$store.state.active_repo.data[idx].hasOwnProperty(key)) {
-            rw += "<td>" + this.$store.state.active_repo.data[idx][key] + "</td>";
+        for(key in this.activeRepo.data[idx]) {
+          if(this.activeRepo.data[idx].hasOwnProperty(key)) {
+            rw += "<td>" + this.activeRepo.data[idx][key] + "</td>";
           } 
         } 
 
@@ -103,18 +100,18 @@ export default {
 
         html += "<tr>";
         var key;
-        for(key in this.$store.state.active_repo.data[0]) {
+        for(key in this.activeRepo.data[0]) {
           html += "<th>" + key + "</th>";  
         }
 
 
         html + "</tr>";
 
-        for(var idx = 0; idx <= this.$store.state.active_repo.data.length; idx++) {
+        for(var idx = 0; idx <= this.activeRepo.data.length; idx++) {
         
           html += "<tr>";
-          for(key in this.$store.state.active_repo.data[idx]) {
-            html += "<td>" + this.$store.state.active_repo.data[idx][key] + "</td>";
+          for(key in this.activeRepo.data[idx]) {
+            html += "<td>" + this.activeRepo.data[idx][key] + "</td>";
           }
           html += "</tr>";
 
