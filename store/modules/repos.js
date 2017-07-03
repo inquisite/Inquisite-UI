@@ -49,21 +49,19 @@ const actions = {
      *          makeActive = Make newly created repository the user's active repository [Default is false]
      */
     addRepo: function(context, data) {
-        console.log("ADD REPO", context, data, context.rootState.token);
         if (!context.rootState.token) return false;
         var setAsActive = data.makeActive ? true : false;
         return api.post('/repositories/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('ADD_REPO', response); 
-                console.log("got new repo", response);
                 var new_repo_id = response.repo.id;
 
                 context.dispatch('people/getRepos', {}, { 'root': true }).then(function() { 
                     if((context.state.user_repos.length == 0) || setAsActive) {
                       context.commit('SET_ACTIVE_REPO', new_repo_id);
-                      console.log("SET ACTIVE REPORT ON NEW", new_repo_id);
                     }     
-            });
+                });
+            context.commit('SET_MESSAGE', 'Created new repository <em>' + response.repo.name + '</em>', {'root': true});
         })
         .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
@@ -81,6 +79,7 @@ const actions = {
         return api.post('/repositories/' +  data['id'] + '/edit', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('EDIT_REPO', response); 
+                context.commit('SET_MESSAGE', 'Saved changes', {'root': true});
             })
             .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
@@ -95,6 +94,7 @@ const actions = {
         return api.post('/repositories/delete', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {
                 context.commit('DELETE_REPO', response);
+                context.commit('SET_MESSAGE', 'Deleted repository', {'root': true});
                 if (router) { router.push("/"); }
             })
             .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
@@ -116,8 +116,10 @@ const actions = {
     addPersonToRepo: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/repositories/add_collaborator', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('ADD_PERSON_REPO', response); })
-            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+            .then(function(response) { 
+                context.commit('ADD_PERSON_REPO', response); 
+                context.commit('SET_MESSAGE', 'Added collaborator', {'root': true});
+            }).catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
 
     /**
@@ -126,8 +128,10 @@ const actions = {
     removePersonFromRepo: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/repositories/remove_collaborator', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('REMOVE_PERSON_REPO', response); })
-            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+            .then(function(response) { 
+                context.commit('REMOVE_PERSON_REPO', response); 
+                context.commit('SET_MESSAGE', 'Removed collaborator', {'root': true});
+            }).catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     }   
 }
 
@@ -185,7 +189,6 @@ const mutations = {
         for(var i in state.user_repos) {
             if (state.user_repos[i]['id'] == active_repo_id) {
                 state.active_repo  = state.user_repos[i];
-                console.log("found active repo = ",state.user_repos[i], i);
                 break;
             }
         }

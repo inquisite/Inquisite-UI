@@ -1,5 +1,9 @@
 <template>
 <div id="home" class="container">
+    <div id="signup-msg" class="alert alert-danger" role="alert" v-show="message !== ''">
+      <div class="msg" v-html="message"></div>
+    </div>
+    
 	<div class="row" v-if="!isLoaded && !isLoggedIn">
 		<div class="col-sm-12">
 			<div class="jumbotron">
@@ -165,7 +169,6 @@
             showRepoControls: function() {
               var show = false;
               var ar = this.$store.getters['repos/getActiveRepo'];
-              console.log("show repo", this.$store.getters['repos/getActiveRepo']);
               if( this.isLoggedIn && (ar.id > 0) ) {
                 show = true;
               }
@@ -180,7 +183,9 @@
               }
               return keys.length;
             },
-            activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; }
+            activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
+            
+	        message: function() { return this.$store.state.msg; }
 		},
         methods: {
           userProfile: function(person_id) {

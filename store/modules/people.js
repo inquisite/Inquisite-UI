@@ -36,8 +36,10 @@ const actions = {
     editPerson: function(context, data) {
       if (!context.rootState.token) return false;
       return api.post('/people/edit', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-        .then(function(response) { context.commit('EDIT_PERSON', response); })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .then(function(response) { 
+            context.commit('EDIT_PERSON', response); 
+            context.commit('SET_MESSAGE', "Saved changes", {'root': true});
+        }).catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
 
     /**

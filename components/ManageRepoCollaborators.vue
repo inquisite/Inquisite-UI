@@ -1,5 +1,9 @@
 <template>
 <div id="addPersonRepo">
+    <div id="signup-msg" class="alert alert-danger" role="alert" v-show="message !== ''">
+      <div class="msg" v-html="message"></div>
+    </div>
+    
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="card card-gray">
@@ -60,7 +64,8 @@ export default {
     },
     repositoryCount: function() {
       return this.$store.getters['people/getUserRepoCount'];
-    }
+    },
+    message: function() { return this.$store.state.msg; }
   }, 
   mounted: function() {
  

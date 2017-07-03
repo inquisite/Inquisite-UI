@@ -137,6 +137,20 @@ export const mutations = {
      * Set current JWT refresh token
      */
     setRefresh: function(state, refresh_token) { state.refresh = refresh_token },
+    
+    
+
+    /**
+     * 
+     */
+    SET_MESSAGE: function(state, message) { 
+        state.msg = message;
+        var rootState = state;
+        console.log('SET MESSAGE', message);
+        setTimeout(function() {
+            rootState.msg = '';
+        }, 5000);
+    },
 
     /**
      *

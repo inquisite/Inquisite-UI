@@ -9,9 +9,8 @@
 
          <form id="signup-form" name="signup-form" method="POST" action="">
 
-            <div id="signup-msg" class="ui message" style="display: none;">
-              <div class="header"></div>
-              <div class="msg"></div>
+            <div id="signup-msg" class="alert alert-danger" role="alert" v-show="message !== ''">
+              <div class="msg">{{message}}</div>
             </div>
 
             <div class="form-group row">
@@ -127,7 +126,6 @@ export default {
   methods: {
     editUser: function() {
         this.$store.dispatch('people/editPerson', {
-          token: this.$store.state.token, 
           data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
         })      
 
