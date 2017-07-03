@@ -39,9 +39,9 @@ const actions = {
      *
      */
     getDataNodes: function(context, data) {
-        if(!context.state.token) return false;
+        if(!context.rootState.token) return false;
 
-        return api.post('repositories/data', data.data, {headers: apiHeaders({"auth": true, "form": true})})
+        return api.post('/repositories/data', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('REPO_DATA', response) })
             .catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
     }

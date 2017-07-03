@@ -43,6 +43,9 @@ Vue.component('visualize-nodes', VisualizeNodes)
 const VisualizeSheets = require('./components/VisualizeSheets.vue')
 Vue.component('visualise-sheets', VisualizeSheets)
 
+const SchemaEditor = require('./components/SchemaEditor.vue')
+Vue.component('schema-editor', SchemaEditor)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -57,5 +60,6 @@ export default [
   { path: '/manage-collaborators', name: 'manage-collaborators', component: ManageRepoCollaborators, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/nodes', name: 'visualize-nodes', component: VisualizeNodes, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/sheet', name: 'visualize-sheets', component: VisualizeSheets, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/schema', name: 'schema-editor', component: SchemaEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '*', redirect: '/' }
 ]

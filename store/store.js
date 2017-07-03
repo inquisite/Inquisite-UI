@@ -6,6 +6,7 @@ import {getters, mutations, actions} from './root'
 import people from './modules/people'
 import repos from './modules/repos'
 import data from './modules/data'
+import schema from './modules/schema'
 
 Vue.use(Vuex)
 
@@ -26,7 +27,8 @@ export default new Vuex.Store({
   modules: {
     people,
     repos,
-    data
+    data,
+    schema
   }
 })
 
