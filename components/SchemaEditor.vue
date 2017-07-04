@@ -39,8 +39,8 @@
 			</div>           
         </div>
     	<div class="col-sm-6">
-            <div class="card card-gray" v-if="editor_header">
-                <div class="card-header text-center" v-html="editor_header"></div>
+            <div class="card card-gray" v-if="editorDataTypeIndex !== null">
+                <div class="card-header text-center" v-html="editorHeader"></div>
                 <div class="card-block">
 
                     <form id="schemaEditor-form" name="addRepo-form" method="POST" action="#">
@@ -63,16 +63,21 @@
                             </div>
                         </div>
                         
+                    <div v-if="(editorDataTypeIndex !== null) && (editorDataTypeIndex >= 0)">
+                        <div class="pull-right">
+                            <a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
+                        </div>  
                         <h2>Fields</h2>
                         <div v-if="formContent.fields && (formContent.fields.length > 0)">
-                            <div v-for="f in formContent.fields">
-                               Name
+                            <div v-for="f, i in formContent.fields">
+                               <div v-if="!f.id"><strong>NEW</strong></div>
+                               <div class="pull-right"><click-confirm placement="top" style="display:inline;"><a @click="deleteDataTypeField(i)" class="btn btn-orange btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a></click-confirm></div>
                                 <div class="ui fluid input content">
                                     <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Name" v-model="f.name">
                                     <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Code" v-model="f.code">
                                     <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Description" v-model="f.description">
                             
-                                    <select v-model="f.type">
+                                    Type <select v-model="f.type">
                                         <option v-for="t,k in fieldTypes" :value="k">{{t.name}}</option>
                                     </select>
                                 </div>
@@ -81,6 +86,7 @@
                         <div v-else>
                             No fields defined
                         </div>
+                    </div>
 
                         <div class="item" style="padding: 10px 0">
                             <button v-on:submit.prevent="saveDataType" v-on:click.prevent="saveDataType" class="btn btn-primary">Save</button>
@@ -101,9 +107,11 @@ export default {
   name: 'schema-editor',
   data: function() {
     return {
-        editor_header: '',
+        editorHeader: '',
         formContent: null,
-        state: this.$store.state,
+        editorDataTypeIndex: null,
+        
+        state: this.$store.state
     }
   },
   mounted: function(){
@@ -122,15 +130,19 @@ export default {
 	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; }
   }, 
   methods: {
+    // ------------------------------------
+    // Data type form
     addDataType: function() {
-        this.editor_header = "Add new data type";
+        this.editorHeader = "Add new data type";
         this.formContent = {};
+        this.editorDataTypeIndex = -1;
     },
     editDataType: function(id) {
         for(var i in this.dataTypes) {
             if (this.dataTypes[i].id == id) {
-                this.editor_header = "Edit <em>" + this.dataTypes[i].name + "</em>";
+                this.editorHeader = "Edit <em>" + this.dataTypes[i].name + "</em>";
                 this.formContent = this.dataTypes[i];
+                this.editorDataTypeIndex = i;
                 break;
             }
         }
@@ -148,12 +160,33 @@ export default {
         } 
     },
     cancelDataTypeEdit: function() {
-        this.editor_header = '';
+        this.editorHeader = '';
+        this.editorDataTypeIndex = null;
+        this.formContent = {};
     },
     deleteDataType: function(type_id) {
       this.$store.dispatch('schema/deleteDataType', type_id);
       this.cancelDataTypeEdit();
+    },
+    // ------------------------------------
+    // Fields form
+    addDataTypeField: function() {
+        console.log("i", this.editorDataTypeIndex);
+        if (this.editorDataTypeIndex !== null) {
+            this.dataTypes[this.editorDataTypeIndex]['fields'].push({});
+        }
+    },
+    deleteDataTypeField: function(index) {
+         if (this.editorDataTypeIndex !== null) {
+            var fieldToDelete = this.dataTypes[this.editorDataTypeIndex]['fields'].splice(index, 1);
+            
+            if (fieldToDelete && fieldToDelete[0].id) {
+                if(!this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete']) { this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'] = []; }
+                this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'].push(fieldToDelete[0].id);
+            }
+        }
     }
+    // ------------------------------------
   },
 }
 </script>
