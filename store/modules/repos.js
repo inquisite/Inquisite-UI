@@ -35,7 +35,7 @@ const getters = {
      * Return repo_id for currently selected repository
      */
     getActiveRepoID: state => { 
-        return window.sessionStorage.getItem('repo_id');
+        return state.active_repo_id;
     }
 }
 
