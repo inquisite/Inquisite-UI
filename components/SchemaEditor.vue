@@ -12,11 +12,15 @@
 				</div>
 			
 				<div class="tab-content">
-                	<div role="tabpanel" class="tab-pane active" id="data-types">   
-                        <div class="pull-right">
-                            <a @click="addDataType" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
-                        </div>               
-						<ul class="list-group list-group-flush" v-if="repos.length">
+                	<div role="tabpanel" class="tab-pane active" id="data-types">  
+                	    <div class="row">
+                	        <div class="col-sm-12">
+                                <div class="pull-right">
+                                    <a @click="addDataType" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New data type</a>
+                                </div>      
+                            </div>
+                        </div>         
+						<div><ul class="list-group list-group-flush" v-if="repos.length">
 							<li class="list-group-item justify-content-between" v-for="dataType in dataTypes">
 								<div>{{dataType.name}}<br/>
 									<small>{{dataType.code}} {{dataType.description}}</small>
@@ -28,7 +32,7 @@
 									</click-confirm>
 								</div>
 							</li>
-						</ul>
+						</ul></div>
 					</div>
                 	<div role="tabpanel" class="tab-pane" id="relationship-types"> 
                 	    <ul class="list-group list-group-flush">
@@ -65,19 +69,22 @@
                         
                     <div v-if="(editorDataTypeIndex !== null) && (editorDataTypeIndex >= 0)">
                         <div class="pull-right">
-                            <a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Add</a>
+                            <a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Field</a>
                         </div>  
                         <h2>Fields</h2>
-                        <div v-if="formContent.fields && (formContent.fields.length > 0)">
-                            <div v-for="f, i in formContent.fields">
-                               <div v-if="!f.id"><strong>NEW</strong></div>
-                               <div class="pull-right"><click-confirm placement="top" style="display:inline;"><a @click="deleteDataTypeField(i)" class="btn btn-orange btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a></click-confirm></div>
-                                <div class="ui fluid input content">
-                                    <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Name" v-model="f.name">
-                                    <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Code" v-model="f.code">
-                                    <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Description" v-model="f.description">
+                        <div v-if="formContent.fields && (formContent.fields.length > 0)"  class="card">
+                            <div v-for="f, i in formContent.fields" class="card-block">
+                               <div class="card-title">
+                                <span v-if="f.name"><strong>{{f.name}}</strong> ({{f.code}})</span>
+                                <div v-if="!f.id" class="btn btn-danger btn-sm">NEW</div>
+                                <div class="pull-right"><click-confirm placement="top" style="display:inline;"><a @click="deleteDataTypeField(i)" class="btn btn-orange btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a></click-confirm></div>
+                              </div>
+                               <div class="ui fluid input content">
+                                    Name <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Name" v-model="f.name">
+                                    Code <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Code" v-model="f.code">
+                                    Description <textarea type="text" class="form-control" rows="3" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Description" v-model="f.description"></textarea>
                             
-                                    Type <select v-model="f.type">
+                                    Type <select v-model="f.type" class="custom-select">
                                         <option v-for="t,k in fieldTypes" :value="k">{{t.name}}</option>
                                     </select>
                                 </div>
@@ -173,7 +180,7 @@ export default {
     addDataTypeField: function() {
         console.log("i", this.editorDataTypeIndex);
         if (this.editorDataTypeIndex !== null) {
-            this.dataTypes[this.editorDataTypeIndex]['fields'].push({});
+            this.dataTypes[this.editorDataTypeIndex]['fields'].push({'type': 'TEXT'});
         }
     },
     deleteDataTypeField: function(index) {
