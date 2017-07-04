@@ -1,5 +1,6 @@
 <template>
 <div id="schema-editor">
+    <div id="schema-editor-msg" class="alert alert-danger" role="alert" v-show="message !== ''" v-html="message"></div>
 	<div class="row">
 	    <div class="col-sm-6">
 			<div class="card card-gray">
@@ -41,9 +42,8 @@
             <div class="card card-gray" v-if="editor_header">
                 <div class="card-header text-center" v-html="editor_header"></div>
                 <div class="card-block">
-                    <div id="repo-msg" class="alert alert-danger" role="alert" v-show="formMessage !== ''">{{formMessage}}</div>
 
-                    <form id="addRepo-form" name="addRepo-form" method="POST" action="#">
+                    <form id="schemaEditor-form" name="addRepo-form" method="POST" action="#">
 
                         <div class="item form-item">
                             <div class="ui fluid input content">
@@ -59,15 +59,33 @@
 
                         <div class="item form-item">
                             <div class="ui fluid input content">
-                                <textarea class="form-control" :value="description" rows="10" cols="80" v-model="formContent.description"></textarea>
+                                <textarea class="form-control" :value="description" rows="3" cols="80" v-model="formContent.description"></textarea>
                             </div>
+                        </div>
+                        
+                        <h2>Fields</h2>
+                        <div v-if="formContent.fields && (formContent.fields.length > 0)">
+                            <div v-for="f in formContent.fields">
+                               Name
+                                <div class="ui fluid input content">
+                                    <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Name" v-model="f.name">
+                                    <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Code" v-model="f.code">
+                                    <input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Description" v-model="f.description">
+                            
+                                    <select v-model="f.type">
+                                        <option v-for="t,k in fieldTypes" :value="k">{{t.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            No fields defined
                         </div>
 
                         <div class="item" style="padding: 10px 0">
-                            <button v-on:submit.prevent="editDataType" v-on:click.prevent="editDataType" class="btn btn-primary">Save</button>
+                            <button v-on:submit.prevent="saveDataType" v-on:click.prevent="saveDataType" class="btn btn-primary">Save</button>
                             <button v-on:click.prevent="cancelDataTypeEdit" class="btn btn-cancel pull-right">Cancel</button>
                         </div>
-
                     </form>
                 </div>
             </div>
@@ -84,7 +102,6 @@ export default {
   data: function() {
     return {
         editor_header: '',
-        formMessage: '',
         formContent: null,
         state: this.$store.state,
     }
@@ -96,10 +113,13 @@ export default {
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
 	},
+	
+	message: function() { return this.$store.state.msg; },
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
-	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; }
+	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
+	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; }
   }, 
   methods: {
     addDataType: function() {
@@ -115,11 +135,24 @@ export default {
             }
         }
     },
+    saveDataType: function() {
+        if (this.formContent.id > 0) {
+            // edit existing type
+            this.$store.dispatch('schema/editDataType', this.formContent);
+        } else {
+            // add new type
+            var self = this;
+            this.$store.dispatch('schema/addDataType', this.formContent).then(function(response) {
+                self.editDataType(response.type.id);
+            });
+        } 
+    },
     cancelDataTypeEdit: function() {
         this.editor_header = '';
     },
-    deleteDataType: function(repo_id) {
-      this.$store.dispatch('schema/deleteDataType', { data: { repo_id: repo_id }});
+    deleteDataType: function(type_id) {
+      this.$store.dispatch('schema/deleteDataType', type_id);
+      this.cancelDataTypeEdit();
     }
   },
 }
