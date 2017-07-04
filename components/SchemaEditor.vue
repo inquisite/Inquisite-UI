@@ -67,10 +67,7 @@
                             </div>
                         </div>
                         
-                    <div v-if="(editorDataTypeIndex !== null) && (editorDataTypeIndex >= 0)">
-                        <div class="pull-right">
-                            <a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Field</a>
-                        </div>  
+                    <div v-if="(editorDataTypeIndex !== null) && (editorDataTypeIndex >= 0)">  
                         <h2>Fields</h2>
                         <div v-if="formContent.fields && (formContent.fields.length > 0)"  class="card">
                             <div v-for="f, i in formContent.fields" class="card-block">
@@ -90,7 +87,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-else>
+                        <div>
+                            <a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Field</a>
+                        </div>
+                        <div v-if="!formContent.fields || (formContent.fields.length == 0)">
                             No fields defined
                         </div>
                     </div>

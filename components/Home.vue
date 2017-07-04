@@ -89,18 +89,18 @@
           <div v-if="activeRepo.data" class="card-block">
             <div class="row">
               <div class="col-4 text-center">
-                <div class="h1">1</div>
+                <div class="h1">{{activeRepo.schema_type_count}}</div>
                 <h5 class="media-heading">Data Types</h5>
-              </div>             
+              </div>  
 
               <div class="col-4 text-center">
-                <div class="h1">{{activeRepo.data.length}}</div>
+                <div class="h1">{{activeRepo.schema_field_count}}</div>
+                <h5 class="media-heading">Fields</h5>
+              </div>           
+
+              <div class="col-4 text-center">
+                <div class="h1">{{activeRepo.data_element_count}}</div>
                 <h5 class="media-heading">Records</h5>
-              </div>
-
-              <div class="col-4 text-center">
-                <div class="h1">{{elementCount}}</div>
-                <h5 class="media-heading">Elements</h5>
               </div>
             </div>
           </div>
