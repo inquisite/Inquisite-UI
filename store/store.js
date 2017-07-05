@@ -7,6 +7,7 @@ import people from './modules/people'
 import repos from './modules/repos'
 import data from './modules/data'
 import schema from './modules/schema'
+import search from './modules/search'
 
 Vue.use(Vuex)
 
@@ -28,7 +29,8 @@ export default new Vuex.Store({
     people,
     repos,
     data,
-    schema
+    schema,
+    search
   }
 })
 

@@ -46,6 +46,9 @@ Vue.component('visualise-sheets', VisualizeSheets)
 const SchemaEditor = require('./components/SchemaEditor.vue')
 Vue.component('schema-editor', SchemaEditor)
 
+const Search = require('./components/Search.vue')
+Vue.component('search', Search)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -61,5 +64,6 @@ export default [
   { path: '/visualize/nodes', name: 'visualize-nodes', component: VisualizeNodes, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/sheet', name: 'visualize-sheets', component: VisualizeSheets, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/schema', name: 'schema-editor', component: SchemaEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/search', name: 'search', component: Search },
   { path: '*', redirect: '/' }
 ]

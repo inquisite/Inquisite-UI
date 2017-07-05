@@ -46,8 +46,8 @@
                 </li>
 
             </ul>
-            <form class="form-inline">
-				<input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <form class="form-inline" v-on:submit="search(search_expression)">
+				<input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_expression">
 				<button class="btn btn-orange-reverse my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 			</form>
             <ul class="navbar-nav nav-bar-icons" v-if="isLoggedIn">
@@ -98,7 +98,8 @@ export default {
   store: store,
   data: function() {
     return {
-        state: store.state
+        state: store.state,
+        search_expression: ""
     }
   },
   mounted: function() {
@@ -154,6 +155,10 @@ export default {
     setActiveRepo: function(repo_id) {
       store.commit('repos/SET_ACTIVE_REPO', repo_id);
       this.$router.push("/");   // force back to dashboard for new repo
+    },
+    search: function(search_expression) {
+        this.$store.dispatch('search/quick', search_expression);
+        this.$router.push("/search");
     }
   },
 }
