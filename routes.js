@@ -49,6 +49,9 @@ Vue.component('schema-editor', SchemaEditor)
 const Search = require('./components/Search.vue')
 Vue.component('search', Search)
 
+const DataEditor = require('./components/DataEditor.vue')
+Vue.component('data-editor', DataEditor)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -64,6 +67,7 @@ export default [
   { path: '/visualize/nodes', name: 'visualize-nodes', component: VisualizeNodes, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/sheet', name: 'visualize-sheets', component: VisualizeSheets, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/schema', name: 'schema-editor', component: SchemaEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/data/edit/:id', name: 'data-editor', component: DataEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
   { path: '*', redirect: '/' }
 ]

@@ -1,7 +1,7 @@
 <template>
-<div id="seach">
+<div id="search">
   <div class="row">
-    <div class="col-sm-6 offset-sm-3">
+    <div class="col-sm-12">
       <div class="card card-form">
         <div class="card-header text-center">
 			Search results
@@ -9,10 +9,10 @@
         <div class="card-block">
 
           <div id="search-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
-            <div>Found {{count}}</div>
-            <ul>
-                <li v-for="r, k in results"><strong>From repository <u>{{r.repository_name}}</u>:</strong> {{r.display}}</li>
-            </ul>
+            <h2>{{count}} found</h2>
+            <ol>
+                <li v-for="r, k in results"><router-link class="btn btn-primary btn-sm" :to="'/data/edit/' + r.data_id">Edit</router-link> <strong>From repository <u>{{r.repository_name}}</u>:</strong> {{r.display}}</li>
+            </ol>
         </div>
       </div>
     </div>

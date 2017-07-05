@@ -44,6 +44,36 @@ const actions = {
         return api.post('/repositories/data', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('REPO_DATA', response) })
             .catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
+    },
+    /**
+     *
+     */
+    getDataNode: function(context, node_id) {
+        if(!context.rootState.token) return false;
+        context.rootState.msg = "";
+
+        return api.get('/data/getNode/' + node_id, {headers: apiHeaders({"auth": true, "form": true})})
+            .then(function(response) { 
+                context.commit('GET_DATA_NODE', response);
+                return response;
+            }).catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
+    },
+    
+    /**
+     *
+     */
+    saveDataNode: function(context, data) {
+        if(!context.rootState.token) return false;
+        var rootState = context.rootState;
+        
+        var node_id = data['node_id'];
+        delete(data['node_id']);
+        return api.post('/data/saveNode/' + node_id, data, {headers: apiHeaders({"auth": true, "form": true})})
+            .then(function(response) { 
+                context.commit('SAVE_DATA_NODE', response);
+                rootState.msg = "Saved data";
+                return response;
+            }).catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
     }
 }
 
@@ -56,7 +86,15 @@ const mutations = {
       state.upload_fields = response.fieldnames;
       state.upload_subfields = response.nestednames;
     },
-    REPO_DATA: function(state, response) { state.msg = response.msg; state.active_data = response.data }
+    REPO_DATA: function(state, response) { state.msg = response.msg; state.active_data = response.data },
+    
+    GET_DATA_NODE: function(state, response) { 
+        // noop
+    },
+    SAVE_DATA_NODE: function(state, response) { 
+        // noop
+    }
+    
 }
 
 

@@ -11,7 +11,10 @@ const state = {
 // getters
 const getters = {
      getResults: state => { return state.results; },
-     getHistory: state => { return state.history; }
+     getHistory: state => { return state.history; },
+     getLastSearch: state => { 
+        return state.history[state.history.length - 1]; 
+    }
 }
 
 // actions
@@ -21,7 +24,7 @@ const actions = {
      */
     quick: function(context, q) {
         if(!context.rootState.token) return false;
-
+        
         return api.get('/search?q=' + escape(q), {headers: apiHeaders({"auth": false, "form": true})})
             .then(function(response) { 
                 context.commit('QUICK_SEARCH', response) 
@@ -35,7 +38,7 @@ const mutations = {
         state.results = [];
         if (response.count > 0) {
             state.results = response.results;
-            if (state.history.indexOf(response['expression']) >= 0) { 
+            if (state.history.indexOf(response['expression']) === -1) { 
                 state.history.push(response['expression']); 
             }
         }
