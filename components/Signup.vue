@@ -99,7 +99,7 @@ export default {
   methods: {
     processSignup: function() {
       if( this.name !== '' && this.email !== '' && this.password !== '') {
-        this.$store.dispatch('addPerson', 
+        this.$store.dispatch('people/addPerson', 
           { data: {name: this.name, 
             email: this.email, 
             location: this.location, 
