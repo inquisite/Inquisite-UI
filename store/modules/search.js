@@ -34,7 +34,6 @@ const mutations = {
     QUICK_SEARCH: function(state, response) { 
         state.results = [];
         if (response.count > 0) {
-             console.log("GOTxx IT", response);
             state.results = response.results;
             if (state.history.search(response.expression) !== false) { state.history.push(response.expression); }
         }
