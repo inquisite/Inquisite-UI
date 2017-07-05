@@ -22,8 +22,8 @@
                         </div>         
 						<div><ul class="list-group list-group-flush" v-if="repos.length">
 							<li class="list-group-item justify-content-between" v-for="dataType in dataTypes">
-								<div>{{dataType.name}}<br/>
-									<small>{{dataType.code}} {{dataType.description}}</small>
+								<div>{{dataType.name}} (<em>{{dataType.code}}</em>)<br/>
+									<small>{{dataType.description}}</small>
 								</div>
 								<div>
 									<a @click="editDataType(dataType.id)" class="btn btn-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
