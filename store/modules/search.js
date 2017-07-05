@@ -35,7 +35,9 @@ const mutations = {
         state.results = [];
         if (response.count > 0) {
             state.results = response.results;
-            if (state.history.search(response.expression) !== false) { state.history.push(response.expression); }
+            if (state.history.indexOf(response['expression']) >= 0) { 
+                state.history.push(response['expression']); 
+            }
         }
     }
 }

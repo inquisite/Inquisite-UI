@@ -8,7 +8,7 @@
 		 </div>
         <div class="card-block">
 
-          <div id="signup-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          <div id="search-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
             <div>Found {{count}}</div>
             <ul>
                 <li v-for="r, k in results"><strong>From repository <u>{{r.repository_name}}</u>:</strong> {{r.display}}</li>
