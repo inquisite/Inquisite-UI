@@ -24,16 +24,9 @@
 <script>
 
 export default { 
-  name: 'home',
+  name: 'search',
   data: function() {
     return {
-      name: '',
-      email: '',
-      location: '',
-      tagline: '',
-      url: '',
-      password: '',
-      
       state: this.$store.state
     }
   },
@@ -47,21 +40,7 @@ export default {
 	}
   },
   methods: {
-    processSignup: function() {
-      if( this.name !== '' && this.email !== '' && this.password !== '') {
-        this.$store.dispatch('addPerson', 
-          { data: {name: this.name, 
-            email: this.email, 
-            location: this.location, 
-            tagline: this.tagline, 
-            url: this.url, 
-            password: this.password
-        }});
-      } else {
-        this.$store.state.msg = "Name, Email, and Password are required fields"   
-      }
-    }
-  } 
-  
+
+  }   
 }
 </script>
