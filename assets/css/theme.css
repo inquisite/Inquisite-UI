@@ -14,6 +14,9 @@ a{
 .spacerRow{
 	height:40px;
 }
+.spacerRowSmall{
+	height:20px;
+}
 .orange{
 	color: #F79D59 !important;
 }
@@ -44,6 +47,9 @@ a{
 .btn{
 	border-radius: 0rem !Important;
 	text-transform: uppercase !Important;
+}
+.btn.inactive{
+	opacity:.5;
 }
 .btn-primary, a.btn-primary {
     color: #fff !Important;
@@ -112,6 +118,12 @@ a{
 	background-color:#F2F2F2;
 	color:#666;
 	padding:30px;
+}
+.bg-lt-gray-form {
+	background-color:#F2F2F2;
+	color:#666;
+	padding:15px;
+	margin-top:15px;
 }
 /* form */
 .form-control::placeholder, .form-control::-moz-placeholder {
@@ -271,7 +283,10 @@ a{
   border-bottom: 1px solid rgba(34,36,38,.15);
   padding-bottom: 5px;
 }
-
+.list-group-scroll{
+	max-height:450px;
+	overflow-y:scroll;
+}
 .input-container {
   display: inline-block;
   width: 450px;
