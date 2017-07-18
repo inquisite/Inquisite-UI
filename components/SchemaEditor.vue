@@ -96,57 +96,59 @@
 											No fields defined
 										</p>
 							</div><!-- end card-block -->
-							<ul id="fieldList" class="list-group list-group-flush list-group-scroll" v-if="formContent.fields && (formContent.fields.length > 0)">
-								<li class="list-group-item" v-for="f, i in formContent.fields">
-									<div class="container">
-										<div class="row">
+							<div class="list-group-scroll">
+								<ul id="fieldList" class="list-group list-group-flush" v-if="formContent.fields && (formContent.fields.length > 0)">
+									<li class="list-group-item" v-for="f, i in formContent.fields">
+										<div class="container">
+											<div class="row">
 
-											<div class="col-sm-9">
-												<div v-if="!f.id" class="btn btn-danger btn-sm">NEW</div>
-												<span v-if="f.name"><strong>{{f.name}}</strong> ({{f.code}})</span>	
-											</div>
-											<div class="col-sm-3 text-right">
-												<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" v-if="f.id" :data-target="'#field' + f.id"  @click="$event.target.classList.toggle('inactive')"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
-												&nbsp;&nbsp;<click-confirm placement="top" style="display:inline;">
-													<a @click="deleteDataTypeField(i)" class="btn btn-orange btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a>
-												</click-confirm>
-											</div>
-										</div>
-									</div>
-									<div class="container bg-lt-gray-form" v-bind:class="{ collapse: f.id}" :id="'field' + f.id">
-										<div class="row">
-											<div class="col-sm-4">
-												<div class="form-group">
-													<label for="name" class="form-label">Name</label>
-													<input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Name" v-model="f.name">
+												<div class="col-sm-9">
+													<div v-if="!f.id" class="btn btn-danger btn-sm">NEW</div>
+													<span v-if="f.name"><strong>{{f.name}}</strong> ({{f.code}})</span>	
 												</div>
-											</div>
-											<div class="col-sm-4">
-												<div class="form-group">
-													<label for="code" class="form-label">Code</label>
-													<input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Code" v-model="f.code">
-												</div>
-											</div>
-											<div class="col-sm-4">
-												<div class="form-group">
-													<label for="type" class="form-label">Type</label>
-													<select v-model="f.type" class="custom-select form-control">
-														<option v-for="t,k in fieldTypes" :value="k">{{t.name}}</option>
-													</select>
+												<div class="col-sm-3 text-right">
+													<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" v-if="f.id" :data-target="'#field' + f.id"  @click="$event.target.classList.toggle('inactive')"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+													&nbsp;&nbsp;<click-confirm placement="top" style="display:inline;">
+														<a @click="deleteDataTypeField(i)" class="btn btn-orange btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a>
+													</click-confirm>
 												</div>
 											</div>
 										</div>
-										<div class="row">
-											<div class="col-sm-12">
-												<div class="form-group">
-													<label for="description" class="form-label">Description</label>
-													<textarea type="text" class="form-control" rows="3" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Description" v-model="f.description"></textarea>
+										<div class="container bg-lt-gray-form" v-bind:class="{ collapse: f.id}" :id="'field' + f.id">
+											<div class="row">
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label for="name" class="form-label">Name</label>
+														<input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Name" v-model="f.name">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label for="code" class="form-label">Code</label>
+														<input type="text" class="form-control" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Code" v-model="f.code">
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="form-group">
+														<label for="type" class="form-label">Type</label>
+														<select v-model="f.type" class="custom-select form-control">
+															<option v-for="t,k in fieldTypes" :value="k">{{t.name}}</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-12">
+													<div class="form-group">
+														<label for="description" class="form-label">Description</label>
+														<textarea type="text" class="form-control" rows="3" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Description" v-model="f.description"></textarea>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
-								</li>
-							</ul>
+									</li>
+								</ul>
+						</div><!-- end scroll -->
                     </div><!-- end card -->
 				</div><!-- end col -->
              </div><!-- end row -->   
