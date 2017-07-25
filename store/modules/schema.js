@@ -119,7 +119,7 @@ const actions = {
 const mutations = {
     GET_DATA_TYPES: function(state, response) { 
         console.log("got types", response);
-        state.data_types = response.types;
+        state.data_types = response;
     },
     ADD_DATA_TYPE: function(state, response) { 
         console.log("add type", response);
@@ -130,12 +130,12 @@ const mutations = {
         console.log("edit type", response);
         
         // set field id's for newly created fields (ICK)
-        if(response.type.field_status) {
-            for(var k in response.type.field_status) {
+        if(response.field_status) {
+            for(var k in response.field_status) {
                 for(var i in state.data_types) {
                     for(var j in state.data_types[i]['fields']) {
                         if((state.data_types[i]['fields'][j]['code'] == k) && !state.data_types[i]['fields'][j]['id']) {
-                            state.data_types[i]['fields'][j]['id'] = response.type.field_status[k]['field_id'];   
+                            state.data_types[i]['fields'][j]['id'] = response.field_status[k]['field_id'];   
                         }
                     }
                 }

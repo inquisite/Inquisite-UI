@@ -54,14 +54,14 @@ const actions = {
         return api.post('/repositories/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('ADD_REPO', response); 
-                var new_repo_id = response.repo.id;
+                var new_repo_id = response.id;
 
                 context.dispatch('people/getRepos', {}, { 'root': true }).then(function() { 
                     if((context.state.user_repos.length == 0) || setAsActive) {
                       context.commit('SET_ACTIVE_REPO', new_repo_id);
                     }     
                 });
-            context.commit('SET_MESSAGE', 'Created new repository <em>' + response.repo.name + '</em>', {'root': true});
+            context.commit('SET_MESSAGE', 'Created new repository <em>' + response.name + '</em>', {'root': true});
         })
         .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
@@ -165,7 +165,7 @@ const mutations = {
         }
     },
     GET_REPO_USERS: function(state, response) { 
-        state.active_repo.users = response.users; 
+        state.active_repo.users = response; 
         state.msg = response.msg 
     },
     SET_REPOS: function(state, response) {
