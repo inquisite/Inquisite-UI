@@ -28,10 +28,11 @@ export default {
           	return false;
         }
       	return response.data; 
-      }).catch(function(error) { 
-        Promise.reject(error);
-        return error;
       });
+      //.catch(function(error) { 
+     //   Promise.reject(error);
+     //   return error;
+     // });
   },
 
   post(url, data, req_config) {
@@ -52,10 +53,11 @@ export default {
           	}});
         }
       	return response.data;
-      }).catch(function(error) { 
-        Promise.reject(error);
-        return error;
       });
+      //.catch(function(error) { 
+      //  Promise.reject(error);
+      //  return error;
+      //});
   },
 
   put(url, data, req_config) {
@@ -74,9 +76,10 @@ export default {
           	}});
         }
       	return response.data;
-      }).catch(function(error) { 
-        Promise.reject(error);
-        return error;
       });
+      //.catch(function(error) { 
+      //  Promise.reject(error);
+      //  return error;
+      //});
   }
 }
