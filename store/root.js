@@ -63,6 +63,7 @@ export const actions = {
           
               // Get User Data -- now sets repos with users and data
               context.dispatch('people/getUserInfo', {token: response.access_token});
+              context.dispatch('people/getRepos', {token: response.access_token});
             } else {
               context.commit('API_FAILURE', response.response.data.msg );
             }
@@ -155,7 +156,7 @@ export const mutations = {
     /**
      *
      */
-    API_FAILURE: function(state, error) { state.msg = 'Error: ' + error }
+    API_FAILURE: function(state, error) { state.msg = error.toString(); }
 }
 
 

@@ -103,7 +103,9 @@ export default {
     }
   },
   mounted: function() {
-    this.$store.dispatch('people/getRepos');
+    if (this.isLoggedIn) {
+        this.$store.dispatch('people/getRepos');
+    }
   },
   watch: {
     '$route': 'pageChangeActions'
