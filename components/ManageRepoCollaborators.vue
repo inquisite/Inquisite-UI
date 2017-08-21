@@ -12,7 +12,7 @@
 			 	</div>
 				<ul class="list-group list-group-flush" v-if="users.length">
 					<li class="list-group-item justify-content-between" v-for="user in users">
-						<div>{{user.name}} ({{user.email}}) {{user.role}}
+						<div>{{user.name}} ({{user.email}}) {{user.role}} <span v-if="user.role !== 'owner'">[{{user.access}} access]</span>
 						<small>{{user.location}}</small></div>
 						<a v-if="user.role != 'owner'" @click="removeFromRepo(user.id)""><button type="button" class="btn btn-orange-reverse"><i class="fa fa-times-circle" aria-hidden="true"></i></button></a>
 					</li>
@@ -25,15 +25,24 @@
 					Add collaborators
 			 	</div>
                 <div class="card-block">
-                    <div class="float-right"><a @click="addToRepo(last_user_id)"><button type="button" class="btn btn-primary" :disabled='(last_user_id == null)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button></a></div>
-                    <autocomplete
-                        service="people/findPeople"
-                        anchor="name" 
-                        placeholder="Find user"
-                        class-name="autocomplete-people"
-                        :on-select="selectUser"
-                        :on-ajax-loaded="filterUsers"
-                        ></autocomplete>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <autocomplete
+                                service="people/findPeople"
+                                anchor="name" 
+                                placeholder="Find user"
+                                class-name="autocomplete-people"
+                                :on-select="selectUser"
+                                :on-ajax-loaded="filterUsers"
+                                ></autocomplete>
+                        </div>
+                        <div class="col-md-4">
+                            <select v-model='access'><option value='edit'>Edit</option><option value='read-only'>Read-only</option></select>
+                        </div>
+                        <div class="col-md-2">
+                            <a @click="addToRepo(last_user_id)"><button type="button" class="btn btn-primary" :disabled='(last_user_id == null)'><i class="fa fa-plus" aria-hidden="true"></i> Add</button></a>
+                        </div>
+                    </div>
                 </div>  
             </div>
         </div>
@@ -49,6 +58,7 @@ export default {
   data: function() {
     return {
         state: this.$store.state,
+        access: 'edit',
         last_user_id: null
     }
   },
@@ -76,7 +86,7 @@ export default {
         var store = this.$store;
         if (!user_id) { return false; }
         
-        this.$store.dispatch('repos/addPersonToRepo', { data: { person_id: user_id, repo_id: store.getters['repos/getActiveRepoID'] }}).then(function() { 
+        this.$store.dispatch('repos/addPersonToRepo', { data: { person_id: user_id, repo_id: store.getters['repos/getActiveRepoID'], access: this.access }}).then(function() { 
             store.dispatch('repos/getRepoUsers', { data: { repo_id: store.getters['repos/getActiveRepoID'] }});
             $('.autocomplete-people-input').val('');
             self.last_user_id = null;

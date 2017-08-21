@@ -1,6 +1,6 @@
 import api from '../api.js'
 import store from '../store.js'
-import { apiHeaders } from '../../lib/utils.js'
+import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
@@ -65,8 +65,12 @@ const actions = {
             if (data.message !== false) {
                 context.commit('SET_MESSAGE', 'Created new repository <em>' + response.name + '</em>', {'root': true});
             }
+            return true;
         })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     },
 
     /**
@@ -83,8 +87,12 @@ const actions = {
             .then(function(response) { 
                 context.commit('EDIT_REPO', response); 
                 context.commit('SET_MESSAGE', 'Saved changes', {'root': true});
+                return true;
             })
-            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            });
     },
 
 
@@ -99,8 +107,12 @@ const actions = {
                 context.commit('DELETE_REPO', response);
                 context.commit('SET_MESSAGE', 'Deleted repository', {'root': true});
                 if (router) { router.push("/"); }
+                return true;
             })
-            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            });
     },
 
     /**
@@ -109,8 +121,11 @@ const actions = {
     getRepoUsers: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/repositories/users', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('GET_REPO_USERS', response); })
-            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+            .then(function(response) { context.commit('GET_REPO_USERS', response); return true; })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            });
     },
 
     /**
@@ -122,7 +137,11 @@ const actions = {
             .then(function(response) { 
                 context.commit('ADD_PERSON_REPO', response); 
                 context.commit('SET_MESSAGE', 'Added collaborator', {'root': true});
-            }).catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+                return true;
+            }).catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            });
     },
 
     /**
@@ -134,7 +153,11 @@ const actions = {
             .then(function(response) { 
                 context.commit('REMOVE_PERSON_REPO', response); 
                 context.commit('SET_MESSAGE', 'Removed collaborator', {'root': true});
-            }).catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+                return true;
+            }).catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            });
     }   
 }
 

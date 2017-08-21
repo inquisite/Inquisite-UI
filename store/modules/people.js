@@ -1,6 +1,6 @@
 import api from '../api.js'
 import store from '../store.js'
-import { apiHeaders } from '../../lib/utils.js'
+import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
@@ -29,20 +29,24 @@ const actions = {
         return api.post('/people/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
         .then(function(response) { 
             context.commit('ADD_PERSON', response); 
+            return true;
         }).then(function(response) {
-            context.dispatch("doLogin", {data: {"username": data.data.email, "password": data.data.password}}, { 'root': true }).then(function(response) {
-                context.dispatch("repos/addRepo", {
-                    makeActive: true, 
-                    message: false,
-                    data: {
-                        "name": "My first repository", 
-                        "url": data.data.url, 
-                        "readme": "This is your first repository in Inquisite. Add your data here, or create additional repositories for different projects."}
-                    }, { 'root': true }
-                );
-            });
+            return context.dispatch("doLogin", {data: {"username": data.data.email, "password": data.data.password}}, { 'root': true });
+        }).then(function(response) { 
+            return context.dispatch("repos/addRepo", {
+                makeActive: true, 
+                message: false,
+                data: {
+                    "name": "My first repository", 
+                    "url": data.data.url, 
+                    "readme": "This is your first repository in Inquisite. Add your data here, or create additional repositories for different projects."}
+                }, { 'root': true }
+            );
         })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     },
     /**
      *
@@ -53,7 +57,12 @@ const actions = {
         .then(function(response) { 
             context.commit('EDIT_PERSON', response); 
             context.commit('SET_MESSAGE', "Saved changes", {'root': true});
-        }).catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+            
+            return true;
+        }).catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     },
 
     /**
@@ -62,8 +71,11 @@ const actions = {
     getUserInfo: function(context, data) {
       if (!context.rootState.token) return false;
       return api.get('/people/info', {headers: apiHeaders({"auth": true})})
-        .then(function(response) { context.commit('GET_USER_INFO', response) })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .then(function(response) { context.commit('GET_USER_INFO', response); return true; })
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     },
 
     /**
@@ -77,7 +89,10 @@ const actions = {
           context.commit('repos/SET_REPOS', response, { root: true });
           return response;
         })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     },
     
     /**
@@ -90,7 +105,10 @@ const actions = {
             .then(function(response) { 
                 return response;
             })
-            .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            })
     }
 }
 
@@ -98,7 +116,11 @@ const actions = {
 const mutations = {
     GET_PEOPLE: function(state, response) { state.users = response.people },
     ADD_PERSON: function(state, response) { state.msg = response.msg },
-    EDIT_PERSON: function(state, response) { state.msg = response.msg /* Update store user obj? */ },
+    EDIT_PERSON: function(state, response) { 
+        state.msg = response.msg;
+        console.log("XXX", state.user.info);
+        state.user.info.name = state.user.info.forename + " " + state.user.info.surname;
+    },
     GET_USER_INFO: function(state, response) { 
         state.user = response.person;
 
@@ -127,7 +149,8 @@ const mutations = {
     /**
      *
      */
-    setUserName: function(state, newName) { state.user.info.name = newName },
+    setUserForename: function(state, newName) { state.user.info.forename = newName },
+    setUserSurname: function(state, newName) { state.user.info.surname = newName },
     setUserEmail: function(state, newEmail) { state.user.info.email = newEmail },
     setUserLocation: function(state, newLocation) { state.user.info.location = newLocation },
     setUserTagline: function(state, newTagline) { state.user.info.tagline = newTagline },

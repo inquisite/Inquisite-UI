@@ -17,7 +17,6 @@
             <div class="col-sm-6">  
               <div class="card">
                   <div class="card-block">
-
                   <div>Name: {{person.name}}</div>
                   <div>Email: {{person.email}}</div>
                   <div>Location: {{person.location}}</div>

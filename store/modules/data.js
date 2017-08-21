@@ -1,6 +1,6 @@
 import api from '../api.js'
 import store from '../store.js'
-import { apiHeaders } from '../../lib/utils.js'
+import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
@@ -32,7 +32,10 @@ const actions = {
             .then(function(response) {
                 context.commit('UPLOAD_REPO_DATA', response)
             })
-            .catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) });
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            });
     },
 
     /**
@@ -43,7 +46,10 @@ const actions = {
 
         return api.post('/repositories/data', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('REPO_DATA', response) })
-            .catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
     },
     /**
      *
@@ -56,7 +62,10 @@ const actions = {
             .then(function(response) { 
                 context.commit('GET_DATA_NODE', response);
                 return response;
-            }).catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
+            }).catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
     },
     
     /**
@@ -73,7 +82,10 @@ const actions = {
                 context.commit('SAVE_DATA_NODE', response);
                 rootState.msg = "Saved data";
                 return response;
-            }).catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
+            }).catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
     }
 }
 

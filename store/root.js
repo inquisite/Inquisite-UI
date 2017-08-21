@@ -1,6 +1,6 @@
 import api from './api.js'
 import store from './store.js'
-import { apiHeaders } from '../lib/utils.js'
+import { apiHeaders, extractAPIError } from '../lib/utils.js'
 
 // getters
 export const getters = {
@@ -58,12 +58,15 @@ export const actions = {
               // Get User Data -- now sets repos with users and data
               context.dispatch('people/getUserInfo', {token: response.access_token});
               context.dispatch('people/getRepos', {token: response.access_token});
+              return true;
             } else {
               context.commit('API_FAILURE', response.response.data.msg );
+              return extractAPIError(response);
             }
         })
         .catch(function(error) { 
-          context.commit('API_FAILURE', error)
+          context.commit('API_FAILURE', error);
+          return extractAPIError(error);
         });
     },
 
@@ -84,7 +87,10 @@ export const actions = {
                 }
                 return null;
             })
-            .catch(function(error) { context.commit('API_FAILURE', error) });
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error);
+                return extractAPIError(error);
+            });
     },
 
     /**
@@ -96,9 +102,13 @@ export const actions = {
         .then(function(response) { 
             window.sessionStorage.removeItem('jwt');
             window.sessionStorage.removeItem('rwt');
-            context.commit('logout')
+            context.commit('logout');
+            return true;
         })
-        .catch(function(error) { context.commit('API_FAILURE', error) });
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error);
+            return extractAPIError(error);
+        });
     }
 }
 
@@ -150,7 +160,9 @@ export const mutations = {
     /**
      *
      */
-    API_FAILURE: function(state, error) { state.msg = error.toString(); }
+    API_FAILURE: function(state, error) { 
+        state.msg = error.toString(); 
+    }
 }
 
 

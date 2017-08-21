@@ -21,8 +21,11 @@
 
 			<div class="form-group row">
 				<label for="name" class="col-2 col-form-label">Name</label>
-				<div class="col-10">
-					<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
+				<div class="col-5">
+					<input type="text" class="form-control" id="forename" name="forename" placeholder="First name" v-model="forename">
+				</div>
+				<div class="col-5">
+					<input type="text" class="form-control" id="surname" name="surname" placeholder="Last name" v-model="surname">
 				</div>
 			</div>
 			
@@ -78,12 +81,13 @@
 </template>
 
 <script>
-
+import { validateEmail } from '../lib/utils.js'
 export default { 
   name: 'home',
   data: function() {
     return {
-      name: '',
+      forename: '',
+      surname: '',
       email: '',
       location: '',
       tagline: '',
@@ -99,21 +103,29 @@ export default {
   methods: {
     processSignup: function() {
       var self = this;
-      if( this.name !== '' && this.email !== '' && this.password !== '') {
+      if( this.forename === '' || this.surname === '' || this.email === '' || this.password === '') {
+        this.$store.state.msg = "Name, Email, and Password are required fields";   
+      } else if(!validateEmail(this.email)) {
+        this.$store.state.msg = "Email address is not valid";   
+      } else {
         this.$store.dispatch('people/addPerson', 
-          { data: {name: this.name, 
+          { data: {
+            forename: this.forename, 
+            surname: this.surname,
             email: this.email, 
             location: this.location, 
             tagline: this.tagline, 
             url: this.url, 
             password: this.password
-        }}).then(function() {
-           self.$store.state.msg = "You are now signed up!";
-           self.$router.push('/'); 
+        }}).then(function(response) {
+            if ((typeof(response) == 'object') && (response.isError === true)) {
+                self.$store.state.msg = response.message;
+            } else {
+                self.$store.state.msg = "You are now signed up!";
+                self.$router.push('/'); 
+            }
         });
-      } else {
-        this.$store.state.msg = "Name, Email, and Password are required fields"   
-      }
+      } 
     }
   } 
   

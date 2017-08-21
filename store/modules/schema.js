@@ -1,6 +1,6 @@
 import api from '../api.js'
 import store from '../store.js'
-import { apiHeaders } from '../../lib/utils.js'
+import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
@@ -64,8 +64,11 @@ const actions = {
         if(!context.rootState.token) return false;
 
         return api.get('schema/getTypes/' + repository_id, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('GET_DATA_TYPES', response) })
-            .catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
+            .then(function(response) { context.commit('GET_DATA_TYPES', response); return true; })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
     },
     
     /**
@@ -83,7 +86,10 @@ const actions = {
                 
                 return response;
             })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     },
     /**
      * Edit existing data type
@@ -98,8 +104,12 @@ const actions = {
             .then(function(response) { 
                 context.commit('EDIT_DATA_TYPE', response); 
                 context.commit('SET_MESSAGE', 'Saved changes to data type <em>' + data.name + '</em>', {'root': true});
+                return true;
             })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     },
     /**
      *
@@ -110,8 +120,12 @@ const actions = {
             .then(function(response) { 
                 context.commit('DELETE_DATA_TYPE', response); 
                 context.commit('SET_MESSAGE', 'Deleted type', {'root': true});
+                return true;
             })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
     }
 }
 

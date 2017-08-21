@@ -1,6 +1,6 @@
 import api from '../api.js'
 import store from '../store.js'
-import { apiHeaders } from '../../lib/utils.js'
+import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
@@ -27,8 +27,12 @@ const actions = {
         
         return api.get('/search?q=' + escape(q), {headers: apiHeaders({"auth": false, "form": true})})
             .then(function(response) { 
-                context.commit('QUICK_SEARCH', response) 
-            }).catch(function(error) { context.commit('API_FAILURE', error, {'root': true }) })
+                context.commit('QUICK_SEARCH', response);
+                return true;
+            }).catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
     }
 }
 

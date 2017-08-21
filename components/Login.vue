@@ -71,7 +71,7 @@ export default {
           .then(function() {
               // Transition to Home Page if logged in
               if(store.getters.isLoggedIn) {
-                  setTimeout( function() { self.$router.push('/') }, 1500) 
+                  setTimeout( function() { self.$router.push('/') }, 1000) 
               }
           });
       } else {

@@ -15,8 +15,11 @@
 
             <div class="form-group row">
 				<label for="name" class="col-2 col-form-label">Name</label>
-				<div class="col-10">
-					<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="name">
+				<div class="col-5">
+					<input type="text" class="form-control" id="forename" name="forename" placeholder="First name" v-model="forename">
+				</div>
+				<div class="col-5">
+					<input type="text" class="form-control" id="surname" name="surname" placeholder="Last name" v-model="surname">
 				</div>
 			</div>
 			
@@ -91,9 +94,13 @@ export default {
     }
   },
   computed: {
-    name: {
-      get: function() { return this.$store.getters['people/getUserInfo'].name; },
-      set: function(value) { this.$store.commit('people/setUserName', value) }
+    forename: {
+      get: function() { return this.$store.getters['people/getUserInfo'].forename; },
+      set: function(value) { this.$store.commit('people/setUserForename', value) }
+    },
+    surname: {
+      get: function() { return this.$store.getters['people/getUserInfo'].surname; },
+      set: function(value) { this.$store.commit('people/setUserSurname', value) }
     },
     email: {
       get: function() { return this.$store.getters['people/getUserInfo'].email; },
@@ -126,7 +133,7 @@ export default {
   methods: {
     editUser: function() {
         this.$store.dispatch('people/editPerson', {
-          data: { name: this.name, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
+          data: { forename: this.forename, surname: this.surname, email: this.email, location: this.location, tagline: this.tagline, url: this.url}
         })      
 
     }
