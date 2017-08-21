@@ -118,7 +118,6 @@ const mutations = {
     ADD_PERSON: function(state, response) { state.msg = response.msg },
     EDIT_PERSON: function(state, response) { 
         state.msg = response.msg;
-        console.log("XXX", state.user.info);
         state.user.info.name = state.user.info.forename + " " + state.user.info.surname;
     },
     GET_USER_INFO: function(state, response) { 

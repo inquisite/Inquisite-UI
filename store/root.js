@@ -161,7 +161,7 @@ export const mutations = {
      *
      */
     API_FAILURE: function(state, error) { 
-        state.msg = error.toString(); 
+        state.msg = error.response && error.response.data && error.response.data.msg ? error.response.data.msg : error.toString(); 
     }
 }
 
