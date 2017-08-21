@@ -47,6 +47,7 @@ const actions = {
      * @param context
      * @param data An object with options + new repository metadata. Repository metadata should be put in an object for key "data". Options include:
      *          makeActive = Make newly created repository the user's active repository [Default is false]
+     *          message = Set created message [Default is true]
      */
     addRepo: function(context, data) {
         if (!context.rootState.token) return false;
@@ -61,7 +62,9 @@ const actions = {
                       context.commit('SET_ACTIVE_REPO', new_repo_id);
                     }     
                 });
-            context.commit('SET_MESSAGE', 'Created new repository <em>' + response.name + '</em>', {'root': true});
+            if (data.message !== false) {
+                context.commit('SET_MESSAGE', 'Created new repository <em>' + response.name + '</em>', {'root': true});
+            }
         })
         .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },

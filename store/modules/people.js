@@ -27,7 +27,21 @@ const getters = {
 const actions = {
     addPerson: function(context, data) {
         return api.post('/people/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-        .then(function(response) { context.commit('ADD_PERSON', response); })
+        .then(function(response) { 
+            context.commit('ADD_PERSON', response); 
+        }).then(function(response) {
+            context.dispatch("doLogin", {data: {"username": data.data.email, "password": data.data.password}}, { 'root': true }).then(function(response) {
+                context.dispatch("repos/addRepo", {
+                    makeActive: true, 
+                    message: false,
+                    data: {
+                        "name": "My first repository", 
+                        "url": data.data.url, 
+                        "readme": "This is your first repository in Inquisite. Add your data here, or create additional repositories for different projects."}
+                    }, { 'root': true }
+                );
+            });
+        })
         .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
     },
     /**

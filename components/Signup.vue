@@ -98,6 +98,7 @@ export default {
   },
   methods: {
     processSignup: function() {
+      var self = this;
       if( this.name !== '' && this.email !== '' && this.password !== '') {
         this.$store.dispatch('people/addPerson', 
           { data: {name: this.name, 
@@ -106,7 +107,10 @@ export default {
             tagline: this.tagline, 
             url: this.url, 
             password: this.password
-        }});
+        }}).then(function() {
+           self.$store.state.msg = "You are now signed up!";
+           self.$router.push('/'); 
+        });
       } else {
         this.$store.state.msg = "Name, Email, and Password are required fields"   
       }

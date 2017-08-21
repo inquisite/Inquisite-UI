@@ -36,11 +36,6 @@ export const getters = {
 
 // actions
 export const actions = {
-    addPerson: function(context, data) {
-        return api.post('/people/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-        .then(function(response) { context.commit('ADD_PERSON', response); })
-        .catch(function(error) { context.commit('API_FAILURE', error, { root: true }) });
-    },
     /**
      * Set current JWT token
      */
@@ -52,7 +47,6 @@ export const actions = {
     doLogin: function(context, data) {
       return api.post('/login', data.data, {headers: apiHeaders({})})
         .then(function(response) { 
-
             if(response.access_token !== undefined) {
               window.sessionStorage.setItem('jwt', response.access_token); 
               window.sessionStorage.setItem('rwt', response.refresh_token);
