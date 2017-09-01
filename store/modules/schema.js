@@ -10,53 +10,22 @@ const state = {
 // getters
 const getters = {
      getDataTypes: state => { return state.data_types; },
-     getFieldTypeList: function(state) {
-        // TODO: pull this from a back-end service
-        return {
-            'TEXT': {
-                'name': 'Text',
-                'description': 'Alphanumeric text',
-                'properties': {
-                    'minimum-length': {
-                        'type': 'int',
-                        'minimum': 0
-                    },
-                    'maximum-length': {
-                        'type': 'int',
-                        'minimum': 0
-                    }
-                }
-            },
-            'INT': {
-                'name': 'Integer',
-                'description': 'Numeric integer (whole) value',
-                'properties': {
-                    'minimum-value': {
-                        'type': 'int'
-                    },
-                    'maximum-value': {
-                        'type': 'int'
-                    }
-                }
-            },
-            'FLOAT': {
-                'name': 'Float',
-                'description': 'Floating point value',
-                'properties': {
-                    'minimum-value': {
-                        'type': 'float'
-                    },
-                    'maximum-value': {
-                        'type': 'float'
-                    }
-                }
-            }
-        };
-     }
+     getFieldDataTypeList: state => { return state.field_data_types; }
 }
 
 // actions
 const actions = {
+    /** 
+     *
+     */
+    getFieldDataTypeList: function(context) {
+        return api.get('schema/getDataTypes', {headers: apiHeaders({"auth": true, "form": true})})
+            .then(function(response) { context.commit('GET_FIELD_DATA_TYPE_LIST', response); return true; })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
+    },
     /**
      *
      */
@@ -165,6 +134,10 @@ const mutations = {
                 break;
             }
         }
+    },
+    GET_FIELD_DATA_TYPE_LIST: function(state, response) {
+        console.log("set field data types", response);
+        state.field_data_types = response;
     }
 }
 

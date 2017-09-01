@@ -132,7 +132,7 @@
 													<div class="form-group">
 														<label for="type" class="form-label">Type</label>
 														<select v-model="f.type" class="custom-select form-control">
-															<option v-for="t,k in fieldTypes" :value="k">{{t.name}}</option>
+															<option v-for="t,k in fieldDataTypes" :value="k">{{t.name}}</option>
 														</select>
 													</div>
 												</div>
@@ -142,6 +142,28 @@
 													<div class="form-group">
 														<label for="description" class="form-label">Description</label>
 														<textarea type="text" class="form-control" rows="3" :id="'field_' + f.code" :name="'field_' + f.code" placeholder="Description" v-model="f.description"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="row" v-if="fieldDataTypes[f.type] && fieldDataTypes[f.type]['order']">
+												<div class="col-sm-12">
+													<div class="form-group">
+														<label for="description" class="form-label">Settings</label>
+														<div v-for="t in getFieldDataTypeSettingsForDisplay(f.type)">
+														    {{t.label}}
+														    
+														    <span v-if="(t.type == 'text') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
+														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select></select></span>
+														    <span v-else-if="(t.type == 'integer') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
+														    <span v-else-if="(t.type == 'integer') && (t.render == 'select')"><select></select></span>
+														    <span v-else-if="(t.type == 'float') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
+														    <span v-else-if="(t.type == 'float') && (t.render == 'select')"><select></select></span>
+														    <span v-else-if="(t.type == 'boolean') && (t.render == 'select')"><select><option value="1">Yes</option><option value="0">No</option></select></span>
+														    <span v-else-if="(t.type == 'list') && (t.render == 'select')"><select></select></span>
+														    <span v-else>???</span>
+														    
+														    
+														</div>
 													</div>
 												</div>
 											</div>
@@ -182,6 +204,7 @@ export default {
   },
   mounted: function(){
     this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']);
+    this.$store.dispatch('schema/getFieldDataTypeList');
   },
   computed: {
     isLoggedIn: function() {
@@ -193,7 +216,8 @@ export default {
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
 	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
-	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; }
+	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; },
+	fieldDataTypes: function() { return this.$store.getters['schema/getFieldDataTypeList']; }
   }, 
   methods: {
     // ------------------------------------
@@ -216,6 +240,7 @@ export default {
     saveDataType: function() {
         if (this.formContent.id > 0) {
             // edit existing type
+            console.log( this.formContent);
             this.$store.dispatch('schema/editDataType', this.formContent);
         } else {
             // add new type
@@ -239,7 +264,7 @@ export default {
     addDataTypeField: function() {
         console.log("i", this.editorDataTypeIndex);
         if (this.editorDataTypeIndex !== null) {
-            this.dataTypes[this.editorDataTypeIndex]['fields'].unshift({'type': 'TEXT'});
+            this.dataTypes[this.editorDataTypeIndex]['fields'].unshift({'type': 'TextDataType'});
             var container = this.$el.querySelector("#fieldList");
 			container.scrollTop = "1px";
         }
@@ -253,8 +278,17 @@ export default {
                 this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'].push(fieldToDelete[0].id);
             }
         }
-    }
+    },
     // ------------------------------------
+    getFieldDataTypeSettingsForDisplay: function(tid) {
+	    var o = this.fieldDataTypes[tid]['order'];
+	    var s = this.fieldDataTypes[tid]['settings'];
+	    if (!o || !s) { return null; }
+	    var acc = [];
+	    for(var i in o) { acc.push(s[o[i]]); }
+	    return acc;
+	}
+	// ------------------------------------
   },
 }
 </script>
