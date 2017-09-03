@@ -29,10 +29,10 @@ const actions = {
     /**
      *
      */
-    getDataTypes: function(context, repository_id) {
+    getDataTypes: function(context, repo_id) {
         if(!context.rootState.token) return false;
 
-        return api.get('schema/getTypes/' + repository_id, {headers: apiHeaders({"auth": true, "form": true})})
+        return api.get('schema/getTypes/' + repo_id, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('GET_DATA_TYPES', response); return true; })
             .catch(function(error) { 
                 context.commit('API_FAILURE', error, {'root': true });
