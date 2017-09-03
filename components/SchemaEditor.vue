@@ -262,7 +262,6 @@ export default {
     // ------------------------------------
     // Fields form
     addDataTypeField: function() {
-        console.log("i", this.editorDataTypeIndex);
         if (this.editorDataTypeIndex !== null) {
             this.dataTypes[this.editorDataTypeIndex]['fields'].unshift({'type': 'TextDataType'});
             var container = this.$el.querySelector("#fieldList");
