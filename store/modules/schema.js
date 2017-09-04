@@ -101,6 +101,20 @@ const actions = {
 // mutations
 const mutations = {
     GET_DATA_TYPES: function(state, response) { 
+        // unwrap settings
+        if (response) {
+            for(var i in response) {
+                if (response[i].fields) {
+                    for(var j in response[i].fields) {
+                        if (response[i].fields[j].settings) {
+                            for(var k in response[i].fields[j].settings) {
+                                response[i].fields[j]['settings_' + k] = response[i].fields[j].settings[k];
+                            }
+                        }
+                    }
+                }
+            }
+        }
         console.log("got types", response);
         state.data_types = response;
     },

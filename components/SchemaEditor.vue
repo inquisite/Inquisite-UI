@@ -97,8 +97,8 @@
 										</p>
 							</div><!-- end card-block -->
 							<div class="list-group-scroll">
-								<ul id="fieldList" class="list-group list-group-flush" v-if="formContent.fields && (formContent.fields.length > 0)">
-									<li class="list-group-item" v-for="f, i in formContent.fields">
+								<ul id="fieldList" class="list-group list-group-flush">
+									<li class="list-group-item" v-for="f, i in formContent.fields" v-if="formContent.fields && (formContent.fields.length > 0)">
 										<div class="container">
 											<div class="row">
 
