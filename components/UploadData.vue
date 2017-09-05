@@ -1,12 +1,12 @@
 <template>
 	<div class="row">
-		<div class="col-sm-6 offset-sm-3">
+		<div class="col-sm-6 offset-sm-3" v-if="server_file_info === null">
 			<div class="card card-form">
 				<div class="card-header text-center">
 					Upload Data
 		 		</div>
 				<div class="card-block">
-       				<p>Adding data to {{activeRepo.name}}</p>
+       				<p>Adding data to <em>{{activeRepo.name}}</em></p>
 
           			<div id="data-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
 				</div>
@@ -16,26 +16,36 @@
 							<label for="name" class="col-2 col-form-label">File</label>
 							<div class="col-10">
 								<input type="file" class="form-control" id="datafile" name="datafile" placeholder="Data File" @change="onFileChange">
-								<small id="fileHelp" class="form-text text-muted">Select a data file and the upload will begin automatically.</small>
+								<small id="fileHelp" class="form-text text-muted">Select a data file to upload to your repository.</small>
 							</div>
 						</div>
 
-            <!--<div class="item" style="padding: 10px 0">
-              <button v-on:submit.prevent="processData" v-on:click.prevent="processData" class="btn btn-primary">Submit</button>
-            </div>-->
+                        <div class="item" style="padding: 10px 0">
+                          <button v-on:submit.prevent="processData" v-on:click.prevent="processData" :disabled="!allow_upload" class="btn btn-primary">Submit</button>
+                        </div>
 					</form>
 				</div>
 				<div class="card-block">
-					<div id="teaser-container" v-if="uploadRowCount">
-						<p>Uploading {{uploadRowCount}} rows</p>
-						<div>Fields: 
-						  <span class="label label-primary" style="display: inline-block; font-size: 14px; margin: 1%"  v-for="field in uploadFields">{{field}}</span>
-						</div>
-						<div>Nested Fields:
-						  <span class="label label-info" style="display: inline-block; font-size: 14px; margin: 1%" v-for="subfield in uploadSubfields">{{subfield}}</span>
-						</div>
+					<div id="teaser-container" v-if="is_uploading">
+						<p>Upload {{upload_progress}}% complete</p>
+						
 					</div>
 				</div>  
+      		</div>
+      	</div>
+      	<div class="col-sm-12" v-if="server_file_info !== null">
+      		<div class="card card-form">
+      		    <div class="card-header text-center">
+					Upload Data in <em>{{server_file_info.original_filename}}</em>
+		 		</div>
+				<div class="card-block">
+       				<p>Adding data to <em>{{activeRepo.name}}</em></p>
+
+          			<div id="data-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+				</div>
+				<div class="card-block">
+      		        <h2>Preview goes here</h2>
+      		    </div>
       		</div>
     	</div>
 	</div>
@@ -49,7 +59,13 @@ export default {
   name: 'upload-data',
   data: function() {
     return {
-      state: this.$store.state
+      state: this.$store.state,
+      data_file: null,
+      allow_upload: false,
+      is_uploading: false,
+      upload_progress: 0,
+      
+      server_file_info: null
     }
   },
   computed: {
@@ -71,11 +87,20 @@ export default {
 
       if(!files.length)
         return;
- 
-      this.processData(files[0]);
+      this.data_file = files[0];
+      this.allow_upload = true;
     },
     processData: function(repo_data) {
-      this.$store.dispatch('data/uploadRepoData', {form: { repo_file: repo_data, repo_id: this.activeRepo.id }});
+        var self = this;
+        if(this.data_file) {
+            this.is_uploading = true;
+            this.$store.dispatch('data/uploadData', {form: { data_file: this.data_file, repo_id: this.activeRepo.id }, progressCallback: function(p) {
+                self.upload_progress = p;
+            }}).then(function(data) {
+                if (data['filename']) { self.server_file_info = data; }
+                 self.is_uploading = false;
+            });
+        }
     }
   } 
   

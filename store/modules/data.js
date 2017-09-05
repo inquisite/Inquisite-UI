@@ -22,15 +22,21 @@ const actions = {
     /**
      *
      */
-    uploadRepoData: function(context, data) {
+    uploadData: function(context, data) {
         if (!context.rootState.token) return false;
         var fd = new FormData();
-        fd.append('repo_file', data.form.repo_file);  
+        var progCallback = data.progressCallback;
+        fd.append('data_file', data.form.data_file);  
         fd.append('repo_id', data.form.repo_id);
 
-        return api.put('/repositories/upload', fd, {headers: apiHeaders({"auth": true, "upload": true})})
+        return api.put('/upload', fd, {
+            headers: apiHeaders({"auth": true, "upload": true}),  
+            onUploadProgress: function(progressEvent) {
+              if (progCallback) { progCallback(Math.round((progressEvent.loaded * 100) / progressEvent.total)); }
+            }})
             .then(function(response) {
-                context.commit('UPLOAD_REPO_DATA', response)
+                context.commit('UPLOAD_DATA', response);
+                return response;
             })
             .catch(function(error) { 
                 context.commit('API_FAILURE', error, {'root': true });
@@ -91,7 +97,7 @@ const actions = {
 
 // mutations
 const mutations = {
-    UPLOAD_REPO_DATA: function(state, response) { 
+    UPLOAD_DATA: function(state, response) { 
       state.msg = response.msg; 
       state.teaser = response.data;
       state.upload_row_count = response.row_count;  
