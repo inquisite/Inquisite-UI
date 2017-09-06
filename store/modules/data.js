@@ -43,6 +43,23 @@ const actions = {
                 return extractAPIError(error);
             });
     },
+    /**
+     *
+     */
+    importData: function(context, data) {
+        if(!context.rootState.token) return false;
+
+        return api.post('/upload/import', data.data, {headers: apiHeaders({"auth": true, "form": true})})
+            .then(function(response) { 
+                context.commit('IMPORT_DATA', response);
+                return response;
+            })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
+    },
+    
 
     /**
      *
@@ -104,6 +121,11 @@ const mutations = {
       state.upload_fields = response.fieldnames;
       state.upload_subfields = response.nestednames;
     },
+    
+    IMPORT_DATA: function(state, response) { 
+        state.msg = response.msg;
+    },
+    
     REPO_DATA: function(state, response) { state.msg = response.msg; state.active_data = response.data },
     
     GET_DATA_NODE: function(state, response) { 

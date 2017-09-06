@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<div class="col-sm-6 offset-sm-3" v-if="server_file_info === null">
+		<div class="col-sm-6 offset-sm-3" v-if="(server_file_info === null) && !import_complete">
 			<div class="card card-form">
 				<div class="card-header text-center">
 					Upload Data
@@ -33,7 +33,7 @@
 				</div>  
       		</div>
       	</div>
-      	<div class="col-sm-12" v-if="server_file_info !== null">
+      	<div class="col-sm-12" v-if="(server_file_info !== null) && !import_complete">
       		<div class="card card-form">
       		    <div class="card-header text-center">
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
@@ -72,6 +72,35 @@
       		    </div>
       		</div>
     	</div>
+    	
+    	<div class="col-sm-12" v-if="import_complete">
+    	    <div class="card card-form">
+      		    <div class="card-header text-center">
+					Upload Data in <em>{{server_file_info.original_filename}}</em>
+		 		</div>
+				<div class="card-block">
+      		        <h3>Import from <em>{{server_file_info.original_filename}}</em> completed</h3>
+      		        
+      		        <div class="item" style="padding: 10px 0">
+                      <button v-on:submit.prevent="reset" v-on:click.prevent="reset" class="btn btn-primary">Do another import</button>
+                    </div>
+				</div>
+				<div class="card-block" style="overflow: auto;">
+				    <h4>Errors ({{import_results.error_count}})</h4>
+      		        <div v-for="(errs, line) in importErrors">
+      		            Line {{line}}: {{errs}}
+      		        </div>
+      		        
+      		        <div v-if="import_results.counts.length > 0">
+                        <h4>Counts</h4>
+                        <div v-for="(c, t) in import_results.counts">
+                            {{t}}: {{c}} items
+                        </div>
+                    </div>
+      		        
+      		    </div>
+      		</div>
+    	</div>
 	</div>
 </div>
 
@@ -87,13 +116,17 @@ export default {
       data_file: null,
       allow_upload: false,
       is_uploading: false,
+      is_importing: false,
+      import_complete: false,
       upload_progress: 0,
       
       server_file_info: null,
       
       data_mapping: [],
       import_as: null,
-      ignore_first_row: false
+      ignore_first_row: false,
+      
+      import_results: null
     }
   },
   mounted: function(){
@@ -128,11 +161,14 @@ export default {
             for(var j in data_types) {
                 var dt = data_types[j];
                 
+                var match_id = null;
                 if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
                         if((dt['fields'][k]['code'] == this.server_file_info.preview.headers[i]) || (dt['fields'][k]['code'] == this.server_file_info.preview.headers[i])) {
                             allowCreateNew = false;
+                            match_id = dt['fields'][k]['id'];
+                            console.log("match", dt['fields'][k]['code'], match_id);
                         }
                         
                         var f = this.data_mapping.indexOf(dt['fields'][k]['id']);
@@ -144,7 +180,10 @@ export default {
             
                     if (allowCreateNew) {
                         opts[i].unshift("Create field " + this.server_file_info.preview.headers[i] + " (" + data_types[j]['name'] + ")");
-                        vals[i].unshift(data_types[j]['name'].replace(/[^A-Za-z0-9_\-]+/, ""));
+                        vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
+                    } else if (match_id) {
+                        this.data_mapping[i] = match_id;
+                        console.log("set", i , match_id);
                     }
                 } else {
                     // related type
@@ -161,9 +200,13 @@ export default {
             opts[i].unshift("Do not import");
             vals[i].unshift(0);
 	    }
-	    //console.log("x", opts, this.server_file_info.preview.headers);
-	    
+	    console.log("mapp", this.data_mapping);
 	    return {"options": opts, "values": vals};
+	},
+	importErrors: function() {
+	    if (!this.import_complete) { return []; }
+	    
+	    return _.mapValues(this.import_results.errors, function(v, k, o) { return v.join("; ") });
 	}
   }, 
   methods: {
@@ -192,6 +235,29 @@ export default {
     },
     importData: function() {
         console.log("IMPORT", this.data_mapping);
+        
+        var self = this;
+        this.is_importing = true;
+        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as }}).then(function(data) {
+            console.log("IMPORTED", data);
+            
+            self.import_results = {
+                "errors": data.errors,
+                "error_count": data.error_count,
+                "counts": data.counts,
+                "fields_created": data.fields_created
+            };
+            self.is_importing = false;
+            self.import_complete = true;
+            
+            self.$store.dispatch('people/getRepos', {});    // reload stats... TODO: break repo stats out into a single repo-specific call
+        });
+    },
+    reset: function() {
+        this.import_complete = this.allow_upload = this.is_uploading = this.is_importing = false;
+        this.upload_progress = 0;
+        this.server_file_info = this.data_file = this.import_as = this.import_results = null;
+        this.data_mapping = [];
     }
   } 
   
