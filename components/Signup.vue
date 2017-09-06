@@ -36,6 +36,13 @@
 				</div>
 			</div>
 			
+			<div class="form-group row" v-if="email.toLowerCase().indexOf('nyu') >= 0">
+				<label for="email" class="col-2 col-form-label">NetID</label>
+				<div class="col-10">
+					<input type="text" class="form-control" id="nyunetid" name="email" placeholder="NYU NetID" v-model="nyunetid">
+				</div>
+			</div>
+			
 			<div class="form-group row">
 				<label for="location" class="col-2 col-form-label">Location</label>
 				<div class="col-10">
@@ -61,6 +68,13 @@
 				<label for="password" class="col-2 col-form-label">Password</label>
 				<div class="col-10">
 					<input type="password" class="form-control" id="password" name="password" placeholder="Password" v-model="password">
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label for="password" class="col-2 col-form-label">Confirm password</label>
+				<div class="col-10">
+					<input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Confirm password" v-model="password_confirm">
 				</div>
 			</div>
 
@@ -93,6 +107,8 @@ export default {
       tagline: '',
       url: '',
       password: '',
+      nyunetid: '',
+      password_confirm: '',
       
       state: this.$store.state
     }
@@ -103,7 +119,10 @@ export default {
   methods: {
     processSignup: function() {
       var self = this;
-      if( this.forename === '' || this.surname === '' || this.email === '' || this.password === '') {
+      
+      if ((this.password.length > 0) && (this.password !== this.password_confirm)) {
+        this.$store.state.msg = "Password do not match";  
+      } else if( this.forename === '' || this.surname === '' || this.email === '' || this.password === '') {
         this.$store.state.msg = "Name, Email, and Password are required fields";   
       } else if(!validateEmail(this.email)) {
         this.$store.state.msg = "Email address is not valid";   
@@ -115,6 +134,7 @@ export default {
             email: this.email, 
             location: this.location, 
             tagline: this.tagline, 
+            nyunetid: this.nyunetid,
             url: this.url, 
             password: this.password
         }}).then(function(response) {
