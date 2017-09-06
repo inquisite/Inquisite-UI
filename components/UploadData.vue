@@ -39,12 +39,36 @@
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
 		 		</div>
 				<div class="card-block">
-       				<p>Adding data to <em>{{activeRepo.name}}</em></p>
+      		        <h3>Displaying first rows from <em>{{server_file_info.original_filename}}</em></h3>
+      		        
+      		        Import as <select name="import_info" v-model="import_as"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
+      		        
+      		        <br/>
+      		        Ignore first row <input type="checkbox" v-model="ignore_first_row"/>
+      		        
+      		        <div class="item" style="padding: 10px 0">
+                        <button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
+                        <a href="#" class="btn btn-secondary">Cancel</a>
+                    </div>
 
           			<div id="data-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
 				</div>
-				<div class="card-block">
-      		        <h2>Preview goes here</h2>
+				<div class="card-block" style="overflow: auto;">
+      		        <table>
+      		            <tr>
+                            <th v-for="(h,i) in server_file_info.preview.headers">{{h}}</th>
+      		            </tr>
+      		            <tr>
+                            <th v-for="(h,i) in server_file_info.preview.headers">
+                                <select :name="'import_info_' + h" v-model="data_mapping[i]"><option v-for="(h,x) in mappingOptions['options'][i]" :value="mappingOptions['values'][i][x]">{{h}}</option></select>
+                            </th>
+      		            </tr>
+      		            <tr v-for="(r, c) in server_file_info.preview.data">
+      		                <td v-for="d in r" v-if="!ignore_first_row || (c > 0)">
+      		                    {{d}}
+      		                </td>
+      		            </tr>
+      		        </table>
       		    </div>
       		</div>
     	</div>
@@ -65,21 +89,82 @@ export default {
       is_uploading: false,
       upload_progress: 0,
       
-      server_file_info: null
+      server_file_info: null,
+      
+      data_mapping: [],
+      import_as: null,
+      ignore_first_row: false
     }
   },
+  mounted: function(){
+    this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']);
+    this.$store.dispatch('schema/getFieldDataTypeList');
+  },
   computed: {
-    isLoggedIn: function() {
-	    return this.$store.getters.isLoggedIn;
-	},
+    isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
+    data_types: function() { return this.$store.getters['schema/getDataTypes']; },
+    field_data_types: function() { this.$store.getters['schema/getFieldDataTypeList']; },
 	message: function() { return this.$store.state.msg; },
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
-	uploadRowCount: function() { return this.$store.getters['data/getUploadRowCount']; },
-	uploadFields: function() { return this.$store.getters['data/getUploadFields']; },
-	uploadSubfields: function() { return this.$store.getters['data/getUploadSubfields']; },
-   
+	
+	canImport: function() {
+	    return this.data_mapping.filter(function(v) {
+	        return v > 0;
+	    }).length > 0;
+	},
+	
+	mappingOptions: function() {
+	    var opts = [];
+	    var vals = [];
+	    
+	    //console.log("import as ", this.import_as);
+	    var data_types = this.data_types;
+	    for(var i in this.server_file_info.preview.headers) {
+            if (!opts[i]) { opts[i] = []; vals[i] = [] }
+            
+            var allowCreateNew = true;
+            for(var j in data_types) {
+                var dt = data_types[j];
+                
+                if (parseInt(dt['id']) == parseInt(this.import_as)) {
+                    // field for target type
+                    for(var k in dt['fields']) {
+                        if((dt['fields'][k]['code'] == this.server_file_info.preview.headers[i]) || (dt['fields'][k]['code'] == this.server_file_info.preview.headers[i])) {
+                            allowCreateNew = false;
+                        }
+                        
+                        var f = this.data_mapping.indexOf(dt['fields'][k]['id']);
+                        if ((f === -1) || (parseInt(f) === parseInt(i))) {
+                            opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
+                            vals[i].unshift(dt['fields'][k]['id']);
+                        }
+                    }
+            
+                    if (allowCreateNew) {
+                        opts[i].unshift("Create field " + this.server_file_info.preview.headers[i] + " (" + data_types[j]['name'] + ")");
+                        vals[i].unshift(data_types[j]['name'].replace(/[^A-Za-z0-9_\-]+/, ""));
+                    }
+                } else {
+                    // related type
+                    for(var k in dt['fields']) {
+                        var f = this.data_mapping.indexOf(dt['fields'][k]['id']);
+                        if ((f === -1) || (parseInt(f) === parseInt(i))) {
+                            opts[i].push(dt['fields'][k]['name'] + " (related " + data_types[j]['name'] + ")");
+                            vals[i].push(dt['fields'][k]['id']);
+                        }
+                    }
+                }   
+            }
+            
+            opts[i].unshift("Do not import");
+            vals[i].unshift(0);
+	    }
+	    //console.log("x", opts, this.server_file_info.preview.headers);
+	    
+	    return {"options": opts, "values": vals};
+	}
   }, 
   methods: {
     onFileChange: function(e) {
@@ -99,8 +184,14 @@ export default {
             }}).then(function(data) {
                 if (data['filename']) { self.server_file_info = data; }
                  self.is_uploading = false;
+                 
+                self.import_as = self.data_types[0]['id'];
+                self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
             });
         }
+    },
+    importData: function() {
+        console.log("IMPORT", this.data_mapping);
     }
   } 
   
