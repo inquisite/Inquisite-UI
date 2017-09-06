@@ -27,7 +27,7 @@
 				</div>
 				<div class="card-block">
 					<div id="teaser-container" v-if="is_uploading">
-						<p>Upload {{upload_progress}}% complete</p>
+						<p><i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_uploading"></i> Upload {{upload_progress}}% complete</p>
 						
 					</div>
 				</div>  
@@ -49,6 +49,7 @@
       		        <div class="item" style="padding: 10px 0">
                         <button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
                         <a href="#" class="btn btn-secondary">Cancel</a>
+                        <i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>
                     </div>
 
           			<div id="data-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
@@ -144,7 +145,7 @@ export default {
 	
 	canImport: function() {
 	    return this.data_mapping.filter(function(v) {
-	        return v > 0;
+	        return v != 0;
 	    }).length > 0;
 	},
 	
