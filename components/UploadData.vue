@@ -39,10 +39,12 @@
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
 		 		</div>
 				<div class="card-block">
+      		        <div class="pull-right">
+      		             <button v-on:click.prevent="setImportForAllFields" class="btn btn-sm">Create new fields for all unrecognized</button>
+      		        </div>
+      		        
       		        <h3>Displaying first rows from <em>{{server_file_info.original_filename}}</em></h3>
-      		        
       		        Import as <select name="import_info" v-model="import_as"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
-      		        
       		        <br/>
       		        Ignore first row <input type="checkbox" v-model="ignore_first_row"/>
       		        
@@ -169,7 +171,7 @@ export default {
                         if((dt['fields'][k]['code'] == this.server_file_info.preview.headers[i]) || (dt['fields'][k]['code'] == this.server_file_info.preview.headers[i])) {
                             allowCreateNew = false;
                             match_id = dt['fields'][k]['id'];
-                            console.log("match", dt['fields'][k]['code'], match_id);
+                            //console.log("match", dt['fields'][k]['code'], match_id);
                         }
                         
                         var f = this.data_mapping.indexOf(dt['fields'][k]['id']);
@@ -201,7 +203,7 @@ export default {
             opts[i].unshift("Do not import");
             vals[i].unshift(0);
 	    }
-	    console.log("mapp", this.data_mapping);
+	    console.log("map", this.data_mapping);
 	    return {"options": opts, "values": vals};
 	},
 	importErrors: function() {
@@ -259,6 +261,14 @@ export default {
         this.upload_progress = 0;
         this.server_file_info = this.data_file = this.import_as = this.import_results = null;
         this.data_mapping = [];
+    },
+    setImportForAllFields: function() {
+        for(var i in this.server_file_info.preview.headers) {
+            if (!this.data_mapping[i]) {
+                this.$set(this.data_mapping, i, this.mappingOptions['values'][i][1]);
+            }
+        }
+        this.mappingOptions;
     }
   } 
   
