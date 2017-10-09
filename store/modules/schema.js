@@ -4,13 +4,15 @@ import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
-  data_types: []
+  data_types: [],
+  default_data_type: null
 }
 
 // getters
 const getters = {
      getDataTypes: state => { return state.data_types; },
-     getFieldDataTypeList: state => { return state.field_data_types; }
+     getFieldDataTypeList: state => { return state.field_data_types; },
+     getDefaultDataType: function() { return state.default_data_type; }
 }
 
 // actions
@@ -115,6 +117,11 @@ const mutations = {
                 }
             }
         }
+        
+        if (response[0]) {
+            state.default_data_type = response[0]['id'];
+        }
+        
         console.log("got types", response);
         state.data_types = response;
     },
