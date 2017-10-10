@@ -8,10 +8,7 @@ const state = {
   upload_row_count: 0,
   upload_fields: [],
   upload_subfields: [],
-  loaded_data: null,
-  
-  // NOTE: the VueJS handontable data grid UI component wrapper does not reliably support dynamic changing of columns, so we need to know about and manipulate the grid in the store
-  data_grid: null  
+  loaded_data: null
 }
 
 // getters
@@ -22,7 +19,16 @@ const getters = {
      
      getDataHeaders: function(state) {
         if (state.loaded_data) {
-            return state.loaded_data.columns;
+            return state.loaded_data.columns.filter(function(v) { return v != 'uuid'});
+        }
+        return [];
+     },
+     getDataColumnSpec: function(state) {
+        if (state.loaded_data) {
+            return state.loaded_data.columns.filter(function(v) { return v != 'uuid'}).map(function(v) { return {
+                'data': v,
+                'column': v
+            }});
         }
         return [];
      },
@@ -31,10 +37,7 @@ const getters = {
             return state.loaded_data.data;
         }
         return [];
-     },
-     
-     // return data_grid display component
-     getDataGrid: state => { return state.data_grid; }
+     }
 }
 
 // actions
@@ -140,7 +143,6 @@ const actions = {
 
         return api.get('/data/getDataForType/' + data.repo_id + '/' + data.type, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {  
-                response.datagrid = data.datagrid;  // we are passed the data grid instance here
                 context.commit('GET_DATA_FOR_TYPE', response);
                 return response;
             }).catch(function(error) { 
@@ -174,23 +176,6 @@ const mutations = {
     },
     GET_DATA_FOR_TYPE: function(state, response) {
         state.loaded_data = response;
-        
-        // NOTE: the VueJS handontable wrapper does not reliably support dynamic changing of columns
-        // so we have to instantiate the grid on load here manually (ugh)
-        if (state.data_grid) { state.data_grid.destroy(); } // kill any existing grid
-        
-        // remove UUID from data grid display
-        var colHeaders = state.loaded_data.columns.filter(function(v) { return (v !== 'uuid'); });
-        var columnSpec = colHeaders.map(function(v) { return {'data': v}; });
-         
-        // create new data grid
-        state.data_grid = new Handsontable(document.getElementById(response.datagrid), {
-          data: response.data,
-          rowHeaders: true,
-          columnSorting: true,
-          colHeaders: colHeaders,
-          columns: columnSpec
-        });
     }
 }
 
