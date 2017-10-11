@@ -21,7 +21,7 @@
 			<div class="form-group row">
 				<label for="name" class="col-3 col-form-label">Description</label>
 				<div class="col-9">
-					<textarea class="form-control" :value="readme" @input="updateMarkdown" rows="10" cols="80"></textarea>
+					<textarea class="form-control" :value="readme" rows="10" cols="80"></textarea>
 				</div>
 			</div>
 
@@ -57,7 +57,6 @@
 
 <script>
 import _ from 'lodash'
-var marked = require('marked');
 
 export default { 
   name: 'home',
@@ -70,9 +69,6 @@ export default {
     return repo;
   },
   computed: {
-    compiledMarkdown: function() {
-      return marked(this.readme, { sanitize: true})
-    },
     repositoryCount: function() {
       return this.$store.getters['people/getUserRepoCount'];
     },
@@ -106,10 +102,7 @@ export default {
     },
     deleteRepo: function(repo_id) {
         this.$store.dispatch('repos/deleteRepo', { data: { repo_id: repo_id }, router: this.$router});
-    },
-    updateMarkdown: _.debounce(function(e) {
-      this.readme = e.target.value
-    }, 300) 
+    }
   } 
   
 }

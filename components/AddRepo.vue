@@ -27,7 +27,7 @@
 					<div class="form-group row">
 						<label for="name" class="col-3 col-form-label">Description</label>
 						<div class="col-9">
-							<textarea class="form-control" :value="readme" rows="10" cols="80"></textarea>
+							<textarea class="form-control" v-model="readme" rows="10" cols="80" placeholder="# Hello! This is your new repository"></textarea>
 						</div>
 					</div>
 					
@@ -48,14 +48,13 @@
 
 <script>
 import _ from 'lodash'
-var marked = require('marked');
 
 export default { 
   name: 'home',
   data: function() {
     return {
       name: '',
-      readme: '# Hello \n this is your new repository',
+      readme: '',
       url: '',
       
       state: this.$store.state
@@ -68,9 +67,6 @@ export default {
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
-//    compiledMarkdown: function() {
-//      return marked(this.readme, { sanitize: true})
-//    },
     repositoryCount: function() {
       return this.$store.getters['people/getUserRepoCount'];
     },
@@ -78,6 +74,7 @@ export default {
   }, 
   methods: {
     addRepo: function() {
+        console.log("readme", this.readme);
       if(this.name !== '') {
         var self = this;
         this.$store.dispatch('repos/addRepo', { data: {name: this.name, readme: this.readme, url: this.url}, makeActive: true})
