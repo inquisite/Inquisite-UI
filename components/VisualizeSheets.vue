@@ -6,9 +6,9 @@
         <div class="card-header">
 			Displaying data with type <select name="showType" v-model="showType" v-on:change="updateDataGrid"><option v-for="(h,x) in dataTypes" :value="h.id">{{h.code}}</option></select> from <em>{{activeRepo.name}}</em>
 		 </div>
-        <div class="card-block" style="display:flex; overflow-x: auto; height: 600px;">
-            <HotTable 
-                :root="datagrid" :data="data" 
+        <div class="card-block" style="display:flex; overflow-x: auto;">
+            <HotTable ref="datagrid"
+                :root="datagrid" :data="data"
                 :columns="colspec" :colWidths="200" :colHeaders="colheaders" :rowHeaders="true" :columnSorting="true" :sortIndicator="true" 
                 v-if="showDataGrid"></HotTable>
         </div>  
@@ -53,6 +53,7 @@ export default {
             var self = this;
             this.$store.dispatch('data/getDataForType', {"repo_id": this.activeRepo.id, "type": this.showType}).then(function() {
                 self.showDataGrid = true;
+                //self.$refs.datagrid.render();
             });
         }
     }

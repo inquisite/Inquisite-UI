@@ -137,18 +137,35 @@ const actions = {
     /**
      *
      */
-    getDataForType: function(context, data) {
+    getDataForType: function(context, data, init=true) {
+        if (init) {
+            state.loaded_data = null;
+        }
         if(!context.rootState.token) return false;
         context.rootState.msg = "";
+        
+        var c = context, d=data;
+        var count = 0, start = d.start ? d.start : 0, limit = d.limit ? d.limit : 1000;
+        var repo_id = data.repo_id, type_id = data.type;
 
-        return api.get('/data/getDataForType/' + data.repo_id + '/' + data.type, {headers: apiHeaders({"auth": true, "form": true})})
+        if (!d.start) { d.start = 0}
+        if (!d.limit) { d.limit = limit}
+
+        api.get('/data/getDataForType/' + repo_id+ '/' + type_id + '/' + start + '/' + limit, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {  
                 context.commit('GET_DATA_FOR_TYPE', response);
+                count = response['count'];
+                
+                if (count > 0){
+                    d.start += limit;
+                    actions.getDataForType(c, d, false);
+                }
+                
                 return response;
             }).catch(function(error) { 
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
-            })
+            });
     }
 }
 
@@ -175,7 +192,12 @@ const mutations = {
         // noop
     },
     GET_DATA_FOR_TYPE: function(state, response) {
-        state.loaded_data = response;
+        if (state.loaded_data == null) {
+            state.loaded_data = response;
+        } else if(response.data && response.data.length > 0) {
+            state.loaded_data.data = state.loaded_data.data.concat(response.data);
+        }
+        console.log("TOTAL", state.loaded_data.data.length)
     }
 }
 
