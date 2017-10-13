@@ -2,7 +2,7 @@
 <div id="schema-editor">
     <div class="row">
 	    <div class="col-sm-12">
-	    	<div id="schema-editor-msg" class="alert alert-danger" role="alert" v-show="message !== ''" v-html="message"></div>
+	    	<div id="schema-editor-msg" class="alert alert-info" role="alert" v-show="message !== ''" v-html="message"></div>
 	    </div>
 	</div>
 	<div class="row" v-if="!editorDataTypeIndex">

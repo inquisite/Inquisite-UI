@@ -8,7 +8,7 @@
 				<div class="card-block">
        				<p>Adding data to <em>{{activeRepo.name}}</em></p>
 
-          			<div id="data-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          			<div id="data-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
 				</div>
 				<div class="card-block">
           			<form id="signup-form" name="signup-form" method="POST" action="">            
@@ -54,7 +54,7 @@
                         <i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>
                     </div>
 
-          			<div id="data-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          			<div id="data-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
 				</div>
 				<div class="card-block" style="overflow: auto;">
       		        <table>

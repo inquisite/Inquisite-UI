@@ -1,6 +1,6 @@
 <template>
 <div id="home" class="container">
-    <div id="signup-msg" class="alert alert-danger" role="alert" v-show="message !== ''">
+    <div id="signup-msg" class="alert alert-info" role="alert" v-show="message !== ''">
       <div class="msg" v-html="message"></div>
     </div>
     

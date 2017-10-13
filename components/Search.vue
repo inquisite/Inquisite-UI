@@ -8,7 +8,7 @@
 		 </div>
         <div class="card-block">
 
-          <div id="search-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          <div id="search-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
             <div v-if="results.length == 0"><h2>Nothing found</h2></div>
             <div v-for="r,t in results">
                 <h2>{{t}} ({{counts[t]}})</h2>

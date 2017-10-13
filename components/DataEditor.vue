@@ -3,7 +3,7 @@
     <a v-if="lastSearch" :href="'#/search?q=' + lastSearch">Back to search results</a>
     <div class="row">
         <div class="col-sm-12">
-          <div id="data-editor-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          <div id="data-editor-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
             <div class="card card-form">
                 <div class="card-header text-center">
                     Data Editor: {{nodeTypeName}} #{{id}}

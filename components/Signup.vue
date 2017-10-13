@@ -10,7 +10,7 @@
 		 </div>
         <div class="card-block">
 
-          <div id="signup-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          <div id="signup-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="signup-form" name="signup-form" method="POST" action="">
 

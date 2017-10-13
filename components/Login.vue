@@ -8,7 +8,7 @@
 		 </div>
         <div class="card-block">
        
-          <div id="login-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          <div id="login-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
 
           <form id="login-form" name="login-form" method="POST" action="">
 

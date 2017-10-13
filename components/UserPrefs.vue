@@ -9,7 +9,7 @@
 
          <form id="signup-form" name="signup-form" method="POST" action="">
 
-            <div id="signup-msg" class="alert alert-danger" role="alert" v-show="message !== ''">
+            <div id="signup-msg" class="alert alert-info" role="alert" v-show="message !== ''">
               <div class="msg">{{message}}</div>
             </div>
 
