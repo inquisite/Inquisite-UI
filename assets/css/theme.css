@@ -1,6 +1,7 @@
 /* turq: 1CB2C6; orange: F79D59; Dark gray text: 222; Dark gray bg: 333; lt gray bg: F2F2F2 */
 
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700');
+@import "/node_modules/leaflet/dist/leaflet.css";
 
 body, div, p{
 	font-family: 'Source Sans Pro', sans-serif !Important;

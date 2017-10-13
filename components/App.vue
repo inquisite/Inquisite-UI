@@ -38,9 +38,8 @@
                      Visualize <span class="caret"></span>
                    </a>
 					<ul class="dropdown-menu">
-                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/map">Map</router-link></li>
-                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/timeline">Timeline</router-link></li>
-                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/sheet">Sheet</router-link></li>
+                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/maps">Map</router-link></li>
+                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/sheets">Sheet</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/nodes">Nodes</router-link></li>
                    </ul>
                 </li>
