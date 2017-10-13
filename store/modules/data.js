@@ -122,7 +122,9 @@ const actions = {
         var rootState = context.rootState;
         
         var node_id = data['node_id'];
+        if (!node_id) { node_id = data['uuid']; }
         delete(data['node_id']);
+        delete(data['uuid']);
         return api.post('/data/saveNode/' + node_id, data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('SAVE_DATA_NODE', response);
@@ -197,7 +199,6 @@ const mutations = {
         } else if(response.data && response.data.length > 0) {
             state.loaded_data.data = state.loaded_data.data.concat(response.data);
         }
-        console.log("TOTAL", state.loaded_data.data.length)
     }
 }
 
