@@ -1,7 +1,7 @@
 <template>
     <transition :name="transition">
         <div id="signup-msg" class="alert alert-info" role="alert" v-show="message.show">
-        <div class="msg">{{message.text}}</div>
+        <div class="msg" v-html="message.text"></div>
         </div>
     </transition>
 </template>
