@@ -45,16 +45,18 @@
       		        
       		        <h3>Displaying first rows from <em>{{server_file_info.original_filename}}</em></h3>
       		        Import as <select name="import_info" v-model="import_as"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
-      		        <br/>
-      		        Ignore first row <input type="checkbox" v-model="ignore_first_row"/>
+      	
+      		        
+                    <div class="pull-right">
+                            <input type="checkbox" v-model="ignore_rows"/>
+                            Ignore first <input type="type" size="4" v-model="ignore_first_rows" v-if="ignore_rows"/> row(s)
+                    </div>
       		        
       		        <div class="item" style="padding: 10px 0">
                         <button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
                         <a href="#" class="btn btn-secondary">Cancel</a>
                         <i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>
                     </div>
-
-          			<div id="data-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
 				</div>
 				<div class="card-block" style="overflow: auto;">
       		        <table>
@@ -67,7 +69,7 @@
                             </th>
       		            </tr>
       		            <tr v-for="(r, c) in server_file_info.preview.data">
-      		                <td v-for="d in r" v-if="!ignore_first_row || (c > 0)">
+      		                <td v-for="d in r" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
       		                    {{d}}
       		                </td>
       		            </tr>
@@ -127,7 +129,8 @@ export default {
       
       data_mapping: [],
       import_as: null,
-      ignore_first_row: false,
+      ignore_rows: false,
+      ignore_first_rows: 0,
       
       import_results: null
     }
@@ -138,7 +141,12 @@ export default {
   },
   computed: {
     isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
-    data_types: function() { return this.$store.getters['schema/getDataTypes']; },
+    data_types: function() { 
+        var t = this.$store.getters['schema/getDataTypes']; 
+        if(!t) { t=[]; }
+        t.push({'id': -1, 'code': "< Create new type >"});
+        return t;
+    },
     field_data_types: function() { this.$store.getters['schema/getFieldDataTypeList']; },
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
@@ -154,7 +162,7 @@ export default {
 	    var opts = [];
 	    var vals = [];
 	    
-	    //console.log("import as ", this.import_as);
+	    console.log("import as ", this.import_as);
 	    var data_types = this.data_types;
 	    for(var i in this.server_file_info.preview.headers) {
             if (!opts[i]) { opts[i] = []; vals[i] = [] }
@@ -164,7 +172,10 @@ export default {
                 var dt = data_types[j];
                 
                 var match_id = null;
-                if (parseInt(dt['id']) == parseInt(this.import_as)) {
+                if (parseInt(this.import_as) < 0) {
+                    opts[i].unshift("Create field " + this.server_file_info.preview.headers[i]);
+                    vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
+                } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
                         if((dt['fields'][k]['code'] == this.server_file_info.preview.headers[i]) || (dt['fields'][k]['code'] == this.server_file_info.preview.headers[i])) {
