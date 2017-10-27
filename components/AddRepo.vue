@@ -18,15 +18,15 @@
 						</div>
 					</div>
 					<div class="form-group row">
-						<label for="name" class="col-3 col-form-label">URL</label>
-						<div class="col-9">
-							<input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
-						</div>
-					</div>
-					<div class="form-group row">
 						<label for="name" class="col-3 col-form-label">Description</label>
 						<div class="col-9">
 							<textarea class="form-control" v-model="readme" rows="10" cols="80" placeholder="# Hello! This is your new repository"></textarea>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="name" class="col-3 col-form-label">URL</label>
+						<div class="col-9">
+							<input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
 						</div>
 					</div>
 					
