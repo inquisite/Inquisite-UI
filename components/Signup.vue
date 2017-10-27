@@ -10,7 +10,7 @@
 		 </div>
         <div class="card-block">
 
-          <div id="signup-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
+         <flashmessage/>
 
           <form id="signup-form" name="signup-form" method="POST" action="">
 
@@ -114,7 +114,7 @@ export default {
     }
   },
   computed: {
-	message: function() { return this.$store.state.msg; }
+    
   },
   methods: {
     processSignup: function() {

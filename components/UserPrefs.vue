@@ -9,9 +9,7 @@
 
          <form id="signup-form" name="signup-form" method="POST" action="">
 
-            <div id="signup-msg" class="alert alert-info" role="alert" v-show="message !== ''">
-              <div class="msg">{{message}}</div>
-            </div>
+           <flashmessage/>
 
             <div class="form-group row">
 				<label for="name" class="col-2 col-form-label">Name</label>
@@ -127,9 +125,8 @@ export default {
           }
           return length;
         }
-    },
-	message: function() { return this.$store.state.msg; }
-  },
+    }
+	},
   methods: {
     editUser: function() {
         this.$store.dispatch('people/editPerson', {

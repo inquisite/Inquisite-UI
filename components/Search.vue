@@ -8,7 +8,7 @@
 		 </div>
         <div class="card-block">
 
-          <div id="search-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
+          <flashmessage/>
             <div v-if="results.length == 0"><h2>Nothing found</h2></div>
             <div v-for="r,t in results">
                 <h2>{{t}} ({{counts[t]}})</h2>
@@ -38,7 +38,6 @@ export default {
     }
   },
   computed: {
-	message: function() { return this.$store.state.msg; },
 	results: function() {
 	    return this.$store.getters['search/getResults'];
 	},

@@ -145,7 +145,7 @@ export default {
     
     pageChangeActions: function() {
       // Clear form msg
-      //store.state.msg = '';
+      store.dispatch('resetMessage');
 
       // Get User Repos if logged in and we don't have them 
       if( this.isLoggedIn && !this.hasRepos) {

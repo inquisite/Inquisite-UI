@@ -15,6 +15,12 @@ const router = new VueRouter({
   routes: routes.default
 });
 
+Vue.component('clickConfirm', ClickConfirm);
+Vue.component('autocomplete',require('./components/ui/Autocomplete.vue'));
+Vue.component('flashmessage',require('./components/ui/FlashMessage.vue'));
+Vue.component('v-map', Vue2Leaflet.Map);
+Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
+Vue.component('v-marker', Vue2Leaflet.Marker);
 new Vue({
   el: '#app',
   render: h => h(App),
@@ -27,10 +33,5 @@ new Vue({
   },
   store
 })
-Vue.component('clickConfirm', ClickConfirm);
-Vue.component('autocomplete',require('./components/ui/Autocomplete.vue'));
-Vue.component('v-map', Vue2Leaflet.Map);
-Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
-Vue.component('v-marker', Vue2Leaflet.Marker);
 
 export default store

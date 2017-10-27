@@ -8,8 +8,7 @@
 				<div class="alert alert-info" v-show="repositoryCount == 0">
 					This looks like your first repository. It will be set as your active repository!
 				</div>
-
-          		<div id="repo-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
+          	  <flashmessage/>
 
           		<form id="addRepo-form" name="addRepo-form" method="POST" action="#">
 					<div class="form-group row">
@@ -69,8 +68,7 @@ export default {
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     repositoryCount: function() {
       return this.$store.getters['people/getUserRepoCount'];
-    },
-	message: function() { return this.$store.state.msg; }
+    }
   }, 
   methods: {
     addRepo: function() {

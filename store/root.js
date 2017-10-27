@@ -5,9 +5,9 @@ import { apiHeaders, extractAPIError } from '../lib/utils.js'
 // getters
 export const getters = {
     /**
-     * Is user logged in?
+     * Get current flash message package
      */
-    getMessage: state => { return state.msg },
+    getMessage: state => { return {'show': state.showMessage, 'text': state.message } },
 
     /**
      * Is user logged in?
@@ -109,6 +109,23 @@ export const actions = {
             context.commit('API_FAILURE', error);
             return extractAPIError(error);
         });
+    },
+    
+    /**
+     * Set flash message
+     */
+    setMessage: function(context, message) {
+        context.commit('SET_MESSAGE', message, {'root': true});
+        return true; 
+    },
+    
+    /**
+     * Clear flash message
+     */
+    resetMessage: function(context, data) {
+        context.state.showMessage = false; 
+        context.state.message = ''; 
+        return true; 
     }
 }
 
@@ -119,7 +136,7 @@ export const mutations = {
      */
     login:  state => { 
       state.logged_in = true ;
-      state.msg = "Success!";
+      state.message = "Success!";
     },
 
     /**
@@ -149,11 +166,12 @@ export const mutations = {
      * 
      */
     SET_MESSAGE: function(state, message) { 
-        state.msg = message;
+        state.message = message;
+        state.showMessage = true;
         var rootState = state;
         console.log('SET MESSAGE', message);
         setTimeout(function() {
-            rootState.msg = '';
+            state.showMessage = false;
         }, 5000);
     },
 
@@ -161,7 +179,7 @@ export const mutations = {
      *
      */
     API_FAILURE: function(state, error) { 
-        state.msg = error.response && error.response.data && error.response.data.msg ? error.response.data.msg : error.toString(); 
+        state.message = error.response && error.response.data && error.response.data.msg ? error.response.data.msg : error.toString(); 
     }
 }
 

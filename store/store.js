@@ -12,12 +12,12 @@ import search from './modules/search'
 Vue.use(Vuex)
 
 const state = {
-  msg: '',                      // flash message
+  message: '',                  // flash message
+  showMessage: false,           // flash message
   logged_in: false,             // user is logged in
   loading: true,                // loading data flag
   token: '',                    // current JWT token
-  refresh: '',                  // JWT refresh token
-  teaser: '... uploading file', // for data component
+  refresh: ''                   // JWT refresh token
 }
 
 export default new Vuex.Store({

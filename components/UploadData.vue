@@ -8,7 +8,7 @@
 				<div class="card-block">
        				<p>Adding data to <em>{{activeRepo.name}}</em></p>
 
-          			<div id="data-msg" class="alert alert-info" role="alert" v-show="message !== ''">{{message}}</div>
+                    <flashmessage/>
 				</div>
 				<div class="card-block">
           			<form id="signup-form" name="signup-form" method="POST" action="">            
@@ -140,7 +140,6 @@ export default {
     isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
     data_types: function() { return this.$store.getters['schema/getDataTypes']; },
     field_data_types: function() { this.$store.getters['schema/getFieldDataTypeList']; },
-	message: function() { return this.$store.state.msg; },
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },

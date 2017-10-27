@@ -8,7 +8,7 @@
 		 </div>
         <div class="card-block">
        
-          <div id="login-msg" class="alert alert-danger" role="alert" v-show="message !== ''">{{message}}</div>
+          <flashmessage/>
 
           <form id="login-form" name="login-form" method="POST" action="">
 
@@ -60,7 +60,7 @@ export default {
     }
   },
   computed: {
-    message: function() { return this.$store.state.msg; }
+  
   },
   methods: {
     processLogin: function() {

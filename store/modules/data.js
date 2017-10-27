@@ -102,7 +102,7 @@ const actions = {
      */
     getDataNode: function(context, node_id) {
         if(!context.rootState.token) return false;
-        context.rootState.msg = "";
+        context.rootState.message = "";
 
         return api.get('/data/getNode/' + node_id, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
@@ -128,7 +128,7 @@ const actions = {
         return api.post('/data/saveNode/' + node_id, data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('SAVE_DATA_NODE', response);
-                rootState.msg = "Saved data";
+                rootState.message = "Saved data";
                 return response;
             }).catch(function(error) { 
                 context.commit('API_FAILURE', error, {'root': true });
@@ -144,7 +144,7 @@ const actions = {
             state.loaded_data = null;
         }
         if(!context.rootState.token) return false;
-        context.rootState.msg = "";
+        context.rootState.message = "";
         
         var c = context, d=data;
         var count = 0, start = d.start ? d.start : 0, limit = d.limit ? d.limit : 1000;
@@ -174,18 +174,17 @@ const actions = {
 // mutations
 const mutations = {
     UPLOAD_DATA: function(state, response) { 
-      state.msg = response.msg; 
-      state.teaser = response.data;
+      state.message = response.msg; 
       state.upload_row_count = response.row_count;  
       state.upload_fields = response.fieldnames;
       state.upload_subfields = response.nestednames;
     },
     
     IMPORT_DATA: function(state, response) { 
-        state.msg = response.msg;
+        state.message = response.msg;
     },
     
-    REPO_DATA: function(state, response) { state.msg = response.msg; state.active_data = response.data },
+    REPO_DATA: function(state, response) { state.message = response.msg; state.active_data = response.data },
     
     GET_DATA_NODE: function(state, response) { 
         // noop

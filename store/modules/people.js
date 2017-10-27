@@ -115,9 +115,9 @@ const actions = {
 // mutations
 const mutations = {
     GET_PEOPLE: function(state, response) { state.users = response.people },
-    ADD_PERSON: function(state, response) { state.msg = response.msg },
+    ADD_PERSON: function(state, response) { state.message = response.msg },
     EDIT_PERSON: function(state, response) { 
-        state.msg = response.msg;
+        state.message = response.msg;
         state.user.info.name = state.user.info.forename + " " + state.user.info.surname;
     },
     GET_USER_INFO: function(state, response) { 
@@ -139,7 +139,7 @@ const mutations = {
     GET_REPOS: function(state, response) { 
         state.user.repos = response.repos; 
         state.user.info = response.userinfo; 
-        state.msg = response.msg;
+        state.message = response.msg;
         state.loading = false;
     },
     

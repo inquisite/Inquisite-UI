@@ -1,8 +1,6 @@
 <template>
 <div id="home" class="container">
-    <div id="signup-msg" class="alert alert-info" role="alert" v-show="message !== ''">
-      <div class="msg" v-html="message"></div>
-    </div>
+    <flashmessage/>
     
 	<div class="row" v-if="!isLoaded && !isLoggedIn">
 		<div class="col-sm-12">
@@ -183,9 +181,7 @@
               }
               return keys.length;
             },
-            activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
-            
-	        message: function() { return this.$store.state.msg; }
+            activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; }
 		},
         methods: {
           userProfile: function(person_id) {

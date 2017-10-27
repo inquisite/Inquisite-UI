@@ -163,12 +163,12 @@ const actions = {
 
 // mutations
 const mutations = {
-    ADD_REPO: function(state, response) { state.msg = response.msg },
-    EDIT_REPO: function(state, response) { state.msg = response.msg },
-    ADD_PERSON_REPO: function(state, response) { state.msg = response.msg },
-    REMOVE_PERSON_REPO: function(state, response) { state.msg = response.msg },
+    ADD_REPO: function(state, response) { state.message = response.msg },
+    EDIT_REPO: function(state, response) { state.message = response.msg },
+    ADD_PERSON_REPO: function(state, response) { state.message = response.msg },
+    REMOVE_PERSON_REPO: function(state, response) { state.message = response.msg },
     DELETE_REPO: function(state, response) { 
-        state.msg = response.msg 
+        state.message = response.msg 
         var deleted_repo_id = response.repo_id;
         
         // remove deleted repo from repolist
@@ -192,7 +192,7 @@ const mutations = {
     },
     GET_REPO_USERS: function(state, response) { 
         state.active_repo.users = response; 
-        state.msg = response.msg 
+        state.message = response.msg 
     },
     SET_REPOS: function(state, response) {
         state.user_repos = response.repos;

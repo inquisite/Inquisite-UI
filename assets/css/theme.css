@@ -396,3 +396,16 @@ a{
 	width:100%;
 	height:auto;
 }
+
+
+/* Message transition */
+  .messageShow-enter-active {
+	transition: all .4s ease;
+  }
+  .messageShow-leave-active {
+	transition: all .4s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  }
+  .messageShow-enter, .messageShow-leave-to {
+	/* transform: translateX(10px); */
+	opacity: 0;
+  }

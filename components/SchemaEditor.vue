@@ -2,7 +2,7 @@
 <div id="schema-editor">
     <div class="row">
 	    <div class="col-sm-12">
-	    	<div id="schema-editor-msg" class="alert alert-info" role="alert" v-show="message !== ''" v-html="message"></div>
+	    	<flashmessage/>
 	    </div>
 	</div>
 	<div class="row" v-if="!editorDataTypeIndex">
@@ -211,7 +211,6 @@ export default {
 	    return this.$store.getters.isLoggedIn;
 	},
 	
-	message: function() { return this.$store.state.msg; },
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },

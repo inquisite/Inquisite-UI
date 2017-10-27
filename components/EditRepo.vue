@@ -7,7 +7,7 @@
 		 </div>
         <div class="card-block">
 
-          <div id="repo-msg" class="alert alert-warning" role="alert" v-show="message !== ''">{{message}}</div>
+          <flashmessage/>
 
           <form id="editRepo-form" name="editRepo-form" method="POST" action="#">
 
@@ -77,8 +77,7 @@ export default {
 	},
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
-	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
-	message: function() { return this.$store.state.msg; }
+	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; }
   }, 
   methods: {
     editRepo: function() {
