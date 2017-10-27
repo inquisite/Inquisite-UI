@@ -21,7 +21,7 @@
 			<div class="form-group row">
 				<label for="name" class="col-3 col-form-label">Description</label>
 				<div class="col-9">
-					<textarea class="form-control" :value="readme" rows="10" cols="80"></textarea>
+					<textarea class="form-control" v-model="readme" rows="10" cols="80"></textarea>
 				</div>
 			</div>
 
@@ -61,11 +61,10 @@ import _ from 'lodash'
 export default { 
   name: 'home',
   data: function() {
-    var repo_id = this.$route.params.id;
+    var repo_id = this.$attrs.id;
     var repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](repo_id));
     
     repo['state'] = this.$store.state;
-    
     return repo;
   },
   computed: {
@@ -87,7 +86,7 @@ export default {
         this.$store.dispatch('repos/editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
         .then(function(response) { 
             // Copy saved field values to model             
-            var repo_id = self.$route.params.id;
+            var repo_id = self.$attrs.id;
             var repo = self.$store.getters['repos/getRepoByID'](repo_id);
             
             var f = ['name', 'readme', 'url'];
