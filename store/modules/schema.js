@@ -5,6 +5,7 @@ import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 // initial state
 const state = {
   data_types: [],
+  field_data_types: [],
   default_data_type: null
 }
 
