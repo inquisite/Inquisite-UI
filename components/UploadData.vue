@@ -69,8 +69,8 @@
                             </th>
       		            </tr>
       		            <tr v-for="(r, c) in server_file_info.preview.data">
-      		                <td v-for="d in r" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
-      		                    {{d}}
+      		                <td v-for="k,h in server_file_info.preview.headers" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
+      		                    {{r[k]}}
       		                </td>
       		            </tr>
       		        </table>
@@ -143,8 +143,10 @@ export default {
     isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
     data_types: function() { 
         var t = this.$store.getters['schema/getDataTypes']; 
-        if(!t) { t=[]; }
-        t.push({'id': -1, 'code': "< Create new type >"});
+        console.log("xxx", t);
+        if((t.constructor !== Array) || (t.length == 0)){ 
+            t =[{'id': -1, 'code': "< Create new type >"}];
+        }
         return t;
     },
     field_data_types: function() { this.$store.getters['schema/getFieldDataTypeList']; },
@@ -247,13 +249,9 @@ export default {
         }
     },
     importData: function() {
-        console.log("IMPORT", this.data_mapping);
-        
         var self = this;
         this.is_importing = true;
-        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as }}).then(function(data) {
-            console.log("IMPORTED", data);
-            
+        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows }}).then(function(data) { 
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,
