@@ -147,7 +147,7 @@ const actions = {
         context.rootState.message = "";
         
         var c = context, d=data;
-        var count = 0, start = d.start ? d.start : 0, limit = d.limit ? d.limit : 1000;
+        var count = 0, start = d.start ? d.start : 0, limit = d.limit ? d.limit : 2000;
         var repo_id = data.repo_id, type_id = data.type;
 
         if (!d.start) { d.start = 0}

@@ -28,8 +28,9 @@
     "vue-template-compiler": "^2.4.4",
     "vue-template-es2015-compiler": "^1.5.1",
     "vue-virtual-scroller": "^0.6.1",
-    "vuex": "^2.4.1",
-    "vue2-leaflet": "0.0.55"
+    "vue2-leaflet": "0.0.55",
+    "vue2-leaflet-markercluster": "^1.2.0",
+    "vuex": "^2.4.1"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

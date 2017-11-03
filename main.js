@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import axios from 'axios'
 import ClickConfirm from 'click-confirm'
 import Vue2Leaflet from 'vue2-leaflet'
+import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 
 Vue.use(VueRouter, Vuex, axios);
 
@@ -21,6 +22,11 @@ Vue.component('flashmessage',require('./components/ui/FlashMessage.vue'));
 Vue.component('v-map', Vue2Leaflet.Map);
 Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
 Vue.component('v-marker', Vue2Leaflet.Marker);
+Vue.component('v-polygon', Vue2Leaflet.Polygon);
+Vue.component('v-rectangle', Vue2Leaflet.Rectangle);
+Vue.component('v-popup', Vue2Leaflet.Popup);
+Vue.component('v-marker-cluster', Vue2LeafletMarkerCluster);
+
 new Vue({
   el: '#app',
   render: h => h(App),
