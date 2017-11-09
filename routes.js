@@ -55,10 +55,14 @@ Vue.component('search', Search)
 const DataEditor = require('./components/DataEditor.vue')
 Vue.component('data-editor', DataEditor)
 
+const Help = require('./components/Help.vue')
+Vue.component('help', Help)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
   { path: '/login', name: 'login', component: Login },
+  { path: '/help', name: 'help', component: Help },
   { path: '/upload', name: 'upload-data', component: UploadData, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/user/preferences', name: 'user-prefs', component: UserPrefs, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/user/profile', name: 'user-profile', component: UserProfile, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },

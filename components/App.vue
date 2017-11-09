@@ -18,6 +18,7 @@
 			  <li class="nav-item">
 				<router-link to="/login" class="nav-link">Login</router-link>
 			  </li>
+                <li class="nav-item"><router-link to="/help" class="nav-link">Help</router-link></li>
 			</ul>
         
             <ul class="navbar-nav" v-if="isLoggedIn">
@@ -42,7 +43,7 @@
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/nodes">Nodes</router-link></li>
                    </ul>
                 </li>
-
+                <li class="nav-item"><router-link to="/help" class="nav-link">Help</router-link></li>
             </ul>
             <form class="form-inline" v-on:submit="search(search_expression)">
 				<input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_expression">
