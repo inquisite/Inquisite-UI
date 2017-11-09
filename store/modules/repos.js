@@ -83,6 +83,7 @@ const actions = {
     editRepo: function(context, data) {
         if (!context.rootState.token) return false;
         var setAsActive = data.makeActive ? true : false;
+        console.log("SAVE", data);
         return api.post('/repositories/' +  data['id'] + '/edit', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('EDIT_REPO', response); 

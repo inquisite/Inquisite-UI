@@ -29,6 +29,12 @@
 							<input type="text" class="form-control" id="url" name="url" placeholder="URL" v-model="url">
 						</div>
 					</div>
+          <div class="form-group row">
+            <label for="name" class="col-3 col-form-label">Access</label>
+            <div class="col-9">
+              <select name="published" id="published" v-model="published"><option v-for="o, k in [{'name':'Private', 'value': 0}, {'name': 'Published', 'value': 1}]" :value="o.value">{{o.name}}</option></select>
+            </div>
+          </div>
 					
 					<div class="form-group text-center">
 					  <button v-on:submit.prevent="addRepo" v-on:click.prevent="addRepo" class="btn btn-primary">Save</button>
@@ -55,6 +61,7 @@ export default {
       name: '',
       readme: '',
       url: '',
+      published: "0",
       
       state: this.$store.state
     }
@@ -75,7 +82,7 @@ export default {
         console.log("readme", this.readme);
       if(this.name !== '') {
         var self = this;
-        this.$store.dispatch('repos/addRepo', { data: {name: this.name, readme: this.readme, url: this.url}, makeActive: true})
+        this.$store.dispatch('repos/addRepo', { data: {name: this.name, readme: this.readme, url: this.url, published: this.published }, makeActive: true})
         .then(function(response) { 
              self.$router.push("/");
         })

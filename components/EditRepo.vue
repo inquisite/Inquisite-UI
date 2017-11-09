@@ -32,6 +32,13 @@
 				</div>
 			</div>
 
+      <div class="form-group row">
+				<label for="name" class="col-3 col-form-label">Access</label>
+				<div class="col-9">
+					<select name="published" id="published" v-model="published"><option v-for="o, k in [{'name':'Private', 'value': 0}, {'name': 'Published', 'value': 1}]" :value="o.value">{{o.name}}</option></select>
+				</div>
+			</div>
+
 			<div class="form-group row">
 				<div class="col-sm-6">
 					<button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Save</button>
@@ -65,6 +72,7 @@ export default {
     var repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](repo_id));
     
     repo['state'] = this.$store.state;
+    console.log(repo);
     return repo;
   },
   computed: {
@@ -83,7 +91,7 @@ export default {
       if(this.name !== '') {
         var self = this;
         var store = this.$store;
-        this.$store.dispatch('repos/editRepo', { data: {name: this.name, readme: this.readme, url: this.url}, id: this.id, makeActive: true})
+        this.$store.dispatch('repos/editRepo', { data: {name: this.name, readme: this.readme, url: this.url, published: this.published}, id: this.id, makeActive: true})
         .then(function(response) { 
             // Copy saved field values to model             
             var repo_id = self.$attrs.id;
