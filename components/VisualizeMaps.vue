@@ -8,7 +8,7 @@
           <h5>{{k.name}}</h5>
           <ul class="list-group">
             <li class="list-group-item" v-for="kf, vf in k.fields" v-if="kf.type == 'GeorefDataType'" v-on:click="updateMap">
-              <h6>{{kf.name}}</h6>
+              <h6 v-on:click="showField = kf.code">{{kf.name}}</h6>
               <div class="small" v-for="kf, vf in k.fields" v-if="kf.type != 'GeorefDataType'"><input type="checkbox" v-model="displayFields" :value="kf.code" v-on:click="updateMap"/> {{kf.name}}</div>
             </li>
           </ul>
@@ -48,6 +48,7 @@ export default {
   data: function() {
     return {
       showType: null,
+      showField: null,
       displayFields: []
     }
   },
@@ -60,23 +61,27 @@ export default {
         var t = self.dataTypes.filter((v) => v.id == self.showType);
         if (t[0]) {
           self.displayFields = [t[0]["fields"][0]["code"]];
+
+          var georefFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] == 'GeorefDataType'; });
+          self.showField = georefFields.length > 0 ? georefFields[0]['code'] : null;
         }
+
     });
   },
   computed: { 
     activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
-    data: function() { return this.$store.getters['data/getData']; },
+    mapData: function() { return this.$store.getters['data/getData']; },
     coords: function() {
-      var d = this.data;
+      var d = this.mapData;
 
       var count = 0;
       var coords = {"polygons": [], "polygon_labels": [], "points": [], "point_labels": []};
       for(var i in d) {
-        if (d[i] && d[i]['coordinates']) {
+        if (d[i] && d[i][this.showField]) {
             // TODO: improve perforamnce and remove limit
             if (count > 3000) break;
-            var c = JSON.parse(d[i]['coordinates']);
+            var c = JSON.parse(d[i][this.showField]);
             if (c['coordinates']) {
               count++;
 
@@ -106,7 +111,6 @@ export default {
             }
         }
       }
-
       return coords;
     },
     getMapCenter: function() {
@@ -143,7 +147,7 @@ export default {
     loadMap: function() {
         if (this.showType >0) {
             var self = this;
-            this.$store.dispatch('data/getDataForType', {"repo_id": this.activeRepo.id, "type": this.showType}).then(function() {
+            this.$store.dispatch('data/getDataForType', {"repo_id": this.activeRepo.id, "type": this.showType}).then(function(r) {
                 console.log("Render map with", self.$store.getters['data/getData']);
             });
         }
