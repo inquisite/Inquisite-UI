@@ -28,6 +28,12 @@ export default {
           	return false;
         }
       	return response.data; 
+      }).catch(function(error) { 
+				if(error == 'Error: Network Error') {
+					alert("Could not connect to network services");
+				}
+      	Promise.reject(error); 
+        return error;
       });
       //.catch(function(error) { 
      //   Promise.reject(error);
@@ -53,6 +59,13 @@ export default {
           	}});
         }
       	return response.data;
+      }).catch(function(error) { 
+				if(error == 'Error: Network Error') {
+					alert("Could not connect to network services");
+				}
+
+      	Promise.reject(error); 
+        return false;
       });
       //.catch(function(error) { 
       //  Promise.reject(error);
@@ -76,10 +89,12 @@ export default {
           	}});
         }
       	return response.data;
+      }).catch(function(error) { 
+				if(error == 'Error: Network Error') {
+					alert("Could not connect to network services");
+				}
+      	Promise.reject(error); 
+        return false;
       });
-      //.catch(function(error) { 
-      //  Promise.reject(error);
-      //  return error;
-      //});
   }
 }

@@ -58,9 +58,11 @@ export const actions = {
               // Get User Data -- now sets repos with users and data
               context.dispatch('people/getUserInfo', {token: response.access_token});
               context.dispatch('people/getRepos', {token: response.access_token});
+              context.commit('SET_MESSAGE', "You are now logged in", {'root': true});
               return true;
             } else {
-              context.commit('API_FAILURE', response.response.data.msg );
+
+              context.commit('API_FAILURE', "Login failed" );
               return extractAPIError(response);
             }
         })
@@ -103,6 +105,7 @@ export const actions = {
             window.sessionStorage.removeItem('jwt');
             window.sessionStorage.removeItem('rwt');
             context.commit('logout');
+            context.commit('SET_MESSAGE', "Logged out", {'root': true});
             return true;
         })
         .catch(function(error) { 
@@ -136,7 +139,6 @@ export const mutations = {
      */
     login:  state => { 
       state.logged_in = true ;
-      state.message = "Success!";
     },
 
     /**
@@ -172,14 +174,22 @@ export const mutations = {
         console.log('SET MESSAGE', message);
         setTimeout(function() {
             state.showMessage = false;
-        }, 5000);
+        }, 4000);
     },
 
     /**
      *
      */
     API_FAILURE: function(state, error) { 
-        state.message = error.response && error.response.data && error.response.data.msg ? error.response.data.msg : error.toString(); 
+        var message = error.response && error.response.data && error.response.data.msg ? error.response.data.msg : error.toString();
+        state.message = message;
+        state.showMessage = true;
+        var rootState = state;
+
+        console.log('SET MESSAGE', message);
+        setTimeout(function() {
+            state.showMessage = false;
+        }, 8000);
     }
 }
 
