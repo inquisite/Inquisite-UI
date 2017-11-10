@@ -83,7 +83,6 @@ const actions = {
     editRepo: function(context, data) {
         if (!context.rootState.token) return false;
         var setAsActive = data.makeActive ? true : false;
-        console.log("SAVE", data);
         return api.post('/repositories/' +  data['id'] + '/edit', data.data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('EDIT_REPO', response); 
@@ -165,7 +164,23 @@ const actions = {
 // mutations
 const mutations = {
     ADD_REPO: function(state, response) { state.message = response.msg },
-    EDIT_REPO: function(state, response) { state.message = response.msg },
+    EDIT_REPO: function(state, response) { 
+            state.message = response.msg;
+            
+            // Copy new values into model
+            for(var i in state.user_repos) {
+                if (state.user_repos[i].id && (parseInt(state.user_repos[i].id) == parseInt(response.repo_id))) {
+                    var keys = Object.keys(response);
+                    for(var j in keys) {
+                        var k = keys[j];
+                        state.user_repos[i][k] = response[k];
+                        if (state.active_repo_id == response.repo_id) {
+                            state.active_repo[k] = response[k];
+                        }
+                    }
+                }
+            }
+    },
     ADD_PERSON_REPO: function(state, response) { state.message = response.msg },
     REMOVE_PERSON_REPO: function(state, response) { state.message = response.msg },
     DELETE_REPO: function(state, response) { 

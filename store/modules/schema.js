@@ -16,12 +16,10 @@ const getters = {
      getDefaultDataType: function() { return state.default_data_type; },
 
      hasGeoreferences: function(state) {
-            console.log( state.field_data_types);
          var types_with_georefs = state.data_types.filter(function(v, i, a) {
                 console.log(v);
              return v['fields'].filter(function (fv, fi, fa) { console.log(fv); return fv['type'] == 'GeorefDataType'; } ).length > 0;
          });
-         console.log("XXX", types_with_georefs);
          return types_with_georefs.length > 0;
      }
 }
@@ -31,9 +29,9 @@ const actions = {
     /** 
      *
      */
-    getFieldDataTypeList: function(context) {
+    getFieldDataTypeList: function(context) {  
         return api.get('schema/getDataTypes', {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('GET_FIELD_DATA_TYPE_LIST', response); return true; })
+            .then(function(response) { context.commit('GET_FIELD_DATA_TYPE_LIST', response);  return true; })
             .catch(function(error) { 
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);

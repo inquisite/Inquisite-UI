@@ -22,7 +22,7 @@
 			</ul>
         
             <ul class="navbar-nav" v-if="isLoggedIn">
-                <li class="nav-item"><router-link to="/" class="nav-link teal">{{ activeRepo.name }}</router-link></li>
+                <li class="nav-item"><router-link to="/" class="nav-link teal">{{ activeRepo.name }} <span class="black" v-if="activeRepo.published == 1"> (Published)</span></router-link></li>
                 <li class="nav-item"><router-link to="/upload" class="nav-link">Upload Data</router-link></li>
                 <li class="nav-item dropdown">
                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -33,12 +33,12 @@
                      <li class="dropdown-item"><router-link class="nav-link" to="/schema">Schema</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/manage-collaborators">Collaborators</router-link></li>
                    </ul>
-                </li><li class="nav-item dropdown">
+                </li><li class="nav-item dropdown" v-if="hasData">
                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                      Visualize <span class="caret"></span>
                    </a>
 					<ul class="dropdown-menu">
-                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/maps">Map</router-link></li>
+                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/maps" v-if="hasGeoreferences">Map</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/sheets">Sheet</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/nodes">Nodes</router-link></li>
                    </ul>
@@ -112,13 +112,25 @@ export default {
   computed: {
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
-	},
+    },
+    hasGeoreferences: function() {
+        return this.$store.getters['schema/hasGeoreferences'];
+    },
+    hasData: function() {
+        if(!this.activeRepo) { return false; }
+        return (this.activeRepo.data_element_count > 0);
+    },
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { 
 	    var repo = this.$store.getters['repos/getActiveRepo'];
 	    return repo ? repo : {}; 
-	}
+    },
+    getDataTypes: function() {
+        if(this.activeRepo) {
+            this.$store.dispatch('schema/getDataTypes', this.activeRepo.id);
+        }
+    }
   },
   methods: {
     processLogout: function() {
@@ -155,6 +167,9 @@ export default {
     },
     setActiveRepo: function(repo_id) {
       store.commit('repos/SET_ACTIVE_REPO', repo_id);
+       if(this.activeRepo) {
+            this.$store.dispatch('schema/getDataTypes', this.activeRepo.id);
+        }
       this.$router.push("/");   // force back to dashboard for new repo
     },
     search: function(search_expression) {

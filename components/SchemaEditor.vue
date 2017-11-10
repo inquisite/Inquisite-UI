@@ -239,7 +239,6 @@ export default {
     saveDataType: function() {
         if (this.formContent.id > 0) {
             // edit existing type
-            console.log( this.formContent);
             this.$store.dispatch('schema/editDataType', this.formContent);
         } else {
             // add new type

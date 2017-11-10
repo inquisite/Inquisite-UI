@@ -77,7 +77,6 @@ export default {
   data: function() {
     var repo_id = this.$attrs.id;
     var repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](repo_id));
-    
     repo['state'] = this.$store.state;
     return repo;
   },
@@ -99,17 +98,7 @@ export default {
       if(this.name !== '') {
         var self = this;
         var store = this.$store;
-        this.$store.dispatch('repos/editRepo', { data: {name: this.name, readme: this.readme, url: this.url, license: this.license, published: this.published}, id: this.id, makeActive: true})
-        .then(function(response) { 
-            // Copy saved field values to model             
-            var repo_id = self.$attrs.id;
-            var repo = self.$store.getters['repos/getRepoByID'](repo_id);
-            
-            var f = ['name', 'readme', 'url'];
-            for(var k in f) {
-                repo[f[k]] = self[f[k]];
-            }
-        })
+        this.$store.dispatch('repos/editRepo', { data: {name: this.name, readme: this.readme, url: this.url, license: this.license, published: this.published}, id: this.id, makeActive: true});
       } else {
         this.$store.stage.msg = 'Repository name is a required field';
       }
