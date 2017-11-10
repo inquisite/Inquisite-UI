@@ -13,7 +13,17 @@ const state = {
 const getters = {
      getDataTypes: state => { return state.data_types; },
      getFieldDataTypeList: state => { return state.field_data_types; },
-     getDefaultDataType: function() { return state.default_data_type; }
+     getDefaultDataType: function() { return state.default_data_type; },
+
+     hasGeoreferences: function(state) {
+            console.log( state.field_data_types);
+         var types_with_georefs = state.data_types.filter(function(v, i, a) {
+                console.log(v);
+             return v['fields'].filter(function (fv, fi, fa) { console.log(fv); return fv['type'] == 'GeorefDataType'; } ).length > 0;
+         });
+         console.log("XXX", types_with_georefs);
+         return types_with_georefs.length > 0;
+     }
 }
 
 // actions
