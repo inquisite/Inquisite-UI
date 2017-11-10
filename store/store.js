@@ -8,6 +8,7 @@ import repos from './modules/repos'
 import data from './modules/data'
 import schema from './modules/schema'
 import search from './modules/search'
+import application from './modules/application'
 
 Vue.use(Vuex)
 
@@ -30,7 +31,8 @@ export default new Vuex.Store({
     repos,
     data,
     schema,
-    search
+    search,
+    application
   }
 })
 
