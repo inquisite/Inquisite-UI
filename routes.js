@@ -55,6 +55,9 @@ Vue.component('search', Search)
 const DataEditor = require('./components/DataEditor.vue')
 Vue.component('data-editor', DataEditor)
 
+const ImportHistory = require('./components/ImportHistory.vue')
+Vue.component('import-history', ImportHistory)
+
 const Help = require('./components/Help.vue')
 Vue.component('help', Help)
 
@@ -76,6 +79,7 @@ export default [
   { path: '/visualize/maps', name: 'visualize-maps', component: VisualizeMaps, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/schema', name: 'schema-editor', component: SchemaEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/data/edit/:id', name: 'data-editor', component: DataEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
   { path: '*', redirect: '/' }
 ]

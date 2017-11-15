@@ -251,7 +251,7 @@ export default {
     importData: function() {
         var self = this;
         this.is_importing = true;
-        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows }}).then(function(data) { 
+        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename }}).then(function(data) { 
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,

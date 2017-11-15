@@ -152,7 +152,7 @@ export default {
         if (this.showType >0) {
             var self = this;
             this.$store.dispatch('data/getDataForType', {"repo_id": this.activeRepo.id, "type": this.showType}).then(function(r) {
-                console.log("Render map with", self.$store.getters['data/getData']);
+                //console.log("Render map with", self.$store.getters['data/getData']);
             });
         }
     },

@@ -8,7 +8,8 @@ const state = {
   upload_row_count: 0,
   upload_fields: [],
   upload_subfields: [],
-  loaded_data: null
+  loaded_data: null,
+  import_events: []
 }
 
 // getters
@@ -37,7 +38,8 @@ const getters = {
             return state.loaded_data.data;
         }
         return [];
-     }
+     },
+     getImportEvents: state => { return state.import_events; }
 }
 
 // actions
@@ -168,6 +170,22 @@ const actions = {
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
             });
+    },
+    /**
+     *
+     */
+    importEventsForRepo: function(context, data) {
+        if(!context.rootState.token) return false;
+        context.rootState.message = "";
+
+        return api.get('/upload/importEventsForRepo/' + data.repo_id, {headers: apiHeaders({"auth": true, "form": true})})
+            .then(function(response) { 
+                context.commit('GET_IMPORT_EVENTS', response);
+                return response;
+            }).catch(function(error) { 
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
     }
 }
 
@@ -198,6 +216,9 @@ const mutations = {
         } else if(response.data && response.data.length > 0) {
             state.loaded_data.data = state.loaded_data.data.concat(response.data);
         }
+    },
+    GET_IMPORT_EVENTS: function(state, response) { 
+        state.import_events = response;
     }
 }
 
