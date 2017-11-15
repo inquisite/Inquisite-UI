@@ -60,10 +60,13 @@ export default {
 
         var t = self.dataTypes.filter((v) => v.id == self.showType);
         if (t[0]) {
-          self.displayFields = [t[0]["fields"][0]["code"]];
-
+          // Select first georef field for display
           var georefFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] == 'GeorefDataType'; });
           self.showField = georefFields.length > 0 ? georefFields[0]['code'] : null;
+
+          // Select first field for display
+          var nonGeorefFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] != 'GeorefDataType'; });
+          self.displayFields = nonGeorefFields.length > 0 ? [nonGeorefFields[0]['code']] : [];
         }
 
     });
@@ -79,7 +82,7 @@ export default {
       var coords = {"polygons": [], "polygon_labels": [], "points": [], "point_labels": []};
       for(var i in d) {
         if (d[i] && d[i][this.showField]) {
-            // TODO: improve perforamnce and remove limit
+            // TODO: improve performance and remove limit
             if (count > 3000) break;
             var c = JSON.parse(d[i][this.showField]);
             if (c['coordinates']) {
@@ -134,6 +137,7 @@ export default {
       return c["polygon_labels"].map((v, i) => {
         var field_values = [];
         for(var f in display_fields) {
+          if (display_fields[f] == self.showField) { continue; }
           var t = self.dataTypes.filter((v) => v.id == self.showType);
           var l = t[0]["fields"].filter((v) => v.code === display_fields[f]);
           var field_label = (l && l[0]) ? l[0].name : "???";

@@ -32,13 +32,14 @@
                      <li class="dropdown-item"><router-link :to="{path: '/edit-repo/' + activeRepo.id}" class="nav-link" >Repository Info</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/schema">Schema</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/manage-collaborators">Collaborators</router-link></li>
+                     <li class="dropdown-item"><router-link class="nav-link" to="/import-history">Import history</router-link></li>
                    </ul>
                 </li><li class="nav-item dropdown" v-if="hasData">
                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                      Visualize <span class="caret"></span>
                    </a>
 					<ul class="dropdown-menu">
-                     <li class="dropdown-item"><router-link class="nav-link" to="/visualize/maps" v-if="hasGeoreferences">Map</router-link></li>
+                     <li class="dropdown-item" v-if="hasGeoreferences"><router-link class="nav-link" to="/visualize/maps">Map</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/sheets">Sheet</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/nodes">Nodes</router-link></li>
                    </ul>
@@ -103,7 +104,12 @@ export default {
   },
   mounted: function() {
     if (this.isLoggedIn) {
-        this.$store.dispatch('people/getRepos');
+        var self = this;
+        this.$store.dispatch('people/getRepos').then(function() {
+            self.$store.dispatch('schema/getDataTypes', self.$store.getters['repos/getActiveRepoID']).then(function() {
+                // noop
+            });
+        });
     }
   },
   watch: {
