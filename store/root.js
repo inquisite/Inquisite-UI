@@ -18,7 +18,7 @@ export const getters = {
      * Get current API token
      */
     getToken: state => {
-        var jwt = window.sessionStorage.getItem('jwt');
+        var jwt = window.localStorage.getItem('jwt');
         state.token = jwt;
     
         if (state.token) { state.logged_in = true; }
@@ -30,7 +30,7 @@ export const getters = {
      * Get refresh token for current session
      */
     getRWT: state => { 
-        return window.sessionStorage.getItem('rwt');
+        return window.localStorage.getItem('rwt');
     }
 }
 
@@ -48,8 +48,8 @@ export const actions = {
       return api.post('/login', data.data, {headers: apiHeaders({})})
         .then(function(response) { 
             if(response.access_token !== undefined) {
-              window.sessionStorage.setItem('jwt', response.access_token); 
-              window.sessionStorage.setItem('rwt', response.refresh_token);
+              window.localStorage.setItem('jwt', response.access_token); 
+              window.localStorage.setItem('rwt', response.refresh_token);
           
               context.commit('login');
               context.commit('setToken', response.access_token);
@@ -102,8 +102,8 @@ export const actions = {
       if (!context.state.token) return false;
       return api.get('/logout', {headers: apiHeaders({"auth": true})})
         .then(function(response) { 
-            window.sessionStorage.removeItem('jwt');
-            window.sessionStorage.removeItem('rwt');
+            window.localStorage.removeItem('jwt');
+            window.localStorage.removeItem('rwt');
             context.commit('logout');
             context.commit('SET_MESSAGE', "Logged out", {'root': true});
             return true;
@@ -153,7 +153,7 @@ export const mutations = {
      * Set current JWT auth token
      */
     setToken: function(state, access_token) { 
-        window.sessionStorage.setItem('jwt', access_token); 
+        window.localStorage.setItem('jwt', access_token); 
         state.token = access_token;
     },
 
