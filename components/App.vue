@@ -45,6 +45,14 @@
                    </ul>
                 </li>
                 <li class="nav-item"><router-link to="/help" class="nav-link">Help</router-link></li>
+                <li class="nav-item dropdown" v-if="isAdmin">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                     Admin <span class="caret"></span>
+                   </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item" ><router-link to="/admin/users" class="nav-link">Users</router-link></li>
+                    </ul>
+                </li>
             </ul>
             <form class="form-inline" v-on:submit="search(search_expression)">
 				<input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_expression">
@@ -118,6 +126,9 @@ export default {
   computed: {
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
+    },
+    isAdmin: function() {
+        return this.$store.getters['people/userIsAdmin'];
     },
     hasGeoreferences: function() {
         return this.$store.getters['schema/hasGeoreferences'];

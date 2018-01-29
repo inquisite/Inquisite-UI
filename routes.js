@@ -58,6 +58,9 @@ Vue.component('data-editor', DataEditor)
 const ImportHistory = require('./components/ImportHistory.vue')
 Vue.component('import-history', ImportHistory)
 
+const AdminUsers = require('./components/AdminUsers.vue')
+Vue.component('admin-users', AdminUsers)
+
 const Help = require('./components/Help.vue')
 Vue.component('help', Help)
 
@@ -81,5 +84,6 @@ export default [
   { path: '/data/edit/:id', name: 'data-editor', component: DataEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
+  { path: '/admin/users', name: 'admin-users', component: AdminUsers, 'beforeEnter': function(f, t, n) { n(store.getters['people/userIsAdmin']);} },
   { path: '*', redirect: '/' }
 ]

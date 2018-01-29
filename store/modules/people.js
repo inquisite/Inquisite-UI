@@ -15,6 +15,7 @@ const state = {
 // getters
 const getters = {
     getUserInfo: state => { return state.user.info; },
+    userIsAdmin: state => { return parseInt(state.user.info['is_admin']); },
     getUserRepos: state => { 
         return state.user.repos; 
     },
