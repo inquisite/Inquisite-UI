@@ -128,7 +128,7 @@
 											</div>
 							      		</div>
 							      		<div class="modal-footer">
-											<button v-on:click="updateDataMapping(h, i)" class="btn btn-primary">Update</button>
+											<button v-on:click="updateFieldNames(h, i)" class="btn btn-primary" data-dismiss="modal">Update</button>
 							        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 							      		</div>
 							    	</div>
@@ -217,7 +217,9 @@ export default {
 	  type_mapping: [],
 	  field_description: [],
 	  custom_field_title: [],
-	  display_stats: []
+	  display_stats: [],
+	  editable_field_names: [],
+	  mapping_options: {},
     }
   },
   mounted: function(){
@@ -297,6 +299,9 @@ export default {
 
                 var match_id = null;
                 if (parseInt(this.import_as) < 0) {
+					if(!this.editable_field_names[i]){
+						this.editable_field_names[i] = this.server_file_info.preview.headers[i];
+					}
 					opts[i].unshift("Create field " + this.server_file_info.preview.headers[i]);
                     vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
@@ -316,8 +321,11 @@ export default {
                     }
 
                     if (allowCreateNew) {
-						opts[i].unshift("Create field " + this.server_file_info.preview.headers[i] + " (" + data_types[j]['name'] + ")");
-                        vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
+						if(!this.editable_field_names[i]){
+							this.editable_field_names[i] = this.server_file_info.preview.headers[i];
+						}
+						opts[i].unshift("Create field " + this.server_file_info.preview.headers[i]);
+	                    vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
                     } else if (match_id) {
                         this.data_mapping[i] = match_id;
                         console.log("set", i , match_id);
@@ -338,7 +346,8 @@ export default {
             vals[i].unshift(0);
 	    }
 	    console.log("map", this.data_mapping);
-	    return {"options": opts, "values": vals};
+		this.mapping_options = {"options": opts, "values": vals}
+	    return this.mapping_options;
 	},
 	importErrors: function() {
 	    if (!this.import_complete) { return []; }
@@ -372,7 +381,7 @@ export default {
     importData: function() {
         var self = this;
         this.is_importing = true;
-        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename }}).then(function(data) {
+        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names }}).then(function(data) {
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,
@@ -398,8 +407,18 @@ export default {
             }
         }
         this.mappingOptions;
-    }
+    },
+	updateFieldNames: function(h, i){
+		if(this.editable_field_names[i]){
+			this.editable_field_names[i] = this.custom_field_title[i];
+			console.log("names", this.editable_field_names);
+			var selectVal = h.replace(/[^A-Za-z0-9_\-]+/, "");
+			var createIndex = this.mapping_options["values"][i].indexOf(selectVal);
+			this.mapping_options["options"][i][createIndex] = "Create field " + this.custom_field_title[i];
+			this.mappingOptions;
+			this.$forceUpdate();
+		}
+	}
   }
-
 }
 </script>
