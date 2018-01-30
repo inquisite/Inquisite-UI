@@ -15,32 +15,17 @@ const state = {
 // getters
 const getters = {
     getUserInfo: state => { return state.user.info; },
-    userIsAdmin: state => { return (state.user && state.user.info) ? (parseInt(state.user.info['is_admin']) != 0): false; },
+    userIsAdmin: state => { return parseInt(state.user.info['is_admin']); },
     getUserRepos: state => { 
         return state.user.repos; 
     },
     getUserRepoCount: state => { 
         return state.user.repos ? state.user.repos.length : 0; 
-    },
-    getList: state => { return state.people_list; }
+    }
 }
 
 // actions
 const actions = {
-    list: function(context) {
-        if (!context.rootState.token) return false;
-        return api.get('/people', {headers: apiHeaders({"auth": true, "form": true})})
-        .then(function(response) { 
-                console.log("COMMIT", response);
-            context.commit('GET_PERSON_LIST', response); 
-            return true;
-        })
-        .catch(function(error) { 
-            context.commit('API_FAILURE', error, { root: true });
-            return extractAPIError(error);
-        });
-
-    },
     addPerson: function(context, data) {
         return api.post('/people/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
         .then(function(response) { 
@@ -157,10 +142,6 @@ const mutations = {
         state.user.info = response.userinfo; 
         state.message = response.msg;
         state.loading = false;
-    },
-
-    GET_PERSON_LIST: function(state, response) {
-        state.people_list = response.people;
     },
     
 

@@ -17,8 +17,7 @@ const getters = {
 
      hasGeoreferences: function(state) {
          var types_with_georefs = state.data_types.filter(function(v, i, a) {
-                console.log(v);
-             return v['fields'].filter(function (fv, fi, fa) { console.log(fv); return fv['type'] == 'GeorefDataType'; } ).length > 0;
+             return v['fields'].filter(function (fv, fi, fa) { return fv['type'] == 'GeorefDataType'; } ).length > 0;
          });
          return types_with_georefs.length > 0;
      }
@@ -79,7 +78,6 @@ const actions = {
      */
     editDataType: function(context, data) {
         if (!context.rootState.token) return false;
-        console.log("SENT", data);
         return api.post('/schema/editType/' + context.rootGetters['repos/getActiveRepoID'] + '/' + data.id, data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { 
                 context.commit('EDIT_DATA_TYPE', response); 
@@ -131,16 +129,13 @@ const mutations = {
             state.default_data_type = response[0]['id'];
         }
         
-        console.log("got types", response);
         state.data_types = response;
     },
     ADD_DATA_TYPE: function(state, response) { 
-        console.log("add type", response);
         response.type['fields'] = [];
         state.data_types.push(response.type);
     },
     EDIT_DATA_TYPE: function(state, response) { 
-        console.log("edit type", response);
         
         // set field id's for newly created fields (ICK)
         if(response.field_status) {
@@ -156,17 +151,14 @@ const mutations = {
         }
     },
     DELETE_DATA_TYPE: function(state, response) { 
-        console.log("delete type", response);
         for(var i in state.data_types) {
             if (state.data_types[i].id == response.type_id) { 
-                console.log("remove type at ", i);
                 state.data_types.splice(i, 1);
                 break;
             }
         }
     },
     GET_FIELD_DATA_TYPE_LIST: function(state, response) {
-        console.log("set field data types", response);
         state.field_data_types = response;
     }
 }

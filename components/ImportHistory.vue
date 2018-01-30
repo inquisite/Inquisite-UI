@@ -39,10 +39,8 @@ export default {
   }, 
   methods: {
     getImportHistory: function() {
-      var self = this;
       this.$store.dispatch("data/importEventsForRepo", { "repo_id": this.activeRepo['id']}).then(function(response) {
-       //self.importHistory = response;
-       console.log("ZZZ", response);
+       // noop
       });
     }
   } 
