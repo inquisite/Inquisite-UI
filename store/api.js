@@ -14,12 +14,12 @@ instance.interceptors.request.use((config) => {
 
 	let token_exp_time = store.getters.getTokenExpiration;
 	//console.log("[INTERCEPT] Exp time is " + token_exp_time);
-	if (!config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
+	if ((config['url'] != '/login') && !config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
 		console.log("[INTERCEPT] Token expired");
 		//console.log("[INTERCEPT] Refresh with ", store.getters.getRWT);
 
 		return instance.post('/refresh', null, {isRefresh: 1, headers: apiHeaders({"refresh": store.getters.getRWT})}).then(function(refresh_response) {
-			console.log("[INTERCEPT] Got new access oken");
+			console.log("[INTERCEPT] Got new access token");
 			originalReq['Authorization'] = 'Bearer ' + refresh_response.data.access_token;
 			store.dispatch('setAccessToken', refresh_response.data.access_token);
 			Promise.resolve(refresh_response);
