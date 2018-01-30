@@ -26,6 +26,13 @@ export const getters = {
         return state.token
     },
 
+    getTokenExpiration: state => {
+        var jwt_expiration = window.localStorage.getItem('jwt_expiration');
+        state.token_expiration = jwt_expiration;
+
+        return state.token_expiration
+    },
+
     /**
      * Get refresh token for current session
      */
@@ -87,12 +94,19 @@ export const actions = {
                     data['callback']['config']['headers']['Authorization'] = 'Bearer ' + response.access_token;
                     return api[data['callback']['method']](data['callback']['url'], data['callback']['data'], data['callback']['config']);
                 }
-                return null;
+                return response.access_token;
             })
             .catch(function(error) { 
                 context.commit('API_FAILURE', error);
                 return extractAPIError(error);
             });
+    },
+
+    /** 
+     * 
+     */
+    setAccessToken: function(context, access_token) {
+        context.commit('setToken', access_token);
     },
 
     /**
@@ -154,6 +168,7 @@ export const mutations = {
      */
     setToken: function(state, access_token) { 
         window.localStorage.setItem('jwt', access_token); 
+        window.localStorage.setItem('jwt_expiration', new Date().getTime() + (10 * 60 * 1000)); // assume 10 minute token lifetime
         state.token = access_token;
     },
 
@@ -162,8 +177,6 @@ export const mutations = {
      */
     setRefresh: function(state, refresh_token) { state.refresh = refresh_token },
     
-    
-
     /**
      * 
      */
