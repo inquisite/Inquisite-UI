@@ -415,3 +415,60 @@ a{
 	  width: 100% !important;
 	  font-size: 14px;
   }
+
+  .statsButton{
+	  height: 21px;
+	  padding: 2px 8px 0 8px !important;
+	  font-size: 14px !important;
+	  margin: 0;
+	  border-radius: 3px !important;
+	  text-transform: none !important;
+  }
+
+  .titleEditButton{
+	  padding: 2px 2px 0 3px !important;
+  }
+
+  .basicStats{
+	  padding: 0.1rem 1.25rem !important;
+  }
+
+  .basicStats p{
+	  margin-bottom: 0;
+  }
+
+  /* Modal Styles */
+  .modal-header{
+	  background-color: #178998;
+	  color: #fff;
+	  padding: 5px 15px;
+  }
+
+  .modal-header button{
+	  color: #fff;
+  }
+
+  .modal-header button:hover{
+	  color: #fff;
+	  opacity: 1;
+  }
+
+  .modal-body ul li{
+	  list-style: none;
+  }
+
+  .modal-footer{
+	  padding: 5px 15px;
+  }
+
+  .modal-footer button{
+	  border: none;
+	  color: #1CB2C6;
+	  padding: 5px 15px;
+  }
+
+  @media (min-width: 576px){
+	  .modal-dialog{
+		  max-width: 50%;
+	  }
+  }

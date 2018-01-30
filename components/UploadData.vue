@@ -58,30 +58,46 @@
                         <i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>
                     </div>
 				</div>
-				<div class="card-block">
+				<div class="card-block basicStats">
 					<h5>Basic Statistics</h5>
 					<p><strong>File Size</strong> {{filesizeInKB}}</p>
 					<p><strong>Total Columns</strong> {{server_file_info.total_columns}}</p>
 					<p><strong>Total Rows</strong> {{server_file_info.total_rows}}</p>
 				</div>
 				<div class="card-block" style="overflow: auto;">
+					<div class="row">
+						<div class="col-sm-2">
+							<h6>Column Title</h6>
+						</div>
+						<div class="col-sm-2"></div>
+						<div class="col-sm-3">
+							<h6>Import Field</h6>
+						</div>
+						<div class="col-sm-2">
+							<h6>Data Type</h6>
+						</div>
+					</div>
 					<div v-for="(h,i) in server_file_info.preview.headers" class="row">
 						<div class="col-sm-2">
 							<h6>{{h}}</h6>
-							<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#' + h + 'Stats'">Stats</button>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-primary statsButton titleEditButton" data-toggle="modal" :data-target="'#' + h + 'editTitle'"><i class="fa fa-edit"></i></button>
+							<button type="button" class="btn btn-primary statsButton" data-toggle="modal" :data-target="'#' + h + 'Stats'">Statistics</button>
 
-							<div class="modal fade" :id="h + 'Stats'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<!--Stats Modal-->
+							<div class="modal fade" :id="h + 'Stats'" tabindex="-1" role="dialog" aria-labelledby="Statistics" aria-hidden="true">
 							  <div class="modal-dialog" role="document">
 							    <div class="modal-content">
 							      <div class="modal-header">
-							        <h5 class="modal-title" id="exampleModalLabel">Stats</h5>
+							        <h5 class="modal-title" id="exampleModalLabel">{{h}} Stats</h5>
 							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							          <span aria-hidden="true">&times;</span>
 							        </button>
 							      </div>
 							      <div class="modal-body">
 									  <ul>
-  										<li v-for="(t, s) in server_file_info.column_stats[h]"><strong>{{s}}: </strong>{{t}}</li>
+										<li v-for="(t, s) in displayStatistics[h]"><strong>{{s}}: </strong>{{t}}</li>
   									</ul>
 							      </div>
 							      <div class="modal-footer">
@@ -90,17 +106,42 @@
 							    </div>
 							  </div>
 							</div>
+
+							<!--Edit Title Modal-->
+							<div class="modal fade" :id="h + 'editTitle'" tabindex="-1" role="dialog" aria-labelledby="Edit Title and Description" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+							  		<div class="modal-content">
+							      		<div class="modal-header">
+							        		<h5 class="modal-title" id="exampleModalLabel">Edit Label &amp; Description for {{h}}</h5>
+							        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          			<span aria-hidden="true">&times;</span>
+							        		</button>
+							      		</div>
+							      		<div class="modal-body">
+											<div class="form-group row">
+												<label :for="h + 'customTitle'" class="col-3 col-form-label">Field Title</label>
+												<input :id="h + 'customTitle'" v-model="custom_field_title[i]" :placeholder="h" class="col-8">
+											</div>
+											<div class="form-group row">
+												<label :for="h + 'fieldDescription'" class="col-3 col-form-label">Field Description</label>
+												<textarea :id="h + 'fieldDescription'" v-model="field_description[i]" placeholder="Description For Field" class="col-8"></textarea>
+											</div>
+							      		</div>
+							      		<div class="modal-footer">
+											<button v-on:click="updateDataMapping(h, i)" class="btn btn-primary">Update</button>
+							        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							      		</div>
+							    	</div>
+							  	</div>
+							</div>
 						</div>
 						<div class="col-sm-3 columnSelect">
 							<select :name="'import_info_' + h" v-model="data_mapping[i]"><option v-for="(h,x) in mappingOptions['options'][i]" :value="mappingOptions['values'][i][x]">{{h}}</option></select>
 						</div>
-						<div class="col-sm-3 columnSelect">
-							<select :name="'field_type_' + h" v-model="type_mapping[i]" >
+						<div class="col-sm-2 columnSelect">
+							<select :name="'field_type_' + h" v-model="dataTypeRecommended[h]" >
 								<option v-for="(t,k) in fieldDataTypes" :value="k">{{t.name}}</option>
 							</select>
-						</div>
-						<div class="col-sm-4">
-
 						</div>
 					</div>
       		        <table>
@@ -173,7 +214,10 @@ export default {
 
       import_results: null,
 
-	  type_mapping: []
+	  type_mapping: [],
+	  field_description: [],
+	  custom_field_title: [],
+	  display_stats: []
     }
   },
   mounted: function(){
@@ -205,12 +249,45 @@ export default {
 		var kb = (bytes/1000).toFixed(2);
 		return kb + ' kB';
 	},
+	dataTypeRecommended: function(){
+		var stats = this.server_file_info.column_stats;
+		for(var stat in stats){
+			if(stats[stat]['type'] == 'Georeference'){
+				this.type_mapping[stat] = 'GeorefDataType';
+			} else if(stats[stat]['type'] == 'Date range'){
+				this.type_mapping[stat] = 'DateRangeDataType';
+			} else {
+				this.type_mapping[stat] = stats[stat]['type'] + 'DataType';
+			}
+		}
+		return this.type_mapping;
+	},
+	displayStatistics: function(){
+		var stats = this.server_file_info.column_stats;
+		var statDisplay = {};
+		for(var statCont in stats){
+			var rowStats = stats[statCont];
+			statDisplay[statCont] = {};
+			for(var stat in rowStats){
+				if(["type", "value_array"].indexOf(stat) >= 0){
+					continue;
+				} else if(stat == "frequent_values"){
+					var freqStrings = [];
+					for(var val in rowStats[stat]){
+						freqStrings.push(rowStats[stat][val][0] + ": " + rowStats[stat][val][1]);
+					}
+					statDisplay[statCont]["Frequent Values"] = freqStrings.join(", ");
+					continue;
+				}
+				statDisplay[statCont][stat] = rowStats[stat];
+			}
+		}
+		return statDisplay;
+	},
 	mappingOptions: function() {
 	    var opts = [];
 	    var vals = [];
-
-	    console.log("import as ", this.import_as);
-		var data_types = this.data_types;
+	    var data_types = this.data_types;
 	    for(var i in this.server_file_info.preview.headers) {
             if (!opts[i]) { opts[i] = []; vals[i] = [] }
 
@@ -220,7 +297,7 @@ export default {
 
                 var match_id = null;
                 if (parseInt(this.import_as) < 0) {
-                    opts[i].unshift("Create field " + this.server_file_info.preview.headers[i]);
+					opts[i].unshift("Create field " + this.server_file_info.preview.headers[i]);
                     vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
@@ -239,7 +316,7 @@ export default {
                     }
 
                     if (allowCreateNew) {
-                        opts[i].unshift("Create field " + this.server_file_info.preview.headers[i] + " (" + data_types[j]['name'] + ")");
+						opts[i].unshift("Create field " + this.server_file_info.preview.headers[i] + " (" + data_types[j]['name'] + ")");
                         vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
                     } else if (match_id) {
                         this.data_mapping[i] = match_id;
