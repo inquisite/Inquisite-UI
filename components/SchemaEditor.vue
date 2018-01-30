@@ -75,7 +75,7 @@
 									<div class="col-sm-12">
 										<div class="form-group">
 											<label for="description" class="form-label">Description</label>
-											<textarea class="form-control" :value="description" rows="3" cols="80" v-model="formContent.description"></textarea>
+											<textarea class="form-control" rows="3" cols="80" v-model="formContent.description"></textarea>
 										</div>
 									</div>
 								</div>
