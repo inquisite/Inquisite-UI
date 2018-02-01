@@ -61,8 +61,14 @@ Vue.component('import-history', ImportHistory)
 const AdminUsers = require('./components/AdminUsers.vue')
 Vue.component('admin-users', AdminUsers)
 
-const Help = require('./components/Help.vue')
-Vue.component('help', Help)
+const GettingStarted = require('./components/GettingStarted.vue')
+Vue.component('getting-started', GettingStarted)
+
+const ContactUs = require('./components/ContactUs.vue')
+Vue.component('contact-us', ContactUs)
+
+const FAQ = require('./components/FAQ.vue')
+Vue.component('faq', FAQ)
 
 const Password = require('./components/Password.vue')
 Vue.component('password', Password)
@@ -74,7 +80,9 @@ export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
   { path: '/login', name: 'login', component: Login },
-  { path: '/help', name: 'help', component: Help },
+  { path: '/help/getting-started', name: 'getting-started', component: GettingStarted },
+  { path: '/help/faq', name: 'faq', component: FAQ },
+  { path: '/help/contact', name: 'contact-us', component: ContactUs },
   { path: '/upload', name: 'upload-data', component: UploadData, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/user/preferences', name: 'user-prefs', component: UserPrefs, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/user/profile', name: 'user-profile', component: UserProfile, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },

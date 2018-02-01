@@ -18,7 +18,17 @@
 			  <li class="nav-item">
 				<router-link to="/login" class="nav-link">Login</router-link>
 			  </li>
-                <li class="nav-item"><router-link to="/help" class="nav-link">Help</router-link></li>
+                
+                 <li class="nav-item dropdown">
+                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                     Help <span class="caret"></span>
+                   </a>
+					<ul class="dropdown-menu">
+                    <li class="dropdown-item"><router-link to="/help/getting-started" class="nav-link">Getting started</router-link></li>
+                    <li class="dropdown-item"><router-link to="/help/faq" class="nav-link">FAQ</router-link></li>
+                    <li class="dropdown-item"><router-link to="/help/contact" class="nav-link">Contact us</router-link></li>
+                   </ul>
+                </li>
 			</ul>
         
             <ul class="navbar-nav" v-if="isLoggedIn">
@@ -44,7 +54,16 @@
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/nodes">Nodes</router-link></li>
                    </ul>
                 </li>
-                <li class="nav-item"><router-link to="/help" class="nav-link">Help</router-link></li>
+                <li class="nav-item dropdown">
+                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                     Help <span class="caret"></span>
+                   </a>
+					<ul class="dropdown-menu">
+                    <li class="dropdown-item"><router-link to="/help/getting-started" class="nav-link">Getting started</router-link></li>
+                    <li class="dropdown-item"><router-link to="/help/faq" class="nav-link">FAQ</router-link></li>
+                    <li class="dropdown-item"><router-link to="/help/contact" class="nav-link">Contact us</router-link></li>
+                   </ul>
+                </li>
                 <li class="nav-item dropdown" v-if="isAdmin">
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                      Admin <span class="caret"></span>
