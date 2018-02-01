@@ -14,7 +14,7 @@ instance.interceptors.request.use((config) => {
 
 	let token_exp_time = store.getters.getTokenExpiration;
 	//console.log("[INTERCEPT] Exp time is " + token_exp_time);
-	if ((config['url'] != '/login') && !config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
+	if ((config['url'].indexOf('/login') < 0) && (config['url'].indexOf('/reset_password') < 0) && !config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
 		console.log("[INTERCEPT] Token expired");
 		//console.log("[INTERCEPT] Refresh with ", store.getters.getRWT);
 
@@ -51,7 +51,9 @@ export default {
   },
 
   post(url, data, req_config) {
-    var d = data;
+			console.log("POST", url, data, req_config);
+		var d = data;
+		console.log("feh");
     return instance.post(url, qs.stringify(data), req_config)
       .then(function(response) { 
       	console.log('API POST SUCCESS', response); 
