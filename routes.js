@@ -64,6 +64,12 @@ Vue.component('admin-users', AdminUsers)
 const Help = require('./components/Help.vue')
 Vue.component('help', Help)
 
+const Password = require('./components/Password.vue')
+Vue.component('password', Password)
+
+const PasswordReset = require('./components/PasswordReset.vue')
+Vue.component('PasswordReset', PasswordReset)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -85,5 +91,7 @@ export default [
   { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
   { path: '/admin/users', name: 'admin-users', component: AdminUsers, 'beforeEnter': function(f, t, n) { n(store.getters['people/userIsAdmin']);} },
+  { path: '/password', name: 'password', component: Password },
+  { path: '/password/reset', name: 'password-reset', component: PasswordReset },
   { path: '*', redirect: '/' }
 ]
