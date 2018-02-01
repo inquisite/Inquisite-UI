@@ -411,6 +411,23 @@ a{
   }
 
   /* Upload Schema Screen */
+
+  .schemaForm{
+	  margin-top: 10px;
+  }
+
+  .rowInput select, .rowInput input{
+	  font-size: 14px;
+	  height: 21px;
+  }
+
+  .rowInput label{
+	  font-size: 18px;
+	  padding: 0 15px;
+	  position: relative;
+	  top: -5px;
+  }
+
   .columnSelect select{
 	  width: 100% !important;
 	  font-size: 14px;
@@ -471,4 +488,27 @@ a{
 	  .modal-dialog{
 		  max-width: 50%;
 	  }
+  }
+
+  /* Preview Table Styles */
+
+  .containerBorder{
+	  border: 15px solid #ebebeb;
+  }
+
+  #previewContainer{
+	  overflow: auto;
+	  height: 700px;
+	  font-size: 14px;
+	  padding: 15px;
+  }
+
+  #previewContainer table{
+	  background-color: #fff;
+  }
+
+  #previewContainer td, #previewContainer th{
+	  border: 1px solid #ebebeb;
+	  min-width: 100px;
+	  padding: 3px;
   }

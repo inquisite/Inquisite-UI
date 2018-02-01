@@ -40,44 +40,40 @@
 		 		</div>
 				<div class="card-block">
 					<div class="row">
-						<div class="col-6">
+						<div class="col-12">
 							<h3>Displaying first rows from <em>{{server_file_info.original_filename}}</em></h3>
 						</div>
-						<div class="col-6">
-							<div class="pull-right">
-		      		             <button v-on:click.prevent="setImportForAllFields" class="btn btn-sm">Create new fields for all unrecognized</button>
+      		        </div>
+					<div class="row schemaForm">
+						<div class="col-12 col-sm-8">
+							<div class="form-group row rowInput">
+								<label class="col-4 col-sm-2 col-form-label">Import as</label>
+								<select name="import_info" class="col-7 col-sm-5" v-model="import_as" @change="updateDataMapping"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
+							</div>
+							<div class="form-group row rowInput" v-if="import_as < 0">
+								<label class="col-4 col-sm-2 col-form-label">Name</label>
+								<input class="col-7 col-sm-5" v-model="new_schema_name" placeholder="New Schema Name"/>
+							</div>
+							<h6>Recommended Schema: {{server_file_info.recommended_schema['name']}}</h6>
+						</div>
+						<div class="col-12 col-sm-4">
+							<div class="row">
+								<div class="col-12">
+		      		             	<button v-on:click.prevent="setImportForAllFields" class="pull-right btn btn-sm btn-primary">Create new fields for all unrecognized</button>
+							 	</div>
+							</div>
+							<div class="row ">
+								<div class="col-12 rowInput">
+								 	<div class="pull-right"><input type="checkbox" v-model="ignore_rows"/>
+								 	Ignore first <input type="type" size="4" v-model="ignore_first_rows" v-if="ignore_rows"/> row(s)</div>
+								</div>
 		      		        </div>
 						</div>
       		        </div>
-					<div class="row">
-						<div class="col-6">
-							<div class="form-group row">
-								<label class="col-3 col-form-label">Import as</label>
-								<select name="import_info" v-model="import_as" @change="updateDataMapping"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
-							</div>
-							<div class="form-group row" v-if="import_as < 0">
-								<label class="col-3 col-form-label">Name</label>
-								<input v-model="new_schema_name" placeholder="New Schema Name"/>
-							</div>
-						</div>
-						<div class="col-6">
-							<div class="pull-right">
-		                            <input type="checkbox" v-model="ignore_rows"/>
-		                            Ignore first <input type="type" size="4" v-model="ignore_first_rows" v-if="ignore_rows"/> row(s)
-		                    </div>
-						</div>
-      		        </div>
-      		        <div class="item" style="padding: 10px 0">
-                        <button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
-                        <a href="#" class="btn btn-secondary">Cancel</a>
-                        <i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>
-                    </div>
 				</div>
 				<div class="card-block basicStats">
 					<h5>Basic Statistics</h5>
-					<p><strong>File Size</strong> {{filesizeInKB}}</p>
-					<p><strong>Total Columns</strong> {{server_file_info.total_columns}}</p>
-					<p><strong>Total Rows</strong> {{server_file_info.total_rows}}</p>
+					<strong>File Size</strong> {{filesizeInKB}} | <strong>Total Columns</strong> {{server_file_info.total_columns}} | <strong>Total Rows</strong> {{server_file_info.total_rows}}
 				</div>
 				<div class="card-block" style="overflow: auto;">
 					<div class="row">
@@ -97,11 +93,11 @@
 							<h6>{{h}}</h6>
 						</div>
 						<div class="col-sm-2">
-							<button type="button" class="btn btn-primary statsButton titleEditButton" data-toggle="modal" :data-target="'#' + h + 'editTitle'"><i class="fa fa-edit"></i></button>
-							<button type="button" class="btn btn-primary statsButton" data-toggle="modal" :data-target="'#' + h + 'Stats'">Statistics</button>
+							<button type="button" class="btn btn-primary statsButton titleEditButton" data-toggle="modal" :data-target="'#' + h.split(' ').join('_') + 'editTitle'"><i class="fa fa-edit"></i></button>
+							<button type="button" class="btn btn-primary statsButton" data-toggle="modal" :data-target="'#' + h.split(' ').join('_') + 'Stats'">Statistics</button>
 
 							<!--Stats Modal-->
-							<div class="modal fade" :id="h + 'Stats'" tabindex="-1" role="dialog" aria-labelledby="Statistics" aria-hidden="true">
+							<div class="modal fade" :id="h.split(' ').join('_') + 'Stats'" tabindex="-1" role="dialog" aria-labelledby="Statistics" aria-hidden="true">
 							  <div class="modal-dialog" role="document">
 							    <div class="modal-content">
 							      <div class="modal-header">
@@ -123,7 +119,7 @@
 							</div>
 
 							<!--Edit Title Modal-->
-							<div class="modal fade" :id="h + 'editTitle'" tabindex="-1" role="dialog" aria-labelledby="Edit Title and Description" aria-hidden="true">
+							<div class="modal fade" :id="h.split(' ').join('_') + 'editTitle'" tabindex="-1" role="dialog" aria-labelledby="Edit Title and Description" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 							  		<div class="modal-content">
 							      		<div class="modal-header">
@@ -154,21 +150,35 @@
 							<select :name="'import_info_' + h" v-model="data_mapping[i]"><option v-for="(h,x) in mappingOptions['options'][i]" :value="mappingOptions['values'][i][x]">{{h}}</option></select>
 						</div>
 						<div class="col-sm-2 columnSelect">
-							<select :name="'field_type_' + h" v-model="dataTypeRecommended[h]" :disabled="allowCustomNameType(i)">
+							<select :name="'field_type_' + h" v-model="data_type_recommended[i]" :disabled="allowCustomNameType(i)">
 								<option v-for="(t,k) in fieldDataTypes" :value="k">{{t.name}}</option>
 							</select>
 						</div>
 					</div>
-      		        <table>
-      		            <tr>
-                            <th v-for="(h,i) in server_file_info.preview.headers">{{h}}</th>
-      		            </tr>
-      		            <tr v-for="(r, c) in server_file_info.preview.data">
-      		                <td v-for="k,h in server_file_info.preview.headers" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
-      		                    {{r[k]}}
-      		                </td>
-      		            </tr>
-      		        </table>
+					<div class="row">
+						<div class="col-12">
+							<div class="item pull-right" style="padding: 10px 0">
+								<a v-on:click="togglePreview" class="btn btn-secondary">Preview Data</a>
+								<button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
+		                        <a href="#" class="btn btn-secondary">Cancel</a>
+		                        <i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>
+		                    </div>
+						</div>
+					</div>
+					<div class="row containerBorder" v-show="displayPreview">
+						<div id="previewContainer" class="col-12">
+		      		        <table>
+		      		            <tr>
+		                            <th v-for="(h,i) in server_file_info.preview.headers">{{h}}</th>
+		      		            </tr>
+		      		            <tr v-for="(r, c) in server_file_info.preview.data">
+		      		                <td v-for="k,h in server_file_info.preview.headers" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
+		      		                    {{r[k]}}
+		      		                </td>
+		      		            </tr>
+		      		        </table>
+						</div>
+					</div>
       		    </div>
       		</div>
     	</div>
@@ -234,8 +244,10 @@ export default {
 	  custom_field_title: [],
 	  display_stats: [],
 	  editable_field_names: [],
+	  data_type_recommended: [],
 	  mapping_options: {},
-	  new_schema_name: null
+	  new_schema_name: null,
+	  displayPreview: false
     }
   },
   mounted: function(){
@@ -267,16 +279,21 @@ export default {
 	},
 	dataTypeRecommended: function(){
 		var stats = this.server_file_info.column_stats;
-		for(var stat in stats){
-			if(stats[stat]['type'] == 'Georeference'){
-				this.type_mapping[stat] = 'GeorefDataType';
-			} else if(stats[stat]['type'] == 'Date range'){
-				this.type_mapping[stat] = 'DateRangeDataType';
+		for(var i in this.server_file_info.preview.headers) {
+			try{
+				var column_type = stats[i]['type'];
+			} catch(error) {
+				var column_type = stats[this.server_file_info.preview.headers[i]]['type'];
+			}
+			if(column_type == 'Georeference'){
+				this.data_type_recommended[i] = 'GeorefDataType';
+			} else if(column_type == 'Date range'){
+				this.data_type_recommended[i] = 'DateRangeDataType';
 			} else {
-				this.type_mapping[stat] = stats[stat]['type'] + 'DataType';
+				this.data_type_recommended[i] = column_type + 'DataType';
 			}
 		}
-		return this.type_mapping;
+		return this.data_type_recommended;
 	},
 	displayStatistics: function(){
 		var stats = this.server_file_info.column_stats;
@@ -325,6 +342,7 @@ export default {
 					}
 					opts[i].unshift("Create field " + optionName);
                     vals[i].unshift(optionVal);
+					break;
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
@@ -392,17 +410,21 @@ export default {
             }}).then(function(data) {
                 if (data['filename']) { self.server_file_info = data; }
                  self.is_uploading = false;
-                self.import_as = self.data_types[0]['id'];
-                self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
+                //self.import_as = self.data_types[0]['id'];
+				self.setRecommendedSchema();
+				self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
+				self.dataTypeRecommended;
 				self.updateDataMapping();
+				self.emptyFieldDescriptions();
             });
+
         }
     },
     importData: function() {
         var self = this;
         this.is_importing = true;
-		console.log(this.data_mapping);
-        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names }}).then(function(data) {
+		console.log(this.field_description);
+        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names.join("|"), schema_name: this.new_schema_name, column_types: this.data_type_recommended.join("|"), field_descriptions: this.field_description.join("|") }}).then(function(data) {
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,
@@ -446,6 +468,15 @@ export default {
 			this.data_mapping[i] = this.mapping_options["values"][i][1];
 		}
 	},
+	setRecommendedSchema: function(){
+		console.log("schema", this.server_file_info.recommended_schema);
+		if(!this.server_file_info.recommended_schema){
+			this.import_as = -1;
+		} else {
+			this.import_as = this.server_file_info.recommended_schema['id'];
+		}
+
+	},
 	allowCustomNameType: function(i){
 		if(this.data_mapping[i] == 0){ return true; }
 		for(var j in this.data_types) {
@@ -456,6 +487,19 @@ export default {
 			}
 		}
 		return false;
+	},
+	togglePreview: function(){
+		if(this.displayPreview){
+			this.displayPreview = false
+		} else {
+			this.displayPreview = true
+		}
+	},
+	emptyFieldDescriptions: function(){
+		for(var i in this.server_file_info.preview.headers){
+			this.field_description[i] = null;
+		}
+		console.log("descriptions", this.field_description);
 	}
   }
 }
