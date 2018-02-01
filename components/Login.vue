@@ -35,6 +35,9 @@
               <button v-on:submit.prevent="processLogin" v-on:click.prevent="processLogin" class="btn btn-primary">Login</button>
             </div>
             <div class="form-group text-center">
+            	Forgot your password? <router-link class="item" to="/password">Reset it</router-link>
+            </div>
+            <div class="form-group text-center">
             	Don't have a login? <router-link class="item" to="/signup">Sign up</router-link>
             </div>
 

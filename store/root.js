@@ -79,29 +79,6 @@ export const actions = {
         });
     },
 
-    /**
-     * Refresh expired JWT token
-     */
-    doRefresh: function(context, data) {
-        if (!data.refresh) { return false; }
-        return api.post('/refresh', null, {headers: apiHeaders({"refresh": data.refresh})})
-            .then(function(response) {
-                if (! response.access_token) { return false; }
-                console.log('doRefresh GOT TOKEN ', response.access_token, data); 
-                context.commit('setToken', response.access_token);
-                if(data && data['callback'] && data['callback']['instance'][data['callback']['method']]) {
-                    // set new token
-                    data['callback']['config']['headers']['Authorization'] = 'Bearer ' + response.access_token;
-                    return api[data['callback']['method']](data['callback']['url'], data['callback']['data'], data['callback']['config']);
-                }
-                return response.access_token;
-            })
-            .catch(function(error) { 
-                context.commit('API_FAILURE', error);
-                return extractAPIError(error);
-            });
-    },
-
     /** 
      * 
      */
