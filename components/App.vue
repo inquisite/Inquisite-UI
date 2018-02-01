@@ -18,21 +18,23 @@
 			  <li class="nav-item">
 				<router-link to="/login" class="nav-link">Login</router-link>
 			  </li>
-                
-                 <li class="nav-item dropdown">
-                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                     Help <span class="caret"></span>
-                   </a>
-					<ul class="dropdown-menu">
-                    <li class="dropdown-item"><router-link to="/help/getting-started" class="nav-link">Getting started</router-link></li>
-                    <li class="dropdown-item"><router-link to="/help/faq" class="nav-link">FAQ</router-link></li>
-                    <li class="dropdown-item"><router-link to="/help/contact" class="nav-link">Contact us</router-link></li>
-                   </ul>
-                </li>
 			</ul>
         
             <ul class="navbar-nav" v-if="isLoggedIn">
-                <li class="nav-item"><router-link to="/" class="nav-link teal">{{ activeRepo.name }} <span class="black" v-if="activeRepo.published == 1"> (Published)</span></router-link></li>
+
+                <li class="nav-item dropdown">
+                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                     Current: {{ activeRepo.name }} <span class="caret"></span>
+                   </a>
+					<ul class="dropdown-menu">
+                        <H6 class="dropdown-header" v-if="repos.length > 1 && activeRepo.id">Change Repository:</H6>
+                        <H6 class="dropdown-header" v-if="repos.length && !activeRepo.id">Choose Repository:</H6>
+                        <li class="dropdown-item" v-for="repo in repos" v-if="activeRepo.id != repo.id"><a @click="setActiveRepo(repo.id)" class="nav-link">{{ repo.name }}</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li class="dropdown-item"><router-link to="/add-repo" class="nav-link"><i class="fa fa-plus" aria-hidden="true"></i> New Repository</router-link></li>                   </ul>
+                </li>
+                
+                
                 <li class="nav-item"><router-link to="/upload" class="nav-link">Upload Data</router-link></li>
                 <li class="nav-item dropdown">
                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -54,16 +56,6 @@
                      <li class="dropdown-item"><router-link class="nav-link" to="/visualize/nodes">Nodes</router-link></li>
                    </ul>
                 </li>
-                <li class="nav-item dropdown">
-                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                     Help <span class="caret"></span>
-                   </a>
-					<ul class="dropdown-menu">
-                    <li class="dropdown-item"><router-link to="/help/getting-started" class="nav-link">Getting started</router-link></li>
-                    <li class="dropdown-item"><router-link to="/help/faq" class="nav-link">FAQ</router-link></li>
-                    <li class="dropdown-item"><router-link to="/help/contact" class="nav-link">Contact us</router-link></li>
-                   </ul>
-                </li>
                 <li class="nav-item dropdown" v-if="isAdmin">
                     <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                      Admin <span class="caret"></span>
@@ -77,29 +69,27 @@
 				<input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_expression">
 				<button class="btn btn-orange-reverse my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 			</form>
-            <ul class="navbar-nav nav-bar-icons" v-if="isLoggedIn">
+            <ul class="navbar-nav nav-bar-icons">
                 <li class="nav-item btn btn-icon dropdown">
                     <a href="#" class="dropdown-toggle dropdown-toggle-icon" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-archive" aria-hidden="true"></i>
+                        <i class="fa fa-question-circle"></i>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <H6 class="dropdown-header" v-if="repos.length > 1 && activeRepo.id">Change Repository:</H6>
-                        <H6 class="dropdown-header" v-if="repos.length && !activeRepo.id">Choose Repository:</H6>
-                        <li class="dropdown-item" v-for="repo in repos" v-if="activeRepo.id != repo.id"><a @click="setActiveRepo(repo.id)" class="nav-link">{{ repo.name }}</a></li>
-                        <div class="dropdown-divider"></div>
-                        <li class="dropdown-item"><router-link to="/add-repo" class="nav-link"><i class="fa fa-plus" aria-hidden="true"></i> New Repository</router-link></li>
+                       <li class="dropdown-item"><router-link to="/help/getting-started" class="nav-link">Getting started</router-link></li>
+                    <li class="dropdown-item"><router-link to="/help/faq" class="nav-link">FAQ</router-link></li>
+                    <li class="dropdown-item"><router-link to="/help/contact" class="nav-link">Contact us</router-link></li>
                     </ul>
                 </li>
-                <li class="nav-item btn btn-icon dropdown">
+                
+                <li class="nav-item btn btn-icon dropdown"  v-if="isLoggedIn">
                     <a href="#" class="dropdown-toggle dropdown-toggle-icon" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li class="dropdown-item"><router-link to="/user/preferences" class="nav-link">User Preferences</router-link></li>
-                        <li class="dropdown-item"><router-link to="/user/my-profile" class="nav-link">User Profile</router-link></li>
-                        <!--<li class="nav-item"><router-link to="/user/activity" class="nav-link">Activity Log</router-link></li>-->
+                        <li class="dropdown-item"><router-link to="/user/my-profile" class="nav-link">User Profile</router-link></li>=
                         <li class="dropdown-item"><a @click="processLogout" class="nav-link">Logout</a></li>
                     </ul>
                 </li>
