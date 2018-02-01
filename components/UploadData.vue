@@ -39,19 +39,34 @@
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
 		 		</div>
 				<div class="card-block">
-      		        <div class="pull-right">
-      		             <button v-on:click.prevent="setImportForAllFields" class="btn btn-sm">Create new fields for all unrecognized</button>
+					<div class="row">
+						<div class="col-6">
+							<h3>Displaying first rows from <em>{{server_file_info.original_filename}}</em></h3>
+						</div>
+						<div class="col-6">
+							<div class="pull-right">
+		      		             <button v-on:click.prevent="setImportForAllFields" class="btn btn-sm">Create new fields for all unrecognized</button>
+		      		        </div>
+						</div>
       		        </div>
-
-      		        <h3>Displaying first rows from <em>{{server_file_info.original_filename}}</em></h3>
-      		        Import as <select name="import_info" v-model="import_as"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
-
-
-                    <div class="pull-right">
-                            <input type="checkbox" v-model="ignore_rows"/>
-                            Ignore first <input type="type" size="4" v-model="ignore_first_rows" v-if="ignore_rows"/> row(s)
-                    </div>
-
+					<div class="row">
+						<div class="col-6">
+							<div class="form-group row">
+								<label class="col-3 col-form-label">Import as</label>
+								<select name="import_info" v-model="import_as" @change="updateDataMapping"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
+							</div>
+							<div class="form-group row" v-if="import_as < 0">
+								<label class="col-3 col-form-label">Name</label>
+								<input v-model="new_schema_name" placeholder="New Schema Name"/>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="pull-right">
+		                            <input type="checkbox" v-model="ignore_rows"/>
+		                            Ignore first <input type="type" size="4" v-model="ignore_first_rows" v-if="ignore_rows"/> row(s)
+		                    </div>
+						</div>
+      		        </div>
       		        <div class="item" style="padding: 10px 0">
                         <button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
                         <a href="#" class="btn btn-secondary">Cancel</a>
@@ -120,7 +135,7 @@
 							      		<div class="modal-body">
 											<div class="form-group row">
 												<label :for="h + 'customTitle'" class="col-3 col-form-label">Field Title</label>
-												<input :id="h + 'customTitle'" v-model="custom_field_title[i]" :placeholder="h" class="col-8">
+												<input :id="h + 'customTitle'" v-model="custom_field_title[i]" :placeholder="h" class="col-8" :disabled="allowCustomNameType(i)">
 											</div>
 											<div class="form-group row">
 												<label :for="h + 'fieldDescription'" class="col-3 col-form-label">Field Description</label>
@@ -139,7 +154,7 @@
 							<select :name="'import_info_' + h" v-model="data_mapping[i]"><option v-for="(h,x) in mappingOptions['options'][i]" :value="mappingOptions['values'][i][x]">{{h}}</option></select>
 						</div>
 						<div class="col-sm-2 columnSelect">
-							<select :name="'field_type_' + h" v-model="dataTypeRecommended[h]" >
+							<select :name="'field_type_' + h" v-model="dataTypeRecommended[h]" :disabled="allowCustomNameType(i)">
 								<option v-for="(t,k) in fieldDataTypes" :value="k">{{t.name}}</option>
 							</select>
 						</div>
@@ -220,6 +235,7 @@ export default {
 	  display_stats: [],
 	  editable_field_names: [],
 	  mapping_options: {},
+	  new_schema_name: null
     }
   },
   mounted: function(){
@@ -231,9 +247,7 @@ export default {
     data_types: function() {
         var t = this.$store.getters['schema/getDataTypes'];
 		console.log("xxx", t);
-        if((t.constructor !== Array) || (t.length == 0)){
-            t =[{'id': -1, 'code': "< Create new type >"}];
-        }
+        t.push({'id': -1, 'code': "< Create new type >"});
         return t;
     },
     fieldDataTypes: function() { return this.$store.getters['schema/getFieldDataTypeList']; },
@@ -291,44 +305,49 @@ export default {
 	    var vals = [];
 	    var data_types = this.data_types;
 	    for(var i in this.server_file_info.preview.headers) {
-            if (!opts[i]) { opts[i] = []; vals[i] = [] }
+			if (!opts[i]) { opts[i] = []; vals[i] = [] }
 
             var allowCreateNew = true;
             for(var j in data_types) {
                 var dt = data_types[j];
 
                 var match_id = null;
-                if (parseInt(this.import_as) < 0) {
+                if (this.import_as < 0) {
+					var optionName = '';
+					var optionVal = '';
 					if(!this.editable_field_names[i]){
 						this.editable_field_names[i] = this.server_file_info.preview.headers[i];
+						optionName = this.server_file_info.preview.headers[i];
+						optionVal = this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, "")
+					} else {
+						optionName = this.editable_field_names[i];
+						optionVal = this.editable_field_names[i].replace(/[^A-Za-z0-9_\-]+/, "")
 					}
-					opts[i].unshift("Create field " + this.server_file_info.preview.headers[i]);
-                    vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
+					opts[i].unshift("Create field " + optionName);
+                    vals[i].unshift(optionVal);
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
-                        if((dt['fields'][k]['code'] == this.server_file_info.preview.headers[i]) || (dt['fields'][k]['code'] == this.server_file_info.preview.headers[i])) {
+                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i]) {
                             allowCreateNew = false;
-                            match_id = dt['fields'][k]['id'];
-                            //console.log("match", dt['fields'][k]['code'], match_id);
-                        }
-
-                        var f = this.data_mapping.indexOf(dt['fields'][k]['id']);
-                        if ((f === -1) || (parseInt(f) === parseInt(i))) {
-                            opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
+							opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
                             vals[i].unshift(dt['fields'][k]['id']);
                         }
                     }
 
                     if (allowCreateNew) {
+						var optionName = '';
+						var optionVal = '';
 						if(!this.editable_field_names[i]){
 							this.editable_field_names[i] = this.server_file_info.preview.headers[i];
+							optionName = this.server_file_info.preview.headers[i];
+							optionVal = this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, "")
+						} else {
+							optionName = this.editable_field_names[i];
+							optionVal = this.editable_field_names[i].replace(/[^A-Za-z0-9_\-]+/, "")
 						}
-						opts[i].unshift("Create field " + this.server_file_info.preview.headers[i]);
-	                    vals[i].unshift(this.server_file_info.preview.headers[i].replace(/[^A-Za-z0-9_\-]+/, ""));
-                    } else if (match_id) {
-                        this.data_mapping[i] = match_id;
-                        console.log("set", i , match_id);
+						opts[i].unshift("Create field " + optionName);
+	                    vals[i].unshift(optionVal);
                     }
                 } else {
                     // related type
@@ -347,7 +366,7 @@ export default {
 	    }
 	    console.log("map", this.data_mapping);
 		this.mapping_options = {"options": opts, "values": vals}
-	    return this.mapping_options;
+		return {"options": opts, "values": vals};
 	},
 	importErrors: function() {
 	    if (!this.import_complete) { return []; }
@@ -375,12 +394,14 @@ export default {
                  self.is_uploading = false;
                 self.import_as = self.data_types[0]['id'];
                 self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
+				self.updateDataMapping();
             });
         }
     },
     importData: function() {
         var self = this;
         this.is_importing = true;
+		console.log(this.data_mapping);
         this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names }}).then(function(data) {
             self.import_results = {
                 "errors": data.errors,
@@ -411,13 +432,30 @@ export default {
 	updateFieldNames: function(h, i){
 		if(this.editable_field_names[i]){
 			this.editable_field_names[i] = this.custom_field_title[i];
-			console.log("names", this.editable_field_names);
 			var selectVal = h.replace(/[^A-Za-z0-9_\-]+/, "");
 			var createIndex = this.mapping_options["values"][i].indexOf(selectVal);
 			this.mapping_options["options"][i][createIndex] = "Create field " + this.custom_field_title[i];
+			this.data_mapping[i] = this.mapping_options["values"][i][1];
 			this.mappingOptions;
 			this.$forceUpdate();
 		}
+	},
+	updateDataMapping: function(){
+		this.mappingOptions;
+		for(var i in this.mapping_options["values"]){
+			this.data_mapping[i] = this.mapping_options["values"][i][1];
+		}
+	},
+	allowCustomNameType: function(i){
+		if(this.data_mapping[i] == 0){ return true; }
+		for(var j in this.data_types) {
+			for(var k in this.data_types[j]['fields']){
+				if(this.data_types[j]['fields'][k]['id'] == this.data_mapping[i]){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
   }
 }

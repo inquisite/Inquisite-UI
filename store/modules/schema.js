@@ -17,6 +17,9 @@ const getters = {
 
      hasGeoreferences: function(state) {
          var types_with_georefs = state.data_types.filter(function(v, i, a) {
+             if(!('fields' in v)){
+                 return 0;
+             }
              return v['fields'].filter(function (fv, fi, fa) { return fv['type'] == 'GeorefDataType'; } ).length > 0;
          });
          return types_with_georefs.length > 0;
@@ -25,13 +28,13 @@ const getters = {
 
 // actions
 const actions = {
-    /** 
+    /**
      *
      */
-    getFieldDataTypeList: function(context) {  
+    getFieldDataTypeList: function(context) {
         return api.get('schema/getDataTypes', {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('GET_FIELD_DATA_TYPE_LIST', response);  return true; })
-            .catch(function(error) { 
+            .catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
             })
@@ -44,12 +47,12 @@ const actions = {
 
         return api.get('schema/getTypes/' + repo_id, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) { context.commit('GET_DATA_TYPES', response); return true; })
-            .catch(function(error) { 
+            .catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
             })
     },
-    
+
     /**
      * Create new data type
      *
@@ -59,13 +62,13 @@ const actions = {
     addDataType: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/schema/addType/' + context.rootGetters['repos/getActiveRepoID'], data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('ADD_DATA_TYPE', response); 
+            .then(function(response) {
+                context.commit('ADD_DATA_TYPE', response);
                 context.commit('SET_MESSAGE', 'Created new data type <em>' + data.name + '</em>', {'root': true});
-                
+
                 return response;
             })
-        .catch(function(error) { 
+        .catch(function(error) {
             context.commit('API_FAILURE', error, { root: true });
             return extractAPIError(error);
         });
@@ -79,12 +82,12 @@ const actions = {
     editDataType: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/schema/editType/' + context.rootGetters['repos/getActiveRepoID'] + '/' + data.id, data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('EDIT_DATA_TYPE', response); 
+            .then(function(response) {
+                context.commit('EDIT_DATA_TYPE', response);
                 context.commit('SET_MESSAGE', 'Saved changes to data type <em>' + data.name + '</em>', {'root': true});
                 return true;
             })
-        .catch(function(error) { 
+        .catch(function(error) {
             context.commit('API_FAILURE', error, { root: true });
             return extractAPIError(error);
         });
@@ -95,12 +98,12 @@ const actions = {
     deleteDataType: function(context, type_id) {
         if (!context.rootState.token) return false;
         return api.post('/schema/deleteType/' + context.rootGetters['repos/getActiveRepoID'] + '/' + type_id, { }, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('DELETE_DATA_TYPE', response); 
+            .then(function(response) {
+                context.commit('DELETE_DATA_TYPE', response);
                 context.commit('SET_MESSAGE', 'Deleted type', {'root': true});
                 return true;
             })
-        .catch(function(error) { 
+        .catch(function(error) {
             context.commit('API_FAILURE', error, { root: true });
             return extractAPIError(error);
         });
@@ -109,7 +112,7 @@ const actions = {
 
 // mutations
 const mutations = {
-    GET_DATA_TYPES: function(state, response) { 
+    GET_DATA_TYPES: function(state, response) {
         // unwrap settings
         if (response) {
             for(var i in response) {
@@ -124,35 +127,35 @@ const mutations = {
                 }
             }
         }
-        
+
         if (response[0]) {
             state.default_data_type = response[0]['id'];
         }
-        
+
         state.data_types = response;
     },
-    ADD_DATA_TYPE: function(state, response) { 
+    ADD_DATA_TYPE: function(state, response) {
         response.type['fields'] = [];
         state.data_types.push(response.type);
     },
-    EDIT_DATA_TYPE: function(state, response) { 
-        
+    EDIT_DATA_TYPE: function(state, response) {
+
         // set field id's for newly created fields (ICK)
         if(response.field_status) {
             for(var k in response.field_status) {
                 for(var i in state.data_types) {
                     for(var j in state.data_types[i]['fields']) {
                         if((state.data_types[i]['fields'][j]['code'] == k) && !state.data_types[i]['fields'][j]['id']) {
-                            state.data_types[i]['fields'][j]['id'] = response.field_status[k]['field_id'];   
+                            state.data_types[i]['fields'][j]['id'] = response.field_status[k]['field_id'];
                         }
                     }
                 }
             }
         }
     },
-    DELETE_DATA_TYPE: function(state, response) { 
+    DELETE_DATA_TYPE: function(state, response) {
         for(var i in state.data_types) {
-            if (state.data_types[i].id == response.type_id) { 
+            if (state.data_types[i].id == response.type_id) {
                 state.data_types.splice(i, 1);
                 break;
             }
