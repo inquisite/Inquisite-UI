@@ -26,7 +26,7 @@
 			
             
             <div class="form-group text-center">
-              <button v-on:submit.prevent="sendReset" v-on:click.prevent="sendReset" class="btn btn-primary">Login</button>
+              <button v-on:submit.prevent="sendReset" v-on:click.prevent="sendReset" class="btn btn-primary">Reset</button>
             </div>
             <div class="form-group text-center">
             	Don't have a login? <router-link class="item" to="/signup">Sign up</router-link>
@@ -59,7 +59,7 @@ export default {
   methods: {
     sendReset: function() {
       if( this.email !== '') {
-          alert("send!");
+          this.$store.dispatch("sendPasswordReset", this.email)
       } else {
           this.$store.state.msg = 'Email is required';
       }

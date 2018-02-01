@@ -94,6 +94,7 @@ export const actions = {
       return api.get('/logout', {headers: apiHeaders({"auth": true})})
         .then(function(response) { 
             window.localStorage.removeItem('jwt');
+            window.localStorage.removeItem('jwt_expiration');
             window.localStorage.removeItem('rwt');
             context.commit('logout');
             context.commit('SET_MESSAGE', "Logged out", {'root': true});
@@ -103,6 +104,21 @@ export const actions = {
             context.commit('API_FAILURE', error);
             return extractAPIError(error);
         });
+    },
+
+    /**
+     * Initiate password reset
+     */
+    sendPasswordReset: function(context, email) {
+        return api.post('/people/' + email + '/reset_password', {"x":"x"}, {headers: apiHeaders({"auth": true})})
+            .then(function(response) { 
+                context.commit('SET_MESSAGE', "Sent password reset", {'root': true});
+                return true;
+            })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error);
+                return extractAPIError(error);
+            });
     },
     
     /**
