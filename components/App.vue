@@ -89,7 +89,7 @@
 
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li class="dropdown-item"><router-link to="/user/preferences" class="nav-link">User Preferences</router-link></li>
-                        <li class="dropdown-item"><router-link to="/user/my-profile" class="nav-link">User Profile</router-link></li>=
+                        <li class="dropdown-item"><router-link to="/user/my-profile" class="nav-link">User Profile</router-link></li>
                         <li class="dropdown-item"><a @click="processLogout" class="nav-link">Logout</a></li>
                     </ul>
                 </li>
