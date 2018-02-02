@@ -10,7 +10,7 @@
        
           <flashmessage/>
 
-          <form id="password-form" name="password-form" method="POST" action="">
+          <form id="password-form" name="password-form" method="POST" action="" v-if="!sentReset">
 
             <div id="password-msg" class="ui message" style="display: none;">
               <div class="header"></div>
@@ -33,6 +33,10 @@
             </div>
 
           </form>
+          <div v-if="sentReset">
+            <h2>An email has been sent with instructions on how to change your password</h2>
+            If you do not receive this email within 30 minutes contact support@inquisite.org for assistance
+            </div>
 
         </div>  
       </div>
@@ -49,8 +53,7 @@ export default {
     return {
       email: '',
       password: '',
-      
-      state: this.$store.state
+      sentReset: false
     }
   },
   computed: {
@@ -58,10 +61,13 @@ export default {
   },
   methods: {
     sendReset: function() {
+      var self = this;
       if( this.email !== '') {
-          this.$store.dispatch("sendPasswordReset", this.email)
+          this.$store.dispatch("sendPasswordReset", this.email).then(function(response) {
+            self.sentReset = true;
+          });
       } else {
-          this.$store.state.msg = 'Email is required';
+          this.$store.dispatch('setMessage',  'Email address is required');
       }
 
     }

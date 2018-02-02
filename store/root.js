@@ -112,7 +112,7 @@ export const actions = {
     sendPasswordReset: function(context, email) {
         return api.post('/people/' + email + '/reset_password', {"x":"x"}, {headers: apiHeaders({"auth": true})})
             .then(function(response) { 
-                context.commit('SET_MESSAGE', "Sent password reset", {'root': true});
+                //context.commit('SET_MESSAGE', "Sent password reset", {'root': true});
                 return true;
             })
             .catch(function(error) { 

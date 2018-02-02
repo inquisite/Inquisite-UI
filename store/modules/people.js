@@ -31,7 +31,7 @@ const actions = {
         if (!context.rootState.token) return false;
         return api.get('/people', {headers: apiHeaders({"auth": true, "form": true})})
         .then(function(response) { 
-                console.log("COMMIT", response);
+            console.log("COMMIT", response);
             context.commit('GET_PERSON_LIST', response); 
             return true;
         })
@@ -80,6 +80,24 @@ const actions = {
             return extractAPIError(error);
         });
     },
+
+    /**
+     * Data must include keys:
+     *      reset_key = a valid password reset key
+     *      password = new password to set
+     */
+    setPassword: function(context, data) {
+        return api.post('/people/' + data.reset_key + '/set_password', {'password': data.password}, {})
+          .then(function(response) { 
+              context.commit('SET_PASSWORD', response); 
+              //context.commit('SET_MESSAGE', response.msg, {'root': true});
+              
+              return response;
+          }).catch(function(error) { 
+              context.commit('API_FAILURE', error, { root: true });
+              return extractAPIError(error);
+          });
+      },
 
     /**
      *
@@ -161,6 +179,10 @@ const mutations = {
 
     GET_PERSON_LIST: function(state, response) {
         state.people_list = response.people;
+    },
+
+    SET_PASSWORD: function(state, response) {
+        // noop
     },
     
 
