@@ -57,6 +57,16 @@
 							<h6>Recommended Schema: {{server_file_info.recommended_schema['name']}}</h6>
 						</div>
 						<div class="col-12 col-sm-4">
+						</div>
+      		        </div>
+				</div>
+				<div class="card-block basicStats">
+					<div class="row">
+						<div class="col-12 col-sm-6">
+							<h5>Basic Statistics</h5>
+							<strong>File Size</strong> {{filesizeInKB}} | <strong>Total Columns</strong> {{server_file_info.total_columns}} | <strong>Total Rows</strong> {{server_file_info.total_rows}}
+						</div>
+						<div class="col-12 col-sm-6">
 							<div class="row">
 								<div class="col-12">
 		      		             	<button v-on:click.prevent="setImportForAllFields" class="pull-right btn btn-sm btn-primary">Create new fields for all unrecognized</button>
@@ -69,11 +79,7 @@
 								</div>
 		      		        </div>
 						</div>
-      		        </div>
-				</div>
-				<div class="card-block basicStats">
-					<h5>Basic Statistics</h5>
-					<strong>File Size</strong> {{filesizeInKB}} | <strong>Total Columns</strong> {{server_file_info.total_columns}} | <strong>Total Rows</strong> {{server_file_info.total_rows}}
+					</div>
 				</div>
 				<div class="card-block" style="overflow: auto;">
 					<div class="row">
@@ -156,7 +162,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-9">
+						<div class="col-12">
 							<div class="item pull-right" style="padding: 10px 0">
 								<a v-on:click="togglePreview" class="btn btn-secondary">Preview Data</a>
 								<button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
@@ -165,7 +171,7 @@
 		                    </div>
 						</div>
 					</div>
-					<div class="row containerBorder" v-show="displayPreview">
+					<div class="row containerBorder" v-show="display_preview">
 						<div id="previewContainer" class="col-12">
 		      		        <table>
 		      		            <tr>
@@ -173,7 +179,7 @@
 		      		            </tr>
 		      		            <tr v-for="(r, c) in server_file_info.preview.data">
 		      		                <td v-for="k,h in server_file_info.preview.headers" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
-		      		                    {{r[k]}}
+		      		                    {{r[h]}}
 		      		                </td>
 		      		            </tr>
 		      		        </table>
@@ -196,18 +202,24 @@
                     </div>
 				</div>
 				<div class="card-block" style="overflow: auto;">
-				    <h4>Errors ({{import_results.error_count}})</h4>
-      		        <div v-for="(errs, line) in importErrors">
-      		            Line {{line}}: {{errs}}
-      		        </div>
-
-      		        <div v-if="import_results.counts.length > 0">
-                        <h4>Counts</h4>
-                        <div v-for="(c, t) in import_results.counts">
-                            {{t}}: {{c}} items
-                        </div>
+					<h3>Import Results from {{server_file_info.original_filename}}</h3>
+					<div v-if="import_results.count.total > 0">
+                        <h4>Records Imported</h4>
+                        <h6>{{import_results.count.type}}: {{import_results.count.total}}</h6>
                     </div>
-
+					<div class="row">
+						<div class="col-10">
+							<h4>Errors ({{import_results.error_count}})</h4>
+						</div>
+				    	<div class="col-2">
+							<button v-on:click.prevent="showErrors" class="btn btn-primary"><i class="fa fa-arrows-v"></i></button>
+						</div>
+					</div>
+					<div id="importErrorList" v-if="show_errors">
+	      		        <div v-for="(errs, line) in importErrors">
+	      		            Line {{line}}: {{errs}}
+	      		        </div>
+					</div>
       		    </div>
       		</div>
     	</div>
@@ -247,7 +259,8 @@ export default {
 	  data_type_recommended: [],
 	  mapping_options: {},
 	  new_schema_name: null,
-	  displayPreview: false
+	  display_preview: false,
+	  show_errors: false
     }
   },
   mounted: function(){
@@ -346,7 +359,7 @@ export default {
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
-                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i].toLowerCase()) {
+                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i].replace(" ", "_").toLowerCase()) {
                             allowCreateNew = false;
 							opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
                             vals[i].unshift(dt['fields'][k]['id']);
@@ -428,7 +441,7 @@ export default {
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,
-                "counts": data.counts,
+                "count": data.count,
                 "fields_created": data.fields_created
             };
             self.is_importing = false;
@@ -489,17 +502,17 @@ export default {
 		return false;
 	},
 	togglePreview: function(){
-		if(this.displayPreview){
-			this.displayPreview = false
-		} else {
-			this.displayPreview = true
-		}
+		this.display_preview = !this.display_preview;
 	},
 	emptyFieldDescriptions: function(){
 		for(var i in this.server_file_info.preview.headers){
 			this.field_description[i] = null;
 		}
 		console.log("descriptions", this.field_description);
+	},
+	showErrors: function(){
+		this.show_errors = !this.show_errors;
+		console.log(this.show_errors);
 	}
   }
 }
