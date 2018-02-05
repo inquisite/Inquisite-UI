@@ -89,7 +89,7 @@
 						</div>
 					</div>
 					<div v-for="(h,i) in server_file_info.preview.headers" class="row">
-						<div class="col-sm-2">
+						<div class="col-sm-2 dataOutlineLabel">
 							<h6>{{h}}</h6>
 						</div>
 						<div class="col-sm-2">
@@ -156,7 +156,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-12">
+						<div class="col-9">
 							<div class="item pull-right" style="padding: 10px 0">
 								<a v-on:click="togglePreview" class="btn btn-secondary">Preview Data</a>
 								<button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
@@ -346,7 +346,7 @@ export default {
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
-                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i]) {
+                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i].toLowerCase()) {
                             allowCreateNew = false;
 							opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
                             vals[i].unshift(dt['fields'][k]['id']);

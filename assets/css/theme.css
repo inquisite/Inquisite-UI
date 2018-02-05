@@ -454,6 +454,10 @@ a{
 	  margin-bottom: 0;
   }
 
+  .dataOutlineLabel h6{
+	  display: inline-block;
+	  margin-bottom: 0.25rem;
+  }
   /* Modal Styles */
   .modal-header{
 	  background-color: #178998;
