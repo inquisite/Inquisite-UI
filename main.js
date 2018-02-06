@@ -5,6 +5,7 @@ import axios from 'axios'
 import ClickConfirm from 'click-confirm'
 import Vue2Leaflet from 'vue2-leaflet'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+import VueCharts from 'vue-chartjs'
 
 Vue.use(VueRouter, Vuex, axios);
 

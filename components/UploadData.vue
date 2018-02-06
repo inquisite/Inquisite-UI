@@ -179,7 +179,7 @@
 		      		            </tr>
 		      		            <tr v-for="(r, c) in server_file_info.preview.data">
 		      		                <td v-for="k,h in server_file_info.preview.headers" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
-		      		                    {{r[h]}}
+		      		                    {{r[h]}}{{r[k]}}
 		      		                </td>
 		      		            </tr>
 		      		        </table>
@@ -195,31 +195,47 @@
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
 		 		</div>
 				<div class="card-block">
-      		        <h3>Import from <em>{{server_file_info.original_filename}}</em> completed</h3>
-
-      		        <div class="item" style="padding: 10px 0">
-                      <button v-on:submit.prevent="reset" v-on:click.prevent="reset" class="btn btn-primary">Do another import</button>
-                    </div>
-				</div>
-				<div class="card-block" style="overflow: auto;">
-					<h3>Import Results from {{server_file_info.original_filename}}</h3>
-					<div v-if="import_results.count.total > 0">
-                        <h4>Records Imported</h4>
-                        <h6>{{import_results.count.type}}: {{import_results.count.total}}</h6>
-                    </div>
 					<div class="row">
-						<div class="col-10">
-							<h4>Errors ({{import_results.error_count}})</h4>
+						<div class="col-12 col-sm-8">
+      		        		<h3>Import from <em>{{server_file_info.original_filename}}</em> completed</h3>
 						</div>
-				    	<div class="col-2">
-							<button v-on:click.prevent="showErrors" class="btn btn-primary"><i class="fa fa-arrows-v"></i></button>
+						<div class="col-12 col-sm-4">
+							<div class="item pull-right">
+		                      <button v-on:submit.prevent="reset" v-on:click.prevent="reset" class="btn btn-primary">Do another import</button>
+		                    </div>
 						</div>
 					</div>
-					<div id="importErrorList" v-if="show_errors">
-	      		        <div v-for="(errs, line) in importErrors">
-	      		            Line {{line}}: {{errs}}
-	      		        </div>
-					</div>
+
+
+				</div>
+				<div class="card-block">
+					<div>
+                        <h4>Import Results</h4>
+						<h5>Imported {{import_results.counts.total}} {{import_results.counts.type}} Records | {{import_results.error_count}} Errors | {{ignore_first_rows}} Skipped | {{import_results.counts.source_total}} Total Rows</h5>
+						<div class="row">
+							<div class="col-12 col-sm-6 resultChart">
+								<div :is="current_chart" :data="result_chart_data" :options="{responsive: false, maintainAspectRatio: false, scales: {yAxes: [{display: true, ticks: {beginAtZero: true}}]}}" :height="400"></div>
+							</div>
+							<div class="col-12 col-sm-6">
+								<div class="row" v-if="import_results.error_count > 0">
+									<div class="col-10">
+										<h4>Errors ({{import_results.error_count}})</h4>
+									</div>
+							    	<div class="col-2">
+										<button v-on:click.prevent="showErrors" class="btn btn-primary"><i class="fa fa-arrows-v"></i></button>
+									</div>
+								</div>
+								<div class="row" v-else>
+									<h4>No Errors</h4>
+								</div>
+								<div id="importErrorList" v-if="show_errors">
+				      		        <div v-for="(errs, line) in importErrors">
+				      		            Row {{line}}: {{errs}}
+				      		        </div>
+								</div>
+							</div>
+						</div>
+                    </div>
       		    </div>
       		</div>
     	</div>
@@ -229,6 +245,7 @@
 </template>
 
 <script>
+import ImportResults from './charts/ImportResults.vue';
 
 export default {
   name: 'upload-data',
@@ -260,8 +277,13 @@ export default {
 	  mapping_options: {},
 	  new_schema_name: null,
 	  display_preview: false,
-	  show_errors: false
+	  show_errors: false,
+	  current_chart: null,
+	  result_chart_data: null
     }
+  },
+  components: {
+	  'result-chart': ImportResults
   },
   mounted: function(){
     this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']);
@@ -436,12 +458,23 @@ export default {
     importData: function() {
         var self = this;
         this.is_importing = true;
-		console.log(this.field_description);
-        this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names.join("|"), schema_name: this.new_schema_name, column_types: this.data_type_recommended.join("|"), field_descriptions: this.field_description.join("|") }}).then(function(data) {
+		var chartData = null;
+		this.$store.dispatch('data/getDataCounts', {data: {repo_id: this.activeRepo.id}}).then(function(data){
+			var labels = [];
+			var dataCounts = [];
+			for(var schema in data.data){
+				labels.push(schema);
+				dataCounts.push(data.data[schema]);
+			}
+			self.result_chart_data = {"labels": labels, "datasets": [{"label": "Pre-Import Data", "backgroundColor": "#1CB2C6", "data": dataCounts}]}
+		});
+
+
+		this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names.join("|"), schema_name: this.new_schema_name, column_types: this.data_type_recommended.join("|"), field_descriptions: this.field_description.join("|") }}).then(function(data) {
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,
-                "count": data.count,
+                "counts": data.counts,
                 "fields_created": data.fields_created
             };
             self.is_importing = false;
@@ -449,6 +482,19 @@ export default {
 
             self.$store.dispatch('people/getRepos', {});    // reload stats... TODO: break repo stats out into a single repo-specific call
         });
+		var postImportStats = this.$store.dispatch('data/getDataCounts', {data: {repo_id: this.activeRepo.id}}).then(function(data){
+			var postData = {"label": "Post-Import Data", "backgroundColor": "#F79D59", "data": []}
+			for(var schema in data.data){
+				if(self.result_chart_data.labels.indexOf(schema) < 0){
+					self.result_chart_data.labels.push(schema)
+				}
+				var dataPos = self.result_chart_data.labels.indexOf(schema);
+				postData.data[dataPos] = data.data[schema];
+			}
+			self.result_chart_data.datasets.push(postData);
+			self.current_chart = 'result-chart';
+		});
+		console.log(this.result_chart_data);
     },
     reset: function() {
         this.import_complete = this.allow_upload = this.is_uploading = this.is_importing = false;
