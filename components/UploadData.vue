@@ -178,7 +178,7 @@
 		                            <th v-for="(h,i) in server_file_info.preview.headers">{{h}}</th>
 		      		            </tr>
 		      		            <tr v-for="(r, c) in server_file_info.preview.data">
-		      		                <td v-for="k,h in server_file_info.preview.headers" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c > ignore_first_rows)))">
+		      		                <td v-for="k,h in server_file_info.preview.headers" v-if="((!ignore_rows && (c >= 0)) || (ignore_rows && (c >= ignore_first_rows)))">
 		      		                    {{r[h]}}{{r[k]}}
 		      		                </td>
 		      		            </tr>
@@ -264,7 +264,7 @@ export default {
       data_mapping: [],
       import_as: null,
       ignore_rows: false,
-      ignore_first_rows: 0,
+      ignore_first_rows: 1,
 
       import_results: null,
 

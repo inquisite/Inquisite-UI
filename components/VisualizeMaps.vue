@@ -26,12 +26,16 @@
               <v-map :zoom=13 :center="getMapCenter">
                 <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
                 <v-marker-cluster>
-                  <v-marker v-if="points.length > 0" :lat-lng="points"></v-marker>
+                  <v-marker v-if="points.length > 0" v-for="p, i in points" :lat-lng="p"><v-popup :content="pointLabels[i]"></v-popup></v-marker>
                   <v-polygon v-if="polygons.length > 0" v-for="p, i in polygons" :lat-lngs="p"><v-popup :content="polygonLabels[i]"></v-popup></v-polygon>
+
                 </v-marker-cluster>
               </v-map>
             </div>
-        </div>  
+        </div>
+        <div class="card-block">
+            <p v-if="points.length > 0" v-for="p, i in points">{{p}}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -43,7 +47,7 @@
 @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
 </style>
 <script>
-export default { 
+export default {
   name: 'visualize-data-maps',
   data: function() {
     return {
@@ -71,17 +75,17 @@ export default {
 
     });
   },
-  computed: { 
+  computed: {
     activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
     mapData: function() { return this.$store.getters['data/getData']; },
     coords: function() {
       var d = this.mapData;
-
       var count = 0;
       var coords = {"polygons": [], "polygon_labels": [], "points": [], "point_labels": []};
       for(var i in d) {
         if (d[i] && d[i][this.showField]) {
+            console.log(d);
             // TODO: improve performance and remove limit
             if (count > 3000) break;
             var c = JSON.parse(d[i][this.showField]);
@@ -89,12 +93,12 @@ export default {
               count++;
 
               switch(c['type']) {
-                case "Polygon":
+                case "polygon":
                   for(var g in c['coordinates']) {
                     var p = [];
                     for(var cs in c['coordinates'][g]) {
                       // flip long/lat (GeoJSON) to lat/long (Leaflet)
-                      p.push([c['coordinates'][g][cs][1], c['coordinates'][g][cs][0]])    
+                      p.push([c['coordinates'][g][cs][1], c['coordinates'][g][cs][0]])
                     }
                     coords["polygons"].push(p);
                     coords["polygon_labels"].push(Object.keys(d[i]).filter(key => key !== 'coordinates')
@@ -102,22 +106,25 @@ export default {
 
                   }
                   break;
-                case "Point":
-                  for(var g in c['coordinates']) {
-                    for(var cs in c['coordinates'][g]) {
+                case "point":
+                  //for(var g in c['coordinates']) {
+                    //for(var cs in c['coordinates'][g]) {
                       // flip long/lat (GeoJSON) to lat/long (Leaflet)
-                      coords["points"].push([c['coordinates'][g][cs][1], c['coordinates'][g][cs][0]])    
-                    }
-                  }
+                  coords["points"].push([c['coordinates'][1], c['coordinates'][0]]);
+                  coords["point_labels"].push(Object.keys(d[i]).filter(key => key !== 'coordinates')
+                    .reduce((obj, key) => { obj[key] = d[i][key]; return obj; }, {}));
+                      //}
+                  //}
                   break;
               }
             }
         }
       }
+      console.log(coords);
       return coords;
     },
     getMapCenter: function() {
-      // TODO: get actual center 
+      // TODO: get actual center
       var c = this.coords["polygons"];
       if (!c || !c[0] || !c[0][0]) { return [0,0]; }
       return c[0][0];
@@ -126,6 +133,22 @@ export default {
       var c = this.coords;
       return c["points"];
     },
+    pointLabels: function() {
+      var self = this;
+      var c = this.coords;
+      var display_fields = this.displayFields;
+      return c["point_labels"].map((v, i) => {
+        var field_values = [];
+        for(var f in display_fields) {
+          if (display_fields[f] == self.showField) { continue; }
+          var t = self.dataTypes.filter((v) => v.id == self.showType);
+          var l = t[0]["fields"].filter((v) => v.code === display_fields[f]);
+          var field_label = (l && l[0]) ? l[0].name : "???";
+          field_values.push(field_label + ": " + v[display_fields[f]]);
+        }
+        return field_values.join("<br/>\n");
+      });
+  },
     polygons: function() {
       var c = this.coords;
       return c["polygons"];
@@ -141,7 +164,7 @@ export default {
           var t = self.dataTypes.filter((v) => v.id == self.showType);
           var l = t[0]["fields"].filter((v) => v.code === display_fields[f]);
           var field_label = (l && l[0]) ? l[0].name : "???";
-          field_values.push(field_label + ": " + v[display_fields[f]]); 
+          field_values.push(field_label + ": " + v[display_fields[f]]);
         }
         return field_values.join("<br/>\n");
       });
