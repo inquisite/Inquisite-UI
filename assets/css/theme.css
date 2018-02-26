@@ -541,7 +541,7 @@ a{
 	  background-color: #f2f2f2;
   }
 
-  .list-group{
+  .list-group .map-list-group{
 	  max-height: 400px;
 	  overflow-y: auto;
 	  overflow-x: hidden;
@@ -551,4 +551,13 @@ a{
 
   .list-group li{
 	  list-style: none;
+  }
+
+  /* Search Styles */
+  .search-result-text h6{
+	  margin-bottom: 0;
+  }
+
+  .search-result-text p{
+	  margin-bottom: 0.25rem;
   }
