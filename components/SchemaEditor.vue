@@ -14,9 +14,9 @@
 						<!--<li role="presentation" class="nav-item"><a href="#relationship-types" aria-controls="relationship-types" role="tab" data-toggle="tab" class="nav-link"> Relationship types</a></li>-->
 					</ul>
 				</div>
-			
+
 				<div class="tab-content">
-                	<div role="tabpanel" class="tab-pane active" id="data-types">  
+                	<div role="tabpanel" class="tab-pane active" id="data-types">
                 	   	<ul class="list-group list-group-flush" v-if="repos.length">
 							<li class="list-group-item justify-content-between">
 								<div></div><div><a @click="addDataType" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New data type</a></div>
@@ -34,13 +34,13 @@
 							</li>
 						</ul>
 					</div>
-                	<div role="tabpanel" class="tab-pane" id="relationship-types"> 
+                	<div role="tabpanel" class="tab-pane" id="relationship-types">
                 	    <ul class="list-group list-group-flush">
                 	        <li class="list-group-item justify-content-between">Relationship type list goes here </li>
                 	    </ul>
                 	</div>
-              	</div> 
-			</div>           
+              	</div>
+			</div>
         </div>
     </div>
     <div class="row" v-if="editorDataTypeIndex !== null">
@@ -79,15 +79,15 @@
 										</div>
 									</div>
 								</div>
-						 </div><!-- end card-block --> 
+						 </div><!-- end card-block -->
 					</div><!-- end card -->
 				</div><!-- end col -->
 			</div><!-- end row -->
 			<div class="row">
-				<div class="col-sm-12" v-if="(editorDataTypeIndex !== null) && (editorDataTypeIndex >= 0)"> 
+				<div class="col-sm-12" v-if="(editorDataTypeIndex !== null) && (editorDataTypeIndex >= 0)">
 					<div class="card card-form">
 						<div class="card-header text-center">Fields</div>
-						    
+
 							<div class="card-block">
 										<div>
 											<a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Field</a>
@@ -104,7 +104,7 @@
 
 												<div class="col-sm-9">
 													<div v-if="!f.id" class="btn btn-danger btn-sm">NEW</div>
-													<span v-if="f.name"><strong>{{f.name}}</strong> ({{f.code}})</span>	
+													<span v-if="f.name"><strong>{{f.name}}</strong> ({{f.code}})</span>
 												</div>
 												<div class="col-sm-3 text-right">
 													<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" v-if="f.id" :data-target="'#field' + f.id"  @click="$event.target.classList.toggle('inactive')"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
@@ -149,9 +149,13 @@
 												<div class="col-sm-12">
 													<div class="form-group">
 														<label for="description" class="form-label">Settings</label>
-														<div v-for="t in getFieldDataTypeSettingsForDisplay(f.type)">
+                                                        <div>
+                                                            <label for="search_display" class="form-label">Display in Search?</label>
+                                                            <input type="checkbox" class="form-input" :id="'field_' + f.code" :name="'field_' + f.code" v-model="f.settings.settings_search_display">
+                                                        </div>
+                                                        <div v-for="t in getFieldDataTypeSettingsForDisplay(f.type)">
 														    {{t.label}}
-														    
+
 														    <span v-if="(t.type == 'text') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
 														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select></select></span>
 														    <span v-else-if="(t.type == 'integer') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
@@ -161,8 +165,8 @@
 														    <span v-else-if="(t.type == 'boolean') && (t.render == 'select')"><select><option value="1">Yes</option><option value="0">No</option></select></span>
 														    <span v-else-if="(t.type == 'list') && (t.render == 'select')"><select></select></span>
 														    <span v-else>???</span>
-														    
-														    
+
+
 														</div>
 													</div>
 												</div>
@@ -173,7 +177,7 @@
 						</div><!-- end scroll -->
                     </div><!-- end card -->
 				</div><!-- end col -->
-             </div><!-- end row -->   
+             </div><!-- end row -->
              <div class="row">
 				<div class="col-sm-12">
 					<p class="text-center">
@@ -181,7 +185,7 @@
 						<button v-on:click.prevent="cancelDataTypeEdit" class="btn btn-cancel">Back</button>
 					</p>
 				</div>
-			</div>   
+			</div>
         </form>
 	    </div><!-- end col -->
     </div>
@@ -191,14 +195,14 @@
 
 <script>
 
-export default { 
+export default {
   name: 'schema-editor',
   data: function() {
     return {
         editorHeader: '',
         formContent: null,
         editorDataTypeIndex: null,
-        
+        search_display_values: [],
         state: this.$store.state
     }
   },
@@ -210,14 +214,14 @@ export default {
     isLoggedIn: function() {
 	    return this.$store.getters.isLoggedIn;
 	},
-	
+
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
 	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
 	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; },
 	fieldDataTypes: function() { return this.$store.getters['schema/getFieldDataTypeList']; }
-  }, 
+  },
   methods: {
     // ------------------------------------
     // Data type form
@@ -246,7 +250,7 @@ export default {
             this.$store.dispatch('schema/addDataType', this.formContent).then(function(response) {
                 self.editDataType(response.type.id);
             });
-        } 
+        }
     },
     cancelDataTypeEdit: function() {
         this.editorHeader = '';
@@ -269,7 +273,7 @@ export default {
     deleteDataTypeField: function(index) {
          if (this.editorDataTypeIndex !== null) {
             var fieldToDelete = this.dataTypes[this.editorDataTypeIndex]['fields'].splice(index, 1);
-            
+
             if (fieldToDelete && fieldToDelete[0].id) {
                 if(!this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete']) { this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'] = []; }
                 this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'].push(fieldToDelete[0].id);
