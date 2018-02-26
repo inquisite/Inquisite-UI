@@ -93,6 +93,9 @@
 						<div class="col-sm-2">
 							<h6>Data Type</h6>
 						</div>
+						<div class="col-sm-2">
+							<h6>Display in Search?</h6>
+						</div>
 					</div>
 					<div v-for="(h,i) in server_file_info.preview.headers" class="row">
 						<div class="col-sm-2 dataOutlineLabel">
@@ -159,6 +162,9 @@
 							<select :name="'field_type_' + h" v-model="data_type_recommended[i]" :disabled="allowCustomNameType(i)">
 								<option v-for="(t,k) in fieldDataTypes" :value="k">{{t.name}}</option>
 							</select>
+						</div>
+						<div class="col-sm-2 columnSelect">
+							<input type="checkbox" :name="'search_include_' + h" v-model="search_result_include[i]">
 						</div>
 					</div>
 					<div class="row">
@@ -274,6 +280,7 @@ export default {
 	  display_stats: [],
 	  editable_field_names: [],
 	  data_type_recommended: [],
+	  search_result_include: [],
 	  mapping_options: {},
 	  new_schema_name: null,
 	  display_preview: false,
@@ -448,6 +455,7 @@ export default {
                 //self.import_as = self.data_types[0]['id'];
 				self.setRecommendedSchema();
 				self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
+				self.search_result_include = Array(self.server_file_info.preview.headers.length).fill(false);
 				self.dataTypeRecommended;
 				self.updateDataMapping();
 				self.emptyFieldDescriptions();
@@ -470,7 +478,7 @@ export default {
 		});
 
 
-		this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names.join("|"), schema_name: this.new_schema_name, column_types: this.data_type_recommended.join("|"), field_descriptions: this.field_description.join("|") }}).then(function(data) {
+		this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names.join("|"), schema_name: this.new_schema_name, column_types: this.data_type_recommended.join("|"), field_descriptions: this.field_description.join("|"), field_search_display: this.search_result_include.join("|") }}).then(function(data) {
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,
@@ -528,7 +536,6 @@ export default {
 		}
 	},
 	setRecommendedSchema: function(){
-		console.log("schema", this.server_file_info.recommended_schema);
 		if(!this.server_file_info.recommended_schema){
 			this.import_as = -1;
 		} else {
@@ -554,7 +561,6 @@ export default {
 		for(var i in this.server_file_info.preview.headers){
 			this.field_description[i] = null;
 		}
-		console.log("descriptions", this.field_description);
 	},
 	showErrors: function(){
 		this.show_errors = !this.show_errors;

@@ -15,7 +15,7 @@
                                 </div>
                                 <div class="schema-map-fields" v-show="k.id == showType">
                                     <h6 class="text-center">Georeference Field:<br/>{{showField}}</h6>
-                                    <ul class="list-group" >
+                                    <ul class="list-group map-list-group" >
                                         <li class="small" v-for="kf, vf in k.fields" v-if="kf.type != 'GeorefDataType'">
                                             <input type="checkbox" v-model="displayFields" :value="kf.code" v-on:click="updateMap(k.id)"/> {{kf.name}}
                                         </li>
