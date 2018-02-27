@@ -102,11 +102,11 @@
 										<div class="container">
 											<div class="row">
 
-												<div class="col-sm-9">
+												<div class="col-sm-8">
 													<div v-if="!f.id" class="btn btn-danger btn-sm">NEW</div>
 													<span v-if="f.name"><strong>{{f.name}}</strong> ({{f.code}})</span>
 												</div>
-												<div class="col-sm-3 text-right">
+												<div class="col-sm-4 text-right">
 													<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" v-if="f.id" :data-target="'#field' + f.id"  @click="$event.target.classList.toggle('inactive')"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
 													&nbsp;&nbsp;<click-confirm placement="top" style="display:inline;">
 														<a @click="deleteDataTypeField(i)" class="btn btn-orange btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a>
@@ -149,24 +149,21 @@
 												<div class="col-sm-12">
 													<div class="form-group">
 														<label for="description" class="form-label">Settings</label>
-                                                        <div>
-                                                            <label for="search_display" class="form-label">Display in Search?</label>
-                                                            <input type="checkbox" class="form-input" :id="'field_' + f.code" :name="'field_' + f.code" v-model="f.settings.settings_search_display">
-                                                        </div>
                                                         <div v-for="t in getFieldDataTypeSettingsForDisplay(f.type)">
-														    {{t.label}}
-
-														    <span v-if="(t.type == 'text') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
-														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select></select></span>
-														    <span v-else-if="(t.type == 'integer') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
-														    <span v-else-if="(t.type == 'integer') && (t.render == 'select')"><select></select></span>
-														    <span v-else-if="(t.type == 'float') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
-														    <span v-else-if="(t.type == 'float') && (t.render == 'select')"><select></select></span>
-														    <span v-else-if="(t.type == 'boolean') && (t.render == 'select')"><select><option value="1">Yes</option><option value="0">No</option></select></span>
-														    <span v-else-if="(t.type == 'list') && (t.render == 'select')"><select></select></span>
-														    <span v-else>???</span>
-
-
+                                                            <div class="form-group row">
+                                                                <label :for="'settings_' + t.label" class="col-sm-3 col-formlabel">{{t.label}}</label>
+                                                                <div class="col-sm-3">
+        														    <span v-if="(t.type == 'text') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
+        														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select class="form-control"></select></span>
+        														    <span v-else-if="(t.type == 'integer') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
+        														    <span v-else-if="(t.type == 'integer') && (t.render == 'select')"><select class="form-control"></select></span>
+        														    <span v-else-if="(t.type == 'float') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
+        														    <span v-else-if="(t.type == 'float') && (t.render == 'select')"><select class="form-control"></select></span>
+        														    <span v-else-if="(t.type == 'boolean') && (t.render == 'select')"><select :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]"><option value="1">Yes</option><option value="0">No</option></select></span>
+        														    <span v-else-if="(t.type == 'list') && (t.render == 'select')"><select class="form-control"></select></span>
+        														    <span v-else>???</span>
+                                                                </div>
+                                                            </div>
 														</div>
 													</div>
 												</div>
@@ -235,6 +232,16 @@ export default {
             if (this.dataTypes[i].id == id) {
                 this.editorHeader = "Editing Data Type: <em>" + this.dataTypes[i].name + "</em>";
                 this.formContent = this.dataTypes[i];
+                for(var j in this.formContent.fields){
+                    console.log(this.formContent.fields[j]);
+                    for(var k in this.formContent.fields[j]){
+                        if(k.indexOf("settings_") > -1){
+                            if(["0", "1"].indexOf(this.formContent.fields[j][k]) > -1){
+                                this.formContent.fields[j][k] = parseInt(this.formContent.fields[j][k], 10);
+                            }
+                        }
+                    }
+                }
                 this.editorDataTypeIndex = i;
                 break;
             }
@@ -284,6 +291,8 @@ export default {
     getFieldDataTypeSettingsForDisplay: function(tid) {
 	    var o = this.fieldDataTypes[tid]['order'];
 	    var s = this.fieldDataTypes[tid]['settings'];
+        console.log(s);
+        console.log(o);
 	    if (!o || !s) { return null; }
 	    var acc = [];
 	    for(var i in o) { acc.push(s[o[i]]); }

@@ -164,7 +164,7 @@
 							</select>
 						</div>
 						<div class="col-sm-2 columnSelect">
-							<input type="checkbox" :name="'search_include_' + h" v-model="search_result_include[i]">
+							<select v-model="search_result_include[i]" :name="'search_include_' + h"><option value="1">Yes</option><option value="0">No</option></select>
 						</div>
 					</div>
 					<div class="row">
@@ -455,7 +455,7 @@ export default {
                 //self.import_as = self.data_types[0]['id'];
 				self.setRecommendedSchema();
 				self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
-				self.search_result_include = Array(self.server_file_info.preview.headers.length).fill(false);
+				self.search_result_include = Array(self.server_file_info.preview.headers.length).fill(0);
 				self.dataTypeRecommended;
 				self.updateDataMapping();
 				self.emptyFieldDescriptions();
