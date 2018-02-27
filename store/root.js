@@ -120,6 +120,33 @@ export const actions = {
                 return extractAPIError(error);
             });
     },
+
+    /** 
+     * User registration
+     */
+    register: function(context, data) {
+        return api.post('/register', data.data, {headers: apiHeaders({"auth": true, "form": true})})
+        .then(function(response) { 
+            context.commit('REGISTER_USER', response); 
+            return true;
+        }).then(function(response) {
+            return context.dispatch("doLogin", {data: {"username": data.data.email, "password": data.data.password}}, { 'root': true });
+        }).then(function(response) { 
+            return context.dispatch("repos/addRepo", {
+                makeActive: true, 
+                message: false,
+                data: {
+                    "name": "My first repository", 
+                    "url": data.data.url, 
+                    "readme": "This is your first repository in Inquisite. Add your data here, or create additional repositories for different projects."}
+                }, { 'root': true }
+            );
+        })
+        .catch(function(error) { 
+            context.commit('API_FAILURE', error, { root: true });
+            return extractAPIError(error);
+        });
+    },
     
     /**
      * Set flash message
@@ -196,7 +223,9 @@ export const mutations = {
         setTimeout(function() {
             state.showMessage = false;
         }, 8000);
-    }
+    },
+
+    REGISTER_USER: function(state, response) { state.message = response.msg },
 }
 
 

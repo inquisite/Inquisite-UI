@@ -41,29 +41,6 @@ const actions = {
         });
 
     },
-    addPerson: function(context, data) {
-        return api.post('/people/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-        .then(function(response) { 
-            context.commit('ADD_PERSON', response); 
-            return true;
-        }).then(function(response) {
-            return context.dispatch("doLogin", {data: {"username": data.data.email, "password": data.data.password}}, { 'root': true });
-        }).then(function(response) { 
-            return context.dispatch("repos/addRepo", {
-                makeActive: true, 
-                message: false,
-                data: {
-                    "name": "My first repository", 
-                    "url": data.data.url, 
-                    "readme": "This is your first repository in Inquisite. Add your data here, or create additional repositories for different projects."}
-                }, { 'root': true }
-            );
-        })
-        .catch(function(error) { 
-            context.commit('API_FAILURE', error, { root: true });
-            return extractAPIError(error);
-        });
-    },
     /**
      *
      */
@@ -149,7 +126,6 @@ const actions = {
 // mutations
 const mutations = {
     GET_PEOPLE: function(state, response) { state.users = response.people },
-    ADD_PERSON: function(state, response) { state.message = response.msg },
     EDIT_PERSON: function(state, response) { 
         state.message = response.msg;
         state.user.info.name = state.user.info.forename + " " + state.user.info.surname;

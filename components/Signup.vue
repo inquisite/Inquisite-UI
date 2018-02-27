@@ -127,7 +127,7 @@ export default {
       } else if(!validateEmail(this.email)) {
         this.$store.state.msg = "Email address is not valid";   
       } else {
-        this.$store.dispatch('people/addPerson', 
+        this.$store.dispatch('register', 
           { data: {
             forename: this.forename, 
             surname: this.surname,
