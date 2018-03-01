@@ -15,7 +15,7 @@ instance.interceptors.request.use((config) => {
 	let token_exp_time = store.getters.getTokenExpiration;
 	//console.log("[INTERCEPT] Exp time is " + token_exp_time);
 	//console.log("[INTERCEPT] " + config['url']);
-	if ((config['url'].indexOf('/login') < 0) && (config['url'].indexOf('/reset_password') < 0) && (config['url'].indexOf('/set_password') < 0) && !config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
+	if ((config['url'].indexOf('/login') < 0) && (config['url'].indexOf('/register') < 0) && (config['url'].indexOf('/reset_password') < 0) && (config['url'].indexOf('/set_password') < 0) && !config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
 		  console.log("[INTERCEPT] Token expired");
 		//console.log("[INTERCEPT] Refresh with ", store.getters.getRWT);
       return instance.post('/refresh', null, {isRefresh: 1, headers: apiHeaders({"refresh": store.getters.getRWT})}).then(function(refresh_response) {
