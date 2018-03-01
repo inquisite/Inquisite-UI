@@ -26,9 +26,16 @@
 					</form>
 				</div>
 				<div class="card-block">
-					<div id="teaser-container" v-if="is_uploading">
-						<p><i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_uploading"></i> Upload {{upload_progress}}% complete</p>
-
+					<div class="teaser-container" v-if="is_uploading">
+						<!--<p><i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_uploading"></i> Upload {{upload_progress}}% complete</p>-->
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" :style="'width: ' + upload_step_pos + '%'" :aria-valuenow="upload_step_pos"></div>
+						</div>
+						<h6>{{upload_step}}</h6>
+						<div class="progress">
+							<div class="progress-bar" role="progressbar" :style="'width: ' + upload_pos + '%'" :aria-valuenow="upload_pos"></div>
+						</div>
+						<h6>{{upload_status}}</h6>
 					</div>
 				</div>
       		</div>
@@ -168,12 +175,34 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-12">
+						<div class="col-12 col-md-7">
+							<div class="card-block">
+								<div class="teaser-container" v-if="is_importing">
+									<!--<p><i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_uploading"></i> Upload {{upload_progress}}% complete</p>-->
+									<h3>Import Step</h3>
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" :style="'width: ' + import_step_pos + '%'" :aria-valuenow="import_step_pos"></div>
+									</div>
+									<h6>{{import_step}}</h6>
+									<h3>Status</h3>
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" :style="'width: ' + import_pos + '%'" :aria-valuenow="import_pos" :aria-valuemax="server_file_info.total_rows"></div>
+									</div>
+									<h6>{{import_status}}</h6>
+									<h3>Errors</h3>
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" :style="'width: ' + error_pos + '%'" :aria-valuenow="error_pos" :aria-valuemax="server_file_info.total_rows"></div>
+									</div>
+									<h6>{{error_status}}</h6>
+								</div>
+								<!--<i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>-->
+							</div>
+						</div>
+						<div class="col-12 col-md-5">
 							<div class="item pull-right" style="padding: 10px 0">
 								<a v-on:click="togglePreview" class="btn btn-secondary">Preview Data</a>
 								<button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
 		                        <a href="#" class="btn btn-secondary">Cancel</a>
-		                        <i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_importing"></i>
 		                    </div>
 						</div>
 					</div>
@@ -286,7 +315,18 @@ export default {
 	  display_preview: false,
 	  show_errors: false,
 	  current_chart: null,
-	  result_chart_data: null
+	  result_chart_data: null,
+
+	  upload_pos: 0,
+	  upload_status: '',
+	  upload_step: '',
+	  upload_step_pos: 0,
+	  import_pos: 0,
+	  import_status: '',
+	  import_step: '',
+	  import_step_pos: 0,
+	  error_status: '',
+	  error_pos: 0
     }
   },
   components: {
@@ -449,6 +489,7 @@ export default {
             this.is_uploading = true;
 			this.$store.dispatch('data/uploadData', {form: { data_file: this.data_file, repo_id: this.activeRepo.id }, progressCallback: function(p) {
                 self.upload_progress = p;
+				self.upload_pos = p;
             }}).then(function(data) {
                 if (data['filename']) { self.server_file_info = data; }
                  self.is_uploading = false;
@@ -462,6 +503,12 @@ export default {
             });
 
         }
+		this.import_status = '';
+		this.import_pos = 0;
+		this.import_step = '';
+		this.import_step_pos = 0;
+		this.error_status = '';
+		this.error_pos = 0;
     },
     importData: function() {
         var self = this;
@@ -565,6 +612,32 @@ export default {
 	showErrors: function(){
 		this.show_errors = !this.show_errors;
 		console.log(this.show_errors);
+	}
+  },
+  sockets: {
+    upload_status: function(data){
+		this.upload_pos = data.pos;
+		this.upload_status = data.status;
+        //console.log("STATUS", data);
+    },
+	upload_step: function(data){
+		this.upload_step_pos = data.pos;
+		this.upload_step = data.step;
+		//console.log("STEP", data);
+	},
+	import_status: function(data){
+		this.import_pos = data.pos;
+		this.import_status = data.status;
+        //console.log("IMPORT STATUS", data);
+    },
+	import_step: function(data){
+		this.import_step_pos = data.pos;
+		this.import_step = data.step;
+		//console.log("IMPORT STEP", data);
+	},
+	error_status: function(data){
+		this.error_pos = data.pos;
+		this.error_status = data.status;
 	}
   }
 }

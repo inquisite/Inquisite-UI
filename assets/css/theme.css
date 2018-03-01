@@ -412,6 +412,15 @@ a{
 
   /* Upload Schema Screen */
 
+  .teaser-container .progress{
+	  height: 33px;
+  }
+
+  .teaser-container .progress .progress-bar{
+	  background-color: #E48035;
+	  height: 33px;
+  }
+
   .schemaForm{
 	  margin-top: 10px;
   }

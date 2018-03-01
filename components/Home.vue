@@ -1,7 +1,7 @@
 <template>
 <div id="home" class="container">
     <flashmessage/>
-    
+
 	<div class="row" v-if="!isLoaded && !isLoggedIn">
 		<div class="col-sm-12">
 			<div class="jumbotron">
@@ -29,14 +29,14 @@
 					<div class="col-sm-6">
 						<p>
 							<h4>What is it?</h4>
-							Inquisite is a tool for collaboratively organizing, analyzing and assembling research data. 
+							Inquisite is a tool for collaboratively organizing, analyzing and assembling research data.
 							It is designed to streamline and encourage the formation of open research communities.
 						</p>
 						<p>
 							<h4>How does it work?</h4>
-							Inquisite users create repositories where research data can be shared and explored. 
-							Inquisite processes and classifies data as it is imported, establishing links between common elements 
-							in disparate sources. These links provide researchers the opportunity to contextualize and expand their 
+							Inquisite users create repositories where research data can be shared and explored.
+							Inquisite processes and classifies data as it is imported, establishing links between common elements
+							in disparate sources. These links provide researchers the opportunity to contextualize and expand their
 							findings by leveraging the data of colleagues and peers into merged super-datasets.
 						</p>
 					</div>
@@ -48,11 +48,11 @@
 				</div>
 			</div><!-- end !isLoggedIn -->
 		</div>
-	</div>  
+	</div>
 
 
-      
-      
+
+
 	<div class="row" v-if="isLoggedIn && showRepoControls">
 		<div class="col-sm-6">
 			<div class="bg-lt-gray">
@@ -89,12 +89,12 @@
               <div class="col-4 text-center">
                 <div class="h1">{{activeRepo.schema_type_count}}</div>
                 <h5 class="media-heading">Data Types</h5>
-              </div>  
+              </div>
 
               <div class="col-4 text-center">
                 <div class="h1">{{activeRepo.schema_field_count}}</div>
                 <h5 class="media-heading">Fields</h5>
-              </div>           
+              </div>
 
               <div class="col-4 text-center">
                 <div class="h1">{{activeRepo.data_element_count}}</div>
@@ -137,9 +137,9 @@
 </template>
 
 <script>
-    var marked = require('marked'); 
+    var marked = require('marked');
 
-	export default { 
+	export default {
 		name: 'home',
         data: function() {
           return {
@@ -170,7 +170,6 @@
               if( this.isLoggedIn && (ar.id > 0) ) {
                 show = true;
               }
-            
               return show;
             },
             elementCount: function() {
@@ -188,7 +187,7 @@
             var self = this;
 
             this.$store.dispatch('people/setPerson', { data: { person_id: person_id }})
-            .then(function() { 
+            .then(function() {
                 // Transition to User Profile if person set
                 if(this.$store.state.person) {
                   self.$root.$options.router.push('/user/profile')
@@ -198,5 +197,5 @@
           }
         }
 	}
-	
+
 </script>

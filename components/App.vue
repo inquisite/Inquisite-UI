@@ -7,10 +7,10 @@
         <router-link to="/" class="navbar-brand">
             <img class="logo" src="assets/images/logo.png">
         </router-link>
-        
+
         <div class="collapse navbar-collapse justify-content-end" id="mainNavigation">
-        
-        
+
+
 			<ul class="navbar-nav" v-if="!isLoggedIn">
 			  <li class="nav-item">
 				<router-link class="nav-link" to="/signup">Sign up</router-link>
@@ -19,7 +19,7 @@
 				<router-link to="/login" class="nav-link">Login</router-link>
 			  </li>
 			</ul>
-        
+
             <ul class="navbar-nav" v-if="isLoggedIn">
 
                 <li class="nav-item dropdown">
@@ -33,8 +33,8 @@
                         <div class="dropdown-divider"></div>
                         <li class="dropdown-item"><router-link to="/add-repo" class="nav-link"><i class="fa fa-plus" aria-hidden="true"></i> New Repository</router-link></li>                   </ul>
                 </li>
-                
-                
+
+
                 <li class="nav-item"><router-link to="/upload" class="nav-link">Upload Data</router-link></li>
                 <li class="nav-item dropdown">
                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -81,7 +81,7 @@
                     <li class="dropdown-item"><router-link to="/help/contact" class="nav-link">Contact us</router-link></li>
                     </ul>
                 </li>
-                
+
                 <li class="nav-item btn btn-icon dropdown"  v-if="isLoggedIn">
                     <a href="#" class="dropdown-toggle dropdown-toggle-icon" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-user-circle" aria-hidden="true"></i>
@@ -96,8 +96,8 @@
             </ul>
         </div>
     </nav>
-    
-   
+
+
 
       <!-- Start of Home page content -->
       <div id="page" class="ui pageContent container">
@@ -130,7 +130,13 @@ export default {
     }
   },
   watch: {
-    '$route': 'pageChangeActions'
+    '$route': 'pageChangeActions',
+    user: function(data){
+        console.log(this.user);
+        if(this.user.id){
+            this.$socket.emit('send_user_id', {"id": this.user.id});
+        }
+    }
   },
   computed: {
     isLoggedIn: function() {
@@ -148,9 +154,9 @@ export default {
     },
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
-	activeRepo: function() { 
+	activeRepo: function() {
 	    var repo = this.$store.getters['repos/getActiveRepo'];
-	    return repo ? repo : {}; 
+	    return repo ? repo : {};
     },
     getDataTypes: function() {
         if(this.activeRepo) {
@@ -166,7 +172,7 @@ export default {
       .then(function() {
           // Transition to Home Page if logged out
           if(!self.isLoggedIn) {
-              setTimeout( function() { self.$root.$options.router.push('/') }, 300) 
+              setTimeout( function() { self.$root.$options.router.push('/') }, 300)
           }
       });
 
@@ -179,14 +185,14 @@ export default {
         }
 
         return length;
-        
+
     },
-    
+
     pageChangeActions: function() {
       // Clear form msg
       store.dispatch('resetMessage');
 
-      // Get User Repos if logged in and we don't have them 
+      // Get User Repos if logged in and we don't have them
       if( this.isLoggedIn && !this.hasRepos) {
         store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
       }
@@ -203,5 +209,16 @@ export default {
         this.$router.push("/search");
     }
   },
+  sockets: {
+    connect: function(){
+        console.log('Socket Connected!');
+    },
+    disconnect: function(){
+        console.log('Recieved Disconnect!');
+    },
+    entered_response: function(data){
+        console.log("Entered Room", data);
+    }
+  }
 }
 </script>

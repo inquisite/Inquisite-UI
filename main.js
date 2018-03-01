@@ -6,8 +6,11 @@ import ClickConfirm from 'click-confirm'
 import Vue2Leaflet from 'vue2-leaflet'
 import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 import VueCharts from 'vue-chartjs'
+import VueSocketio from 'vue-socket.io'
+import config from './config.js'
 
 Vue.use(VueRouter, Vuex, axios);
+Vue.use(VueSocketio, config.api_endpoint, store);
 
 const routes = require('./routes.js')
 const App = require('./components/App.vue')
