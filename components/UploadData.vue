@@ -124,7 +124,8 @@
 							      </div>
 							      <div class="modal-body">
 									  <ul>
-										<li v-for="(t, s) in displayStatistics[h]"><strong>{{s}}: </strong>{{t}}</li>
+										<li v-if="displayStatistics[h]" v-for="(t, s) in displayStatistics[h]"><strong>{{s}}: </strong>{{t}}</li>
+										<li v-if="displayStatistics[i]" v-for="(t, s) in displayStatistics[i]"><strong>{{s}}: </strong>{{t}}</li>
   									</ul>
 							      </div>
 							      <div class="modal-footer">
@@ -361,11 +362,17 @@ export default {
 	},
 	dataTypeRecommended: function(){
 		var stats = this.server_file_info.column_stats;
+		for(var j in stats){
+			var quote_trim = new RegExp('^"|"$', "g");
+			var clean_header = j.replace(quote_trim, "");
+			console.log(clean_header);
+			stats[clean_header] = stats[j];
+		}
 		for(var i in this.server_file_info.preview.headers) {
 			try{
 				var column_type = stats[i]['type'];
 			} catch(error) {
-				var column_type = stats[this.server_file_info.preview.headers[i]]['type'];
+				var column_type = stats[clean_header]['type'];
 			}
 			if(column_type == 'Georeference'){
 				this.data_type_recommended[i] = 'GeorefDataType';
@@ -384,6 +391,7 @@ export default {
 			var rowStats = stats[statCont];
 			statDisplay[statCont] = {};
 			for(var stat in rowStats){
+
 				if(["type", "value_array"].indexOf(stat) >= 0){
 					continue;
 				} else if(stat == "frequent_values"){
@@ -397,6 +405,7 @@ export default {
 				statDisplay[statCont][stat] = rowStats[stat];
 			}
 		}
+		console.log(statDisplay);
 		return statDisplay;
 	},
 	mappingOptions: function() {
@@ -428,7 +437,8 @@ export default {
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
-                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i].replace(" ", "_").toLowerCase()) {
+						var fieldRegEx = new RegExp("[^A-Za-z0-9_]+", "g")
+                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i].replace(fieldRegEx, "_").toLowerCase()) {
                             allowCreateNew = false;
 							opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
                             vals[i].unshift(dt['fields'][k]['id']);
@@ -492,7 +502,7 @@ export default {
 				self.upload_pos = p;
             }}).then(function(data) {
                 if (data['filename']) { self.server_file_info = data; }
-                 self.is_uploading = false;
+				self.is_uploading = false;
                 //self.import_as = self.data_types[0]['id'];
 				self.setRecommendedSchema();
 				self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
@@ -536,19 +546,19 @@ export default {
             self.import_complete = true;
 
             self.$store.dispatch('people/getRepos', {});    // reload stats... TODO: break repo stats out into a single repo-specific call
-        });
-		var postImportStats = this.$store.dispatch('data/getDataCounts', {data: {repo_id: this.activeRepo.id}}).then(function(data){
-			var postData = {"label": "Post-Import Data", "backgroundColor": "#F79D59", "data": []}
-			for(var schema in data.data){
-				if(self.result_chart_data.labels.indexOf(schema) < 0){
-					self.result_chart_data.labels.push(schema)
+			var postImportStats = self.$store.dispatch('data/getDataCounts', {data: {repo_id: self.activeRepo.id}}).then(function(data){
+				var postData = {"label": "Post-Import Data", "backgroundColor": "#F79D59", "data": []}
+				for(var schema in data.data){
+					if(self.result_chart_data.labels.indexOf(schema) < 0){
+						self.result_chart_data.labels.push(schema)
+					}
+					var dataPos = self.result_chart_data.labels.indexOf(schema);
+					postData.data[dataPos] = data.data[schema];
 				}
-				var dataPos = self.result_chart_data.labels.indexOf(schema);
-				postData.data[dataPos] = data.data[schema];
-			}
-			self.result_chart_data.datasets.push(postData);
-			self.current_chart = 'result-chart';
-		});
+				self.result_chart_data.datasets.push(postData);
+				self.current_chart = 'result-chart';
+			});
+        });
 		console.log(this.result_chart_data);
     },
     reset: function() {
