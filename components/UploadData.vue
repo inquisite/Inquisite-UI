@@ -365,14 +365,14 @@ export default {
 		for(var j in stats){
 			var quote_trim = new RegExp('^"|"$', "g");
 			var clean_header = j.replace(quote_trim, "");
-			console.log(clean_header);
 			stats[clean_header] = stats[j];
 		}
 		for(var i in this.server_file_info.preview.headers) {
+
 			try{
 				var column_type = stats[i]['type'];
 			} catch(error) {
-				var column_type = stats[clean_header]['type'];
+				var column_type = stats[this.server_file_info.preview.headers[i]]['type'];
 			}
 			if(column_type == 'Georeference'){
 				this.data_type_recommended[i] = 'GeorefDataType';
