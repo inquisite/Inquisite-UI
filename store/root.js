@@ -66,7 +66,7 @@ export const actions = {
               context.dispatch('people/getUserInfo', {token: response.access_token});
               context.dispatch('people/getRepos', {token: response.access_token});
               context.commit('SET_MESSAGE', "You are now logged in", {'root': true});
-              return true;
+              return response;
             } else {
 
               context.commit('API_FAILURE', "Login failed" );
@@ -127,22 +127,40 @@ export const actions = {
     register: function(context, data) {
         return api.post('/register', data.data, {headers: apiHeaders({"auth": true, "form": true})})
         .then(function(response) { 
-            context.commit('REGISTER_USER', response); 
-            return true;
-        }).then(function(response) {
-            return context.dispatch("doLogin", {data: {"username": data.data.email, "password": data.data.password}}, { 'root': true });
+            if ((response._status >= 200) && (response._status <= 299)) {
+                context.commit('REGISTER_USER', response); 
+            }
+            return response;
+        }).then(function(response){
+            if ((response._status >= 200) && (response._status <= 299)) {
+                return context.dispatch("doLogin", {data: {"username": data.data.email, "password": data.data.password}}, { 'root': true });
+            } else {
+                context.commit('SET_MESSAGE', response.msg, {'root': true});
+                return response;
+            }
         }).then(function(response) { 
-            return context.dispatch("repos/addRepo", {
-                makeActive: true, 
-                message: false,
-                data: {
-                    "name": "My first repository", 
-                    "url": data.data.url, 
-                    "readme": "This is your first repository in Inquisite. Add your data here, or create additional repositories for different projects."}
-                }, { 'root': true }
-            );
-        })
-        .catch(function(error) { 
+            if ((response._status >= 200) && (response._status <= 299)) {
+                return context.dispatch("repos/addRepo", {
+                    makeActive: true, 
+                    message: false,
+                    data: {
+                        "name": "My first repository", 
+                        "url": data.data.url, 
+                        "readme": "This is your first repository in Inquisite. Add your data here, or create additional repositories for different projects."}
+                    }, { 'root': true }
+                );
+            }  else {
+                context.commit('SET_MESSAGE', response.msg, {'root': true});
+                return false;
+            }
+        }).then(function(response) {
+            if (response && (response._status >= 300)) {
+                context.commit('SET_MESSAGE', response.msg, {'root': true});
+                return false;
+            } else {
+                return response;
+            }
+        }).catch(function(error) { 
             context.commit('API_FAILURE', error, { root: true });
             return extractAPIError(error);
         });

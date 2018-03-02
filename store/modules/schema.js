@@ -33,7 +33,10 @@ const actions = {
      */
     getFieldDataTypeList: function(context) {
         return api.get('schema/getDataTypes', {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('GET_FIELD_DATA_TYPE_LIST', response);  return true; })
+            .then(function(response) { 
+                context.commit('GET_FIELD_DATA_TYPE_LIST', response);  
+                return response; 
+            })
             .catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
@@ -46,7 +49,10 @@ const actions = {
         if(!context.rootState.token) return false;
 
         return api.get('schema/getTypes/' + repo_id, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('GET_DATA_TYPES', response); return true; })
+            .then(function(response) { 
+                context.commit('GET_DATA_TYPES', response); 
+                return response; 
+            })
             .catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
@@ -85,7 +91,7 @@ const actions = {
             .then(function(response) {
                 context.commit('EDIT_DATA_TYPE', response);
                 context.commit('SET_MESSAGE', 'Saved changes to data type <em>' + data.name + '</em>', {'root': true});
-                return true;
+                return response;
             })
         .catch(function(error) {
             context.commit('API_FAILURE', error, { root: true });
@@ -101,7 +107,7 @@ const actions = {
             .then(function(response) {
                 context.commit('DELETE_DATA_TYPE', response);
                 context.commit('SET_MESSAGE', 'Deleted type', {'root': true});
-                return true;
+                return response;
             })
         .catch(function(error) {
             context.commit('API_FAILURE', error, { root: true });

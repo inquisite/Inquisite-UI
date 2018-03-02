@@ -33,7 +33,7 @@ const actions = {
         .then(function(response) { 
             console.log("COMMIT", response);
             context.commit('GET_PERSON_LIST', response); 
-            return true;
+            return response;
         })
         .catch(function(error) { 
             context.commit('API_FAILURE', error, { root: true });
@@ -51,7 +51,7 @@ const actions = {
             context.commit('EDIT_PERSON', response); 
             context.commit('SET_MESSAGE', "Saved changes", {'root': true});
             
-            return true;
+            return response;
         }).catch(function(error) { 
             context.commit('API_FAILURE', error, { root: true });
             return extractAPIError(error);
@@ -82,7 +82,10 @@ const actions = {
     getUserInfo: function(context, data) {
       if (!context.rootState.token) return false;
       return api.get('/people/info', {headers: apiHeaders({"auth": true})})
-        .then(function(response) { context.commit('GET_USER_INFO', response); return true; })
+        .then(function(response) { 
+            context.commit('GET_USER_INFO', response); 
+            return response; 
+        })
         .catch(function(error) { 
             context.commit('API_FAILURE', error, { root: true });
             return extractAPIError(error);
