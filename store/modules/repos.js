@@ -65,7 +65,7 @@ const actions = {
             if (data.message !== false) {
                 context.commit('SET_MESSAGE', 'Created new repository <em>' + response.name + '</em>', {'root': true});
             }
-            return true;
+            return response;
         })
         .catch(function(error) { 
             context.commit('API_FAILURE', error, { root: true });
@@ -87,7 +87,7 @@ const actions = {
             .then(function(response) { 
                 context.commit('EDIT_REPO', response); 
                 context.commit('SET_MESSAGE', 'Saved changes', {'root': true});
-                return true;
+                return response;
             })
             .catch(function(error) { 
                 context.commit('API_FAILURE', error, { root: true });
@@ -107,7 +107,7 @@ const actions = {
                 context.commit('DELETE_REPO', response);
                 context.commit('SET_MESSAGE', 'Deleted repository', {'root': true});
                 if (router) { router.push("/"); }
-                return true;
+                return response;
             })
             .catch(function(error) { 
                 context.commit('API_FAILURE', error, { root: true });
@@ -121,7 +121,10 @@ const actions = {
     getRepoUsers: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/repositories/users', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('GET_REPO_USERS', response); return true; })
+            .then(function(response) { 
+                context.commit('GET_REPO_USERS', response); 
+                return response;
+            })
             .catch(function(error) { 
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);
@@ -137,7 +140,7 @@ const actions = {
             .then(function(response) { 
                 context.commit('ADD_PERSON_REPO', response); 
                 context.commit('SET_MESSAGE', 'Added collaborator', {'root': true});
-                return true;
+                return response;
             }).catch(function(error) { 
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);
@@ -153,7 +156,7 @@ const actions = {
             .then(function(response) { 
                 context.commit('REMOVE_PERSON_REPO', response); 
                 context.commit('SET_MESSAGE', 'Removed collaborator', {'root': true});
-                return true;
+                return response;
             }).catch(function(error) { 
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);

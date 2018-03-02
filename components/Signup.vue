@@ -119,13 +119,13 @@ export default {
   methods: {
     processSignup: function() {
       var self = this;
-      
+      console.log("Xxx", this, this.password === '');
       if ((this.password.length > 0) && (this.password !== this.password_confirm)) {
-        this.$store.state.msg = "Password do not match";  
-      } else if( this.forename === '' || this.surname === '' || this.email === '' || this.password === '') {
-        this.$store.state.msg = "Name, Email, and Password are required fields";   
+        this.$store.dispatch('setMessage', "Password do not match"); 
+      } else if( (this.forename === '') || (this.surname === '') || (this.email === '') || (this.password === '')) {
+        this.$store.dispatch('setMessage', "Name, Email, and Password are required fields"); 
       } else if(!validateEmail(this.email)) {
-        this.$store.state.msg = "Email address is not valid";   
+        this.$store.dispatch('setMessage', "Email address is not valid"); 
       } else {
         this.$store.dispatch('register', 
           { data: {
@@ -137,11 +137,9 @@ export default {
             nyunetid: this.nyunetid,
             url: this.url, 
             password: this.password
-        }}).then(function(response) {
-            if ((typeof(response) == 'object') && (response.isError === true)) {
-                self.$store.state.msg = response.message;
-            } else {
-                self.$store.state.msg = "You are now signed up!";
+        }}).then(function(result) {
+            if (result) {
+                self.$store.dispatch('setMessage', "You are now signed up!");
                 self.$router.push('/'); 
             }
         });

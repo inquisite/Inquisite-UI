@@ -93,7 +93,10 @@ const actions = {
         if(!context.rootState.token) return false;
 
         return api.post('/repositories/data', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { context.commit('REPO_DATA', response) })
+            .then(function(response) { 
+                context.commit('REPO_DATA', response);
+                return response;
+            })
             .catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);

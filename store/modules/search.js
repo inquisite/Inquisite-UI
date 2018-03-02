@@ -32,7 +32,7 @@ const actions = {
         return api.get('/search?q=' + escape(q), {headers: apiHeaders({"auth": false, "form": true})})
             .then(function(response) { 
                 context.commit('QUICK_SEARCH', response);
-                return true;
+                return response;
             }).catch(function(error) { 
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
