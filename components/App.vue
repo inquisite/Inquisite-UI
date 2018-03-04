@@ -121,18 +121,15 @@ export default {
   },
   mounted: function() {
     if (this.isLoggedIn) {
-        var self = this;
-        this.$store.dispatch('people/getRepos').then(function() {
-            self.$store.dispatch('schema/getDataTypes', self.$store.getters['repos/getActiveRepoID']).then(function() {
-                // noop
-            });
+        // Load initial data
+        this.$store.dispatch('boot', this.$store.getters['repos/getActiveRepoID']).then(function() {
+
         });
     }
   },
   watch: {
     '$route': 'pageChangeActions',
     user: function(data){
-        console.log(this.user);
         if(this.user.id){
             this.$socket.emit('send_user_id', {"id": this.user.id});
         }

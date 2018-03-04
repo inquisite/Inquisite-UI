@@ -110,10 +110,30 @@ export const actions = {
     },
 
     /**
+     * Get initial data on page load
+     */
+    boot: function(context, repo_id) {
+        if (!context.rootState.token) return false;
+        return api.post('/boot', {"repo_id": repo_id }, {headers: apiHeaders({"auth": true})})
+            .then(function(response) { 
+            context.commit('GET_REPOS', response.repos);
+            context.commit('repos/SET_REPOS', response.repos, { root: true });
+            if (repo_id && response.schema) {
+                context.commit('schema/GET_DATA_TYPES', response.schema); 
+            }
+            return response;
+            })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            });
+    },
+
+    /**
      * Initiate password reset
      */
     sendPasswordReset: function(context, email) {
-        return api.post('/people/' + email + '/reset_password', {"x":"x"}, {headers: apiHeaders({"auth": true})})
+        return api.post('/people/' + email + '/reset_password', {}, {headers: apiHeaders({"auth": true})})
             .then(function(response) { 
                 //context.commit('SET_MESSAGE', "Sent password reset", {'root': true});
                 return true;
