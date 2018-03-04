@@ -25,6 +25,7 @@ const getters = {
         return [];
      },
      getDataColumnSpec: function(state) {
+        console.log("feh", state, state.loaded_data);
         if (state.loaded_data) {
             return state.loaded_data.columns.filter(function(v) { return v != 'uuid'}).map(function(v) { return {
                 'data': v,
@@ -174,7 +175,7 @@ const actions = {
         if (!d.start) { d.start = 0}
         if (!d.limit) { d.limit = limit}
 
-        return api.get('/data/getDataForType/' + repo_id+ '/' + type_id + '/' + start + '/' + limit, {headers: apiHeaders({"auth": true, "form": true})})
+        return api.get('/data/getDataForType/' + repo_id + '/' + type_id + '/' + start + '/' + limit, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {
                 context.commit('GET_DATA_FOR_TYPE', response);
                 count = response['count'];

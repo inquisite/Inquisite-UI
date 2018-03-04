@@ -155,7 +155,7 @@ export default {
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() {
-	    var repo = this.$store.getters['repos/getActiveRepo'];
+        var repo = this.$store.getters['repos/getActiveRepo'];
 	    return repo ? repo : {};
     },
     getDataTypes: function() {
@@ -194,7 +194,7 @@ export default {
 
       // Get User Repos if logged in and we don't have them
       if( this.isLoggedIn && !this.hasRepos) {
-        store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
+        store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo_id }}); });
       }
     },
     setActiveRepo: function(repo_id) {
