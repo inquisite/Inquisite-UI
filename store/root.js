@@ -116,7 +116,7 @@ export const actions = {
         if (!context.rootState.token) return false;
         return api.post('/boot', {"repo_id": repo_id }, {headers: apiHeaders({"auth": true})})
             .then(function(response) { 
-            context.commit('GET_REPOS', response.repos);
+            context.commit('people/GET_REPOS', response.repos);
             context.commit('repos/SET_REPOS', response.repos, { root: true });
             if (repo_id && response.schema) {
                 context.commit('schema/GET_DATA_TYPES', response.schema); 
