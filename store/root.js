@@ -61,6 +61,8 @@ export const actions = {
               context.commit('login');
               context.commit('setToken', response.access_token);
               context.commit('setRefresh', response.refresh_token);
+              window.localStorage.removeItem('repos');
+              window.sessionStorage.removeItem('repo_id');
           
               // Get User Data -- now sets repos with users and data
               context.dispatch('people/getUserInfo', {token: response.access_token});
@@ -96,6 +98,8 @@ export const actions = {
             window.localStorage.removeItem('jwt');
             window.localStorage.removeItem('jwt_expiration');
             window.localStorage.removeItem('rwt');
+            window.localStorage.removeItem('repos');
+            window.sessionStorage.removeItem('repo_id');
             context.commit('logout');
             context.commit('SET_MESSAGE', "Logged out", {'root': true});
             return true;

@@ -4,9 +4,9 @@ import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
-  user_repos: [],               // list of repositories for currently logged in user
+  user_repos: window.localStorage.getItem('repos'),               // list of repositories for currently logged in user
   active_repo: {},              // info for currently active repository 
-  active_repo_id: null          // id for currently active repository
+  active_repo_id: window.localStorage.getItem('active_repo_id')          // id for currently active repository
 }
 
 // getters
@@ -34,8 +34,13 @@ const getters = {
     /**
      * Return repo_id for currently selected repository
      */
-    getActiveRepoID: state => { 
-        return state.active_repo_id;
+    getActiveRepoID: state => {
+        var active_repo_id = state.active_repo_id;
+        if (!active_repo_id) { active_repo_id = window.sessionStorage.getItem('repo_id');}
+        if ((active_repo_id == null) && (state.user_repos) && (state.user_repos.length > 0)) {
+            active_repo_id = state.user_repos[0]['id'];
+        }
+        return active_repo_id;
     }
 }
 
@@ -215,6 +220,7 @@ const mutations = {
     },
     SET_REPOS: function(state, response) {
         state.user_repos = response.repos;
+        window.localStorage.setItem('repos', JSON.stringify(response.repos));
         state.active_repo_id = window.sessionStorage.getItem('repo_id');
         if (!state.active_repo_id) {
             state.active_repo_id = state.user_repos[0]['id'];
