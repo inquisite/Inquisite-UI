@@ -9,7 +9,7 @@
 						<div class="card-block">
 						
 				
-						<div>Name: {{user.name}}</div>
+						<div>Name: {{user.forename}} {{user.surname}}</div>
 						<div>Email: {{user.email}}</div>
 						<div>Location: {{user.location}}</div>
 						<div>Tagline: {{user.tagline}}</div>
