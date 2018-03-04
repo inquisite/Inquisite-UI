@@ -117,8 +117,8 @@ export const actions = {
         return api.post('/boot', {"repo_id": repo_id }, {headers: apiHeaders({"auth": true})})
             .then(function(response) { 
             context.commit('people/GET_REPOS', response.repos);
-            context.commit('repos/SET_REPOS', response.repos, { root: true });
-            if (repo_id && response.schema) {
+            context.commit('repos/SET_REPOS', response.repos);
+            if (response.schema) {
                 context.commit('schema/GET_DATA_TYPES', response.schema); 
             }
             return response;
