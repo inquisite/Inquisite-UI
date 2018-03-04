@@ -16,6 +16,9 @@ const routes = require('./routes.js')
 const App = require('./components/App.vue')
 const store = require('./store/store.js')
 
+// load token and set logged in status before creating router
+// as routes depend upon login status
+store.default.getters.getToken; 
 const router = new VueRouter({
   routes: routes.default
 });
@@ -37,9 +40,6 @@ new Vue({
   router: router,
   http: {
     root: '.'
-  },
-  created: function() {
-    store.default.getters.getToken
   },
   store
 })

@@ -4,7 +4,7 @@ import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
 // initial state
 const state = {
-  user_repos: window.localStorage.getItem('repos'),               // list of repositories for currently logged in user
+  user_repos: JSON.parse(window.localStorage.getItem('repos')),               // list of repositories for currently logged in user
   active_repo_id: parseInt(window.sessionStorage.getItem('repo_id'))          // id for currently active repository
 }
 
@@ -16,7 +16,6 @@ const getters = {
     getActiveRepo: state => {
         var active_repo_id = parseInt(state.active_repo_id);
         var activeRepo = $.grep(state.user_repos, function(repo) { return parseInt(repo.id) === active_repo_id; });
-        
         return (activeRepo && activeRepo.length > 0) ? activeRepo[0] : {};
     },
     

@@ -12,7 +12,7 @@ export const getters = {
     /**
      * Is user logged in?
      */
-    isLoggedIn: state => { return state.logged_in },
+    isLoggedIn: state => { return state.logged_in; },
 
     /**
      * Get current API token
@@ -20,7 +20,6 @@ export const getters = {
     getToken: state => {
         var jwt = window.localStorage.getItem('jwt');
         state.token = jwt;
-    
         if (state.token) { state.logged_in = true; }
 
         return state.token
