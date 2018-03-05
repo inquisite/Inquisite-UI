@@ -190,9 +190,9 @@ export default {
       store.dispatch('resetMessage');
 
       // Get User Repos if logged in and we don't have them
-      if( this.isLoggedIn && !this.hasRepos) {
-        store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo_id }}); });
-      }
+    //   if( this.isLoggedIn && !this.hasRepos) {
+    //     store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo_id }}); });
+    //   }
     },
     setActiveRepo: function(repo_id) {
       store.commit('repos/SET_ACTIVE_REPO', repo_id);

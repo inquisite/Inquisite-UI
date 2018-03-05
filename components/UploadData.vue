@@ -341,7 +341,6 @@ export default {
     isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
     data_types: function() {
         var t = this.$store.getters['schema/getDataTypes'];
-		console.log("xxx", t);
         t.push({'id': -1, 'code': "< Create new type >"});
         return t;
     },
@@ -405,7 +404,6 @@ export default {
 				statDisplay[statCont][stat] = rowStats[stat];
 			}
 		}
-		console.log(statDisplay);
 		return statDisplay;
 	},
 	mappingOptions: function() {
@@ -474,7 +472,6 @@ export default {
             opts[i].unshift("Do not import");
             vals[i].unshift(0);
 	    }
-	    console.log("map", this.data_mapping);
 		this.mapping_options = {"options": opts, "values": vals}
 		return {"options": opts, "values": vals};
 	},
@@ -559,7 +556,6 @@ export default {
 				self.current_chart = 'result-chart';
 			});
         });
-		console.log(this.result_chart_data);
     },
     reset: function() {
         this.import_complete = this.allow_upload = this.is_uploading = this.is_importing = false;
@@ -621,7 +617,6 @@ export default {
 	},
 	showErrors: function(){
 		this.show_errors = !this.show_errors;
-		console.log(this.show_errors);
 	}
   },
   sockets: {
