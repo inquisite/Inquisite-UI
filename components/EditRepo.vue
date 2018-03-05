@@ -75,8 +75,10 @@ import _ from 'lodash'
 export default { 
   name: 'home',
   data: function() {
-    // Make copy of object
-    return jQuery.extend({}, this.$store.getters['repos/getRepoByID'](this.$attrs.id));
+    var repo_id = this.$attrs.id;
+    var repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](repo_id));
+    repo['state'] = this.$store.state;
+    return repo;
   },
   computed: {
     repositoryCount: function() {

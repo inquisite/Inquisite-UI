@@ -183,19 +183,17 @@ const mutations = {
             state.message = response.msg;
             
             var repo_id = parseInt(response.repo_id);
-            // var matches = $.grep(state.user_repos, function(repo) { return parseInt(repo.id) === repo_id; });
-            // if (matches && (matches.length > 0)) {
-            //     console.log("SET!!", matches, response);
-            //     matches[0] =  response;
-            // }
-            console.log("repos", state.user_repos);
-            var resp = response;
-            $.each(state.user_repos, function(k, v) { 
-              if (parseInt(v.id) === repo_id) {
-                    console.log("SETxx", resp, "key" + k, v);
-                  state.user_repos[k] = $.extend({"id": repo_id}, resp);
-              }  
+            $.each(state.user_repos, function(k, v) {   // find current repo in repo list
+                if (parseInt(v.id) === repo_id) {
+                    $.each(response, function(f,fv) {   // copy user-edited fields into copy in list
+                        if(!(f in state.user_repos[k])) { return; }
+                        state.user_repos[k][f] = fv
+                    });
+                }
             });
+            
+            // Upload local storage copy of user repo list
+            window.localStorage.setItem('repos', JSON.stringify(state.user_repos));
     },
     ADD_PERSON_REPO: function(state, response) { state.message = response.msg },
     REMOVE_PERSON_REPO: function(state, response) { state.message = response.msg },
