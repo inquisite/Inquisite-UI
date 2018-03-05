@@ -123,7 +123,7 @@ export default {
     if (this.isLoggedIn) {
         // Load initial data
         this.$store.dispatch('boot', this.$store.getters['repos/getActiveRepoID']).then(function() {
-
+            // NOOP
         });
     }
   },
