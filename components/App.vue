@@ -30,7 +30,7 @@
                         <H6 class="dropdown-header" v-if="repos.length > 1 && activeRepo.id">Change Repository:</H6>
                         <H6 class="dropdown-header" v-if="repos.length && !activeRepo.id">Choose Repository:</H6>
                         <li class="dropdown-item" v-for="repo in repos" v-if="activeRepo.id != repo.id"><a @click="setActiveRepo(repo.id)" class="nav-link">{{ repo.name }}</a></li>
-                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider" v-if="repos.length > 1"></div>
                         <li class="dropdown-item"><router-link to="/add-repo" class="nav-link"><i class="fa fa-plus" aria-hidden="true"></i> New Repository</router-link></li>                   </ul>
                 </li>
 
@@ -149,7 +149,7 @@ export default {
         if(!this.activeRepo) { return false; }
         return (this.activeRepo.data_element_count > 0);
     },
-	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	repos: function() { return this.$store.getters['repos/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() {
         var repo = this.$store.getters['repos/getActiveRepo'];
