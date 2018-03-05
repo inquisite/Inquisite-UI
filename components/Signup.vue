@@ -119,7 +119,6 @@ export default {
   methods: {
     processSignup: function() {
       var self = this;
-      console.log("Xxx", this, this.password === '');
       if ((this.password.length > 0) && (this.password !== this.password_confirm)) {
         this.$store.dispatch('setMessage', "Password do not match"); 
       } else if( (this.forename === '') || (this.surname === '') || (this.email === '') || (this.password === '')) {

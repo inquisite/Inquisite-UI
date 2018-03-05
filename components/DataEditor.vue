@@ -40,7 +40,6 @@ export default {
   mounted: function() {
     var self = this;
         this.$store.dispatch('data/getDataNode', this.id).then(function(response) {
-	        //console.log("GOT ", response);
 	        self.node = response['data'];
 	        self.nodeTypeName = response['typename'];
 	        self.nodeTypeCode = response['typecode'];
@@ -54,7 +53,7 @@ export default {
   methods: {
     saveData: function() {
         this.$store.dispatch('data/saveDataNode', jQuery.extend(this.node, {'node_id': this.id})).then(function(response) {
-            console.log("save!", response);
+            // NOOP
         });
     }
   } 

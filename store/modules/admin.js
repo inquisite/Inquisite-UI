@@ -55,7 +55,6 @@ const mutations = {
         state.message = response.msg;
     },
     GET_PERSON_INFO: function(state, response) { 
-        console.log("Commit GET PERSON INFO", response);
         state.personInfo = response.person;
     }
 }

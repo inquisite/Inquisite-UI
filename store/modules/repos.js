@@ -2,9 +2,12 @@ import api from '../api.js'
 import store from '../store.js'
 import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
+var repos = JSON.parse(window.localStorage.getItem('repos'));
+if (!repos) { repos = []; }
+
 // initial state
 const state = {
-  user_repos: JSON.parse(window.localStorage.getItem('repos')),               // list of repositories for currently logged in user
+  user_repos: repos,               // list of repositories for currently logged in user
   active_repo_id: parseInt(window.sessionStorage.getItem('repo_id'))          // id for currently active repository
 }
 
@@ -33,6 +36,8 @@ const getters = {
             return (matches.length > 0) ? matches[0] : null;
         };
     },
+
+    getUserRepos: state => { return state.user_repos; },
 
     /**
      * Return repo_id for currently selected repository
@@ -176,6 +181,21 @@ const mutations = {
     ADD_REPO: function(state, response) { state.message = response.msg },
     EDIT_REPO: function(state, response) { 
             state.message = response.msg;
+            
+            var repo_id = parseInt(response.repo_id);
+            // var matches = $.grep(state.user_repos, function(repo) { return parseInt(repo.id) === repo_id; });
+            // if (matches && (matches.length > 0)) {
+            //     console.log("SET!!", matches, response);
+            //     matches[0] =  response;
+            // }
+            console.log("repos", state.user_repos);
+            var resp = response;
+            $.each(state.user_repos, function(k, v) { 
+              if (parseInt(v.id) === repo_id) {
+                    console.log("SETxx", resp, "key" + k, v);
+                  state.user_repos[k] = $.extend({"id": repo_id}, resp);
+              }  
+            });
     },
     ADD_PERSON_REPO: function(state, response) { state.message = response.msg },
     REMOVE_PERSON_REPO: function(state, response) { state.message = response.msg },

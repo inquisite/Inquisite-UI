@@ -25,7 +25,6 @@ const getters = {
         return [];
      },
      getDataColumnSpec: function(state) {
-        console.log("feh", state, state.loaded_data);
         if (state.loaded_data) {
             return state.loaded_data.columns.filter(function(v) { return v != 'uuid'}).map(function(v) { return {
                 'data': v,

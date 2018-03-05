@@ -75,10 +75,7 @@ import _ from 'lodash'
 export default { 
   name: 'home',
   data: function() {
-    var repo_id = this.$attrs.id;
-    var repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](repo_id));
-    repo['state'] = this.$store.state;
-    return repo;
+    return this.$store.getters['repos/getRepoByID'](this.$attrs.id);
   },
   computed: {
     repositoryCount: function() {
