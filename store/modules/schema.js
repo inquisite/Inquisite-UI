@@ -15,7 +15,8 @@ const getters = {
      getFieldDataTypeList: state => { return state.field_data_types; },
      getDefaultDataType: function() { return state.default_data_type; },
 
-     hasGeoreferences: function(state) {
+     hasGeoreferences: function(state) {   
+         if (!state.data_types || !state.data_types.filter) { return false; }
          var types_with_georefs = state.data_types.filter(function(v, i, a) {
              if(!('fields' in v)){
                  return 0;

@@ -30,7 +30,7 @@
                         <H6 class="dropdown-header" v-if="repos.length > 1 && activeRepo.id">Change Repository:</H6>
                         <H6 class="dropdown-header" v-if="repos.length && !activeRepo.id">Choose Repository:</H6>
                         <li class="dropdown-item" v-for="repo in repos" v-if="activeRepo.id != repo.id"><a @click="setActiveRepo(repo.id)" class="nav-link">{{ repo.name }}</a></li>
-                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider" v-if="repos.length > 1"></div>
                         <li class="dropdown-item"><router-link to="/add-repo" class="nav-link"><i class="fa fa-plus" aria-hidden="true"></i> New Repository</router-link></li>                   </ul>
                 </li>
 
@@ -121,18 +121,15 @@ export default {
   },
   mounted: function() {
     if (this.isLoggedIn) {
-        var self = this;
-        this.$store.dispatch('people/getRepos').then(function() {
-            self.$store.dispatch('schema/getDataTypes', self.$store.getters['repos/getActiveRepoID']).then(function() {
-                // noop
-            });
+        // Load initial data
+        this.$store.dispatch('boot', this.$store.getters['repos/getActiveRepoID']).then(function() {
+            // NOOP
         });
     }
   },
   watch: {
     '$route': 'pageChangeActions',
     user: function(data){
-        console.log(this.user);
         if(this.user.id){
             this.$socket.emit('send_user_id', {"id": this.user.id});
         }
@@ -152,10 +149,10 @@ export default {
         if(!this.activeRepo) { return false; }
         return (this.activeRepo.data_element_count > 0);
     },
-	repos: function() { return this.$store.getters['people/getUserRepos']; },
+	repos: function() { return this.$store.getters['repos/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() {
-	    var repo = this.$store.getters['repos/getActiveRepo'];
+        var repo = this.$store.getters['repos/getActiveRepo'];
 	    return repo ? repo : {};
     },
     getDataTypes: function() {
@@ -193,9 +190,9 @@ export default {
       store.dispatch('resetMessage');
 
       // Get User Repos if logged in and we don't have them
-      if( this.isLoggedIn && !this.hasRepos) {
-        store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo.id }}); });
-      }
+    //   if( this.isLoggedIn && !this.hasRepos) {
+    //     store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo_id }}); });
+    //   }
     },
     setActiveRepo: function(repo_id) {
       store.commit('repos/SET_ACTIVE_REPO', repo_id);

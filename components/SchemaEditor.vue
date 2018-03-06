@@ -233,7 +233,6 @@ export default {
                 this.editorHeader = "Editing Data Type: <em>" + this.dataTypes[i].name + "</em>";
                 this.formContent = this.dataTypes[i];
                 for(var j in this.formContent.fields){
-                    console.log(this.formContent.fields[j]);
                     for(var k in this.formContent.fields[j]){
                         if(k.indexOf("settings_") > -1){
                             if(["0", "1"].indexOf(this.formContent.fields[j][k]) > -1){
@@ -290,9 +289,8 @@ export default {
     // ------------------------------------
     getFieldDataTypeSettingsForDisplay: function(tid) {
 	    var o = this.fieldDataTypes[tid]['order'];
-	    var s = this.fieldDataTypes[tid]['settings'];
-        console.log(s);
-        console.log(o);
+		var s = this.fieldDataTypes[tid]['settings'];
+		
 	    if (!o || !s) { return null; }
 	    var acc = [];
 	    for(var i in o) { acc.push(s[o[i]]); }

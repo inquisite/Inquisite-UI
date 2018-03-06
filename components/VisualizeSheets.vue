@@ -68,7 +68,6 @@ export default {
           this.isSaving = true;
           var self = this;
           this.$store.dispatch('data/saveDataNode', this.data[changes[0][0]]).then(function(resp) {
-            console.log(resp);
             self.isSaving = false;
           });
         }

@@ -2,11 +2,13 @@ import api from '../api.js'
 import store from '../store.js'
 import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 
+var repos = JSON.parse(window.localStorage.getItem('repos'));
+if (!repos) { repos = []; }
+
 // initial state
 const state = {
-  user_repos: [],               // list of repositories for currently logged in user
-  active_repo: {},              // info for currently active repository 
-  active_repo_id: null          // id for currently active repository
+  user_repos: repos,               // list of repositories for currently logged in user
+  active_repo_id: parseInt(window.sessionStorage.getItem('repo_id'))          // id for currently active repository
 }
 
 // getters
@@ -14,7 +16,11 @@ const getters = {
     /**
      * Get info to currently active repository
      */
-    getActiveRepo: state => { return state.active_repo;  },
+    getActiveRepo: state => {
+        var active_repo_id = parseInt(state.active_repo_id);
+        var activeRepo = $.grep(state.user_repos, function(repo) { return parseInt(repo.id) === active_repo_id; });
+        return (activeRepo && activeRepo.length > 0) ? activeRepo[0] : {};
+    },
     
     /**
      * Get info for repository with id. Repository must be accessible to the current user.
@@ -31,11 +37,17 @@ const getters = {
         };
     },
 
+    getUserRepos: state => { return state.user_repos; },
+
     /**
      * Return repo_id for currently selected repository
      */
-    getActiveRepoID: state => { 
-        return state.active_repo_id;
+    getActiveRepoID: state => {
+        var active_repo_id = state.active_repo_id;
+        if ((active_repo_id == null) && (state.user_repos) && (state.user_repos.length > 0)) {
+            active_repo_id = state.user_repos[0]['id'];
+        }
+        return active_repo_id;
     }
 }
 
@@ -170,19 +182,18 @@ const mutations = {
     EDIT_REPO: function(state, response) { 
             state.message = response.msg;
             
-            // Copy new values into model
-            for(var i in state.user_repos) {
-                if (state.user_repos[i].id && (parseInt(state.user_repos[i].id) == parseInt(response.repo_id))) {
-                    var keys = Object.keys(response);
-                    for(var j in keys) {
-                        var k = keys[j];
-                        state.user_repos[i][k] = response[k];
-                        if (state.active_repo_id == response.repo_id) {
-                            state.active_repo[k] = response[k];
-                        }
-                    }
+            var repo_id = parseInt(response.repo_id);
+            $.each(state.user_repos, function(k, v) {   // find current repo in repo list
+                if (parseInt(v.id) === repo_id) {
+                    $.each(response, function(f,fv) {   // copy user-edited fields into copy in list
+                        if(!(f in state.user_repos[k])) { return; }
+                        state.user_repos[k][f] = fv
+                    });
                 }
-            }
+            });
+            
+            // Upload local storage copy of user repo list
+            window.localStorage.setItem('repos', JSON.stringify(state.user_repos));
     },
     ADD_PERSON_REPO: function(state, response) { state.message = response.msg },
     REMOVE_PERSON_REPO: function(state, response) { state.message = response.msg },
@@ -200,43 +211,28 @@ const mutations = {
             var active_repo_id = state.user_repos[0]['id'];
             window.sessionStorage.setItem('repo_id', active_repo_id);
             state.active_repo_id = active_repo_id;
-    
-            for(var i in state.user_repos) {
-                if (state.user_repos[i]['id'] == active_repo_id) {
-                    state.active_repo  = state.user_repos[i];
-                    break;
-                }
-            }
         }
     },
     GET_REPO_USERS: function(state, response) { 
-        state.active_repo.users = response; 
-        state.message = response.msg 
+        var active_repo_id = parseInt(state.active_repo_id);
+        var activeRepo = $.grep(state.user_repos, function(repo) { return parseInt(repo.id) === active_repo_id; });
+        
+        if (activeRepo && activeRepo.length > 0) {
+            activeRepo[0].users = response; 
+        }
+        state.message = response.msg;
     },
     SET_REPOS: function(state, response) {
         state.user_repos = response.repos;
+        window.localStorage.setItem('repos', JSON.stringify(response.repos));
         state.active_repo_id = window.sessionStorage.getItem('repo_id');
         if (!state.active_repo_id) {
             state.active_repo_id = state.user_repos[0]['id'];
-        }
-        
-        for(var i in state.user_repos) {
-            if (state.user_repos[i]['id'] == state.active_repo_id) {
-                state.active_repo  = state.user_repos[i];
-                break;
-            }
         }
     },
     SET_ACTIVE_REPO: function(state, active_repo_id) { 
         window.sessionStorage.setItem('repo_id', active_repo_id);
         state.active_repo_id = active_repo_id;
-    
-        for(var i in state.user_repos) {
-            if (state.user_repos[i]['id'] == active_repo_id) {
-                state.active_repo  = state.user_repos[i];
-                break;
-            }
-        }
     }
 }
 

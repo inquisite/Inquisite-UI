@@ -125,14 +125,12 @@ export default {
     buttonStatus: function() {
         var buttonStatus = {}
         for(var i in this.dataTypes){
-            console.log(this.dataTypes[i]);
             if(this.dataTypes[i].id == this.showType){
                 buttonStatus[this.dataTypes[i].id] = true;
             } else {
                 buttonStatus[this.dataTypes[i].id] = false;
             }
         }
-        console.log(buttonStatus);
         return buttonStatus;
     }
   },

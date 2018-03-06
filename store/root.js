@@ -12,7 +12,7 @@ export const getters = {
     /**
      * Is user logged in?
      */
-    isLoggedIn: state => { return state.logged_in },
+    isLoggedIn: state => { return state.logged_in; },
 
     /**
      * Get current API token
@@ -20,7 +20,6 @@ export const getters = {
     getToken: state => {
         var jwt = window.localStorage.getItem('jwt');
         state.token = jwt;
-    
         if (state.token) { state.logged_in = true; }
 
         return state.token
@@ -46,7 +45,7 @@ export const actions = {
     /**
      * Set current JWT token
      */
-    setToken: function(context, access_token) { context.commit('setToken', access_token) },
+    setToken: function(context, access_token) { context.commit('SET_TOKEN', access_token) },
 
     /**
      * Perform user login
@@ -59,8 +58,10 @@ export const actions = {
               window.localStorage.setItem('rwt', response.refresh_token);
           
               context.commit('login');
-              context.commit('setToken', response.access_token);
-              context.commit('setRefresh', response.refresh_token);
+              context.commit('SET_TOKEN', response.access_token);
+              context.commit('SET_REFRESH', response.refresh_token);
+              window.localStorage.removeItem('repos');
+              window.sessionStorage.removeItem('repo_id');
           
               // Get User Data -- now sets repos with users and data
               context.dispatch('people/getUserInfo', {token: response.access_token});
@@ -83,7 +84,7 @@ export const actions = {
      * 
      */
     setAccessToken: function(context, access_token) {
-        context.commit('setToken', access_token);
+        context.commit('SET_TOKEN', access_token);
     },
 
     /**
@@ -96,6 +97,8 @@ export const actions = {
             window.localStorage.removeItem('jwt');
             window.localStorage.removeItem('jwt_expiration');
             window.localStorage.removeItem('rwt');
+            window.localStorage.removeItem('repos');
+            window.sessionStorage.removeItem('repo_id');
             context.commit('logout');
             context.commit('SET_MESSAGE', "Logged out", {'root': true});
             return true;
@@ -107,10 +110,30 @@ export const actions = {
     },
 
     /**
+     * Get initial data on page load
+     */
+    boot: function(context, repo_id) {
+        if (!context.rootState.token) return false;
+        return api.post('/boot', {"repo_id": repo_id }, {headers: apiHeaders({"auth": true})})
+            .then(function(response) { 
+            context.commit('people/GET_REPOS', response.repos);
+            context.commit('repos/SET_REPOS', response.repos);
+            if (response.schema) {
+                context.commit('schema/GET_DATA_TYPES', response.schema.types); 
+            }
+            return response;
+            })
+            .catch(function(error) { 
+                context.commit('API_FAILURE', error, { root: true });
+                return extractAPIError(error);
+            });
+    },
+
+    /**
      * Initiate password reset
      */
     sendPasswordReset: function(context, email) {
-        return api.post('/people/' + email + '/reset_password', {"x":"x"}, {headers: apiHeaders({"auth": true})})
+        return api.post('/people/' + email + '/reset_password', {}, {headers: apiHeaders({"auth": true})})
             .then(function(response) { 
                 //context.commit('SET_MESSAGE', "Sent password reset", {'root': true});
                 return true;
@@ -204,7 +227,7 @@ export const mutations = {
     /**
      * Set current JWT auth token
      */
-    setToken: function(state, access_token) { 
+    SET_TOKEN: function(state, access_token) { 
         window.localStorage.setItem('jwt', access_token); 
         window.localStorage.setItem('jwt_expiration', new Date().getTime() + (10 * 60 * 1000)); // assume 10 minute token lifetime
         state.token = access_token;
@@ -213,7 +236,10 @@ export const mutations = {
     /**
      * Set current JWT refresh token
      */
-    setRefresh: function(state, refresh_token) { state.refresh = refresh_token },
+    SET_REFRESH: function(state, refresh_token) { 
+        window.localStorage.setItem('rwt', refresh_token); 
+        state.refresh = refresh_token; 
+    },
     
     /**
      * 
@@ -222,7 +248,7 @@ export const mutations = {
         state.message = message;
         state.showMessage = true;
         var rootState = state;
-        console.log('SET MESSAGE', message);
+        //('SET MESSAGE', message);
         setTimeout(function() {
             state.showMessage = false;
         }, 4000);
@@ -237,7 +263,7 @@ export const mutations = {
         state.showMessage = true;
         var rootState = state;
 
-        console.log('SET MESSAGE', message);
+        //console.log('SET MESSAGE', message);
         setTimeout(function() {
             state.showMessage = false;
         }, 8000);

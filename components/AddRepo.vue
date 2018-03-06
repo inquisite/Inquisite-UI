@@ -93,7 +93,6 @@ export default {
   }, 
   methods: {
     addRepo: function() {
-        console.log("readme", this.readme);
       if(this.name !== '') {
         var self = this;
         this.$store.dispatch('repos/addRepo', { data: {name: this.name, readme: this.readme, url: this.url, license: this.license, published: this.published }, makeActive: true})

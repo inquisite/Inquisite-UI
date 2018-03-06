@@ -100,7 +100,6 @@ export default {
     },
     toggleUserEnabled: function(e, id, enable) {
       var self = this;
-        console.log("set enabled", id, enable);
       this.$store.dispatch("admin/editPerson", {"person_id": id, "is_disabled": enable ? 0 : 1 }).then(function(response) {  
         self.person_info.is_disabled = enable ? 0 : 1;
         self.people[self.person_info.index].is_disabled = enable ? 0 : 1;

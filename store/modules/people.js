@@ -8,8 +8,8 @@ const state = {
     info: {},
     prefs: {},                      // current user's preferences
     repos: []                       // current user's repositories
-  }
-    
+  },
+  people_list: []
 }
 
 // getters
@@ -31,7 +31,6 @@ const actions = {
         if (!context.rootState.token) return false;
         return api.get('/people', {headers: apiHeaders({"auth": true, "form": true})})
         .then(function(response) { 
-            console.log("COMMIT", response);
             context.commit('GET_PERSON_LIST', response); 
             return response;
         })
@@ -140,11 +139,6 @@ const mutations = {
             state.user.prefs = {default_repo_id: null};
         } else {
             state.user.prefs = (typeof response.person.prefs === 'object') ? response.person.prefs : JSON.parse(response.person.prefs);
-
-            if (response.repos.length > 0) {
-                state.active_repo = response.repos[0];
-                //store.commit('setDefaultRepo', response.repos[0]);
-            }
         }
 
         state.user.repos = response.repos
