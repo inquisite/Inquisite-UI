@@ -16,7 +16,7 @@
                                 <div class="schema-map-fields" v-show="k.id == showType">
                                     <h6 class="text-center">Georeference Field:<br/>{{showField}}</h6>
                                     <ul class="list-group map-list-group" >
-                                        <li class="small" v-for="kf, vf in k.fields" v-if="kf.type != 'GeorefDataType'">
+                                        <li class="small" v-for="kf, vf in k.fields">
                                             <input type="checkbox" v-model="displayFields" :value="kf.code" v-on:click="updateMap(k.id)"/> {{kf.name}}
                                         </li>
                                     </ul>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="col-sm-10">
                             <div id="map" style="width: 100%; height: 500px;">
-                                <v-map :zoom=13 :center="getMapCenter">
+                                <v-map ref="map" :zoom="13">
                                     <v-tilelayer url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png"></v-tilelayer>
                                     <v-marker-cluster>
                                         <v-marker v-if="points.length > 0" v-for="p, i in points" :lat-lng="p"><v-popup :content="pointLabels[i]"></v-popup></v-marker>
@@ -68,11 +68,12 @@ export default {
         if (t[0]) {
           // Select first georef field for display
           var georefFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] == 'GeorefDataType'; });
-          self.showField = georefFields.length > 0 ? georefFields[0]['code'] : null;
+          self.showField = georefFields.length > 0 ? georefFields[0]['code'] + '_geoJSON' : null;
 
           // Select first field for display
-          var nonGeorefFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] != 'GeorefDataType'; });
+          var nonGeorefFields = t[0]["fields"].filter(function(v, i, a) { return v['type']});
           self.displayFields = nonGeorefFields.length > 0 ? [nonGeorefFields[0]['code']] : [];
+          //self.displayFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] });
         }
 
     });
@@ -81,31 +82,6 @@ export default {
     activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
     mapData: function() { return this.$store.getters['data/getData']; },
-    getMapCenter: function() {
-      var totalLat = 0;
-      var totalLon = 0
-      var measureCount = 0;
-      if(this.coords["polygons"].length < 1 && this.coords["points"].length < 1){
-          return [0,0];
-      }
-      var polygons = this.coords["polygons"];
-      var points = this.coords["points"];
-      for(var i in polygons){
-          for(var j in polygons[i]['coordinates']){
-              totalLon += polygons[i]['coordinates'][j][0];
-              totalLat += polygons[i]['coordinates'][j][1];
-              measureCount++;
-          }
-      }
-      for(var k in points){
-          totalLon += points[k][0];
-          totalLat += points[k][1];
-          measureCount++;
-      }
-      var avgLat = totalLat/measureCount;
-      var avgLon = totalLon/measureCount;
-      return [avgLon, avgLat];
-    },
     points: function() {
       var c = this.coords;
       return c["points"];
@@ -117,7 +93,7 @@ export default {
       return c["point_labels"].map((v, i) => {
         var field_values = [];
         for(var f in display_fields) {
-          if (display_fields[f] == self.showField) { continue; }
+          //if (display_fields[f] == self.showField) { continue; }
           var t = self.dataTypes.filter((v) => v.id == this.showType);
           var l = t[0]["fields"].filter((v) => v.code === display_fields[f]);
           var field_label = (l && l[0]) ? l[0].name : "???";
@@ -137,7 +113,7 @@ export default {
       return c["polygon_labels"].map((v, i) => {
         var field_values = [];
         for(var f in display_fields) {
-          if (display_fields[f] == self.showField) { continue; }
+          //if (display_fields[f] == self.showField) { continue; }
           var t = self.dataTypes.filter((v) => v.id == self.showType);
           var l = t[0]["fields"].filter((v) => v.code === display_fields[f]);
           var field_label = (l && l[0]) ? l[0].name : "???";
@@ -167,7 +143,9 @@ export default {
             var self = this;
             this.$store.dispatch('data/getDataForType', {"repo_id": this.activeRepo.id, "type": this.showType}).then(function(r) {
                 self.getCoords();
+                self.setMapCenterZoom();
             });
+
         }
     },
     updateMap: function(newType) {
@@ -176,11 +154,12 @@ export default {
           var t = this.dataTypes.filter((v) => v.id == this.showType);
           // Select first georef field for display
           var georefFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] == 'GeorefDataType'; });
-          this.showField = georefFields.length > 0 ? georefFields[0]['code'] : null;
+          this.showField = georefFields.length > 0 ? georefFields[0]['code']+'_geoJSON' : null;
 
           // Select first field for display
-          var nonGeorefFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] != 'GeorefDataType'; });
+          var nonGeorefFields = t[0]["fields"].filter(function(v, i, a) { return v['type']});
           this.displayFields = nonGeorefFields.length > 0 ? [nonGeorefFields[0]['code']] : [];
+          //self.displayFields = t[0]["fields"].filter(function(v, i, a) { return v['type'] });
       } else {
           this.showType = newType;
       }
@@ -221,9 +200,38 @@ export default {
               }
             }
         }
-    }
+      }
       return this.coords;
-    }
+    },
+    setMapCenterZoom: function() {
+      var minLat = 90;
+      var minLon = 180;
+      var maxLat = -90;
+      var maxLon = -180;
+      var totalLon = 0
+      var measureCount = 0;
+      if(this.coords["polygons"].length < 1 && this.coords["points"].length < 1){
+          return [0,0];
+      }
+      var polygons = this.coords["polygons"];
+      var points = this.coords["points"];
+      for(var i in polygons){
+          for(var j in polygons[i]['coordinates']){
+              if(maxLon < polygons[i]['coordinates'][j][1]){ maxLon = polygons[i]['coordinates'][j][1]}
+              if(maxLat < polygons[i]['coordinates'][j][0]){ maxLat = polygons[i]['coordinates'][j][0]}
+              if(minLon > polygons[i]['coordinates'][j][1]){ minLon = polygons[i]['coordinates'][j][1]}
+              if(minLat > polygons[i]['coordinates'][j][0]){ minLat = polygons[i]['coordinates'][j][0]}
+          }
+      }
+      for(var k in points){
+          if(maxLon < points[k][1]){ maxLon = points[k][1]}
+          if(maxLat < points[k][0]){ maxLat = points[k][0]}
+          if(minLon > points[k][1]){ minLon = points[k][1]}
+          if(minLat > points[k][0]){ minLat = points[k][0]}
+      }
+      this.$refs.map.mapObject.fitBounds([[minLat, minLon], [maxLat, maxLon]], {"padding": [30, 30]})
+      //return [avgLon, avgLat];
+    },
   }
 }
 </script>
