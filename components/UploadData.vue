@@ -203,7 +203,7 @@
 							<div class="item pull-right" style="padding: 10px 0">
 								<a v-on:click="togglePreview" class="btn btn-secondary">Preview Data</a>
 								<button v-on:click.prevent="importData" class="btn btn-primary" :disabled="!canImport">Import</button>
-		                        <a href="#" class="btn btn-secondary">Cancel</a>
+		                        <a href="#" v-on:click.prevent="reset" class="btn btn-secondary">Cancel</a>
 		                    </div>
 						</div>
 					</div>
