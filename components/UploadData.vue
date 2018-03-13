@@ -246,8 +246,24 @@
 				</div>
 				<div class="card-block">
 					<div>
-                        <h4>Import Results</h4>
-						<h5>Imported {{import_results.counts.total}} {{import_results.counts.type}} Records | {{import_results.error_count}} Errors | {{ignore_first_rows}} Skipped | {{import_results.counts.source_total}} Total Rows</h5>
+						<div class="row">
+							<div class="col-12 col-sm-8">
+		                        <h4>Import Results</h4>
+								<h5>Imported {{import_results.counts.total}} {{import_results.counts.type}} Records | {{import_results.error_count}} Errors | {{ignore_first_rows}} Skipped | {{import_results.counts.source_total}} Total Rows</h5>
+							</div>
+							<div class="col-12 col-sm-4 text-right">
+								<h4>View Data</h4>
+								<router-link to="/visualize/maps">
+					              <button type="button" class="btn btn-primary">Map</button>
+					            </router-link>
+								<router-link to="/visualize/sheets">
+					              <button type="button" class="btn btn-primary">Sheet</button>
+					            </router-link>
+								<router-link to="/visualize/nodes">
+					              <button type="button" class="btn btn-primary">Nodes</button>
+					            </router-link>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-12 col-sm-6 resultChart">
 								<div :is="current_chart" :data="result_chart_data" :options="{responsive: false, maintainAspectRatio: false, scales: {yAxes: [{display: true, ticks: {beginAtZero: true}}]}}" :height="400"></div>
@@ -467,7 +483,6 @@ export default {
                         if ((f === -1) || (parseInt(f) === parseInt(i))) {
                             opts[i].push(dt['fields'][k]['name'] + " (related " + data_types[j]['name'] + ")");
                             vals[i].push(dt['fields'][k]['id']);
-							types[i].unshift(dt['fields'][k]['type']);
                         }
                     }
                 }
@@ -476,6 +491,7 @@ export default {
             opts[i].unshift("Do not import");
             vals[i].unshift(0);
 	    }
+		console.log(types);
 		this.mapping_options = {"options": opts, "values": vals}
 		this.data_type_recommended = types.map(type => type[0]);
 		return {"options": opts, "values": vals};
