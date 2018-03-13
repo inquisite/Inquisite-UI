@@ -109,11 +109,11 @@
 							<h6>{{h}}</h6>
 						</div>
 						<div class="col-sm-2">
-							<button type="button" class="btn btn-primary statsButton titleEditButton" data-toggle="modal" :data-target="'#' + h.split(' ').join('_') + 'editTitle'"><i class="fa fa-edit"></i></button>
-							<button type="button" class="btn btn-primary statsButton" data-toggle="modal" :data-target="'#' + h.split(' ').join('_') + 'Stats'">Statistics</button>
+							<button type="button" class="btn btn-primary statsButton titleEditButton" data-toggle="modal" :data-target="'#' + h.replace(/[\[\]]+/g, '').split(' ').join('_') + 'editTitle'"><i class="fa fa-edit"></i></button>
+							<button type="button" class="btn btn-primary statsButton" data-toggle="modal" :data-target="'#' + h.replace(/[\[\]]+/g, '').split(' ').join('_') + 'Stats'">Statistics</button>
 
 							<!--Stats Modal-->
-							<div class="modal fade" :id="h.split(' ').join('_') + 'Stats'" tabindex="-1" role="dialog" aria-labelledby="Statistics" aria-hidden="true">
+							<div class="modal fade" :id="h.replace(/[\[\]]+/g, '').split(' ').join('_') + 'Stats'" tabindex="-1" role="dialog" aria-labelledby="Statistics" aria-hidden="true">
 							  <div class="modal-dialog" role="document">
 							    <div class="modal-content">
 							      <div class="modal-header">
@@ -136,7 +136,7 @@
 							</div>
 
 							<!--Edit Title Modal-->
-							<div class="modal fade" :id="h.split(' ').join('_') + 'editTitle'" tabindex="-1" role="dialog" aria-labelledby="Edit Title and Description" aria-hidden="true">
+							<div class="modal fade" :id="h.replace(/[\[\]]+/g, '').split(' ').join('_') + 'editTitle'" tabindex="-1" role="dialog" aria-labelledby="Edit Title and Description" aria-hidden="true">
 								<div class="modal-dialog" role="document">
 							  		<div class="modal-content">
 							      		<div class="modal-header">
@@ -409,9 +409,10 @@ export default {
 	mappingOptions: function() {
 	    var opts = [];
 	    var vals = [];
+		var types = [];
 	    var data_types = this.data_types;
 	    for(var i in this.server_file_info.preview.headers) {
-			if (!opts[i]) { opts[i] = []; vals[i] = [] }
+			if (!opts[i]) { opts[i] = []; vals[i] = []; types[i] = []; }
 
             var allowCreateNew = true;
             for(var j in data_types) {
@@ -431,6 +432,7 @@ export default {
 					}
 					opts[i].unshift("Create field " + optionName);
                     vals[i].unshift(optionVal);
+					types[i].unshift(this.data_type_recommended[i])
 					break;
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
@@ -440,6 +442,7 @@ export default {
                             allowCreateNew = false;
 							opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
                             vals[i].unshift(dt['fields'][k]['id']);
+							types[i].unshift(dt['fields'][k]['type']);
                         }
                     }
 
@@ -464,6 +467,7 @@ export default {
                         if ((f === -1) || (parseInt(f) === parseInt(i))) {
                             opts[i].push(dt['fields'][k]['name'] + " (related " + data_types[j]['name'] + ")");
                             vals[i].push(dt['fields'][k]['id']);
+							types[i].unshift(dt['fields'][k]['type']);
                         }
                     }
                 }
@@ -473,6 +477,7 @@ export default {
             vals[i].unshift(0);
 	    }
 		this.mapping_options = {"options": opts, "values": vals}
+		this.data_type_recommended = types.map(type => type[0]);
 		return {"options": opts, "values": vals};
 	},
 	importErrors: function() {
@@ -555,13 +560,43 @@ export default {
 				self.result_chart_data.datasets.push(postData);
 				self.current_chart = 'result-chart';
 			});
+			self.$store.dispatch('schema/getDataTypes', self.activeRepo.id);
         });
     },
     reset: function() {
-        this.import_complete = this.allow_upload = this.is_uploading = this.is_importing = false;
+        this.import_complete = false;
+		this.allow_upload = false;
+		this.is_uploading = false;
+		this.is_importing = false;
+		this.display_preview = false;
         this.upload_progress = 0;
-        this.server_file_info = this.data_file = this.import_as = this.import_results = null;
+        this.server_file_info = null;
+		this.data_file = null;
+		this.import_as = null;
+		this.import_results = null;
+		this.import_as = null;
+		this.new_schema_name  = null;
         this.data_mapping = [];
+		this.type_mapping = [];
+		this.field_description = [];
+		this.custom_field_title = [];
+		this.display_stats = [];
+		this.editable_field_names = [];
+		this.data_type_recommended = [];
+		this.search_result_include = [];
+        this.ignore_rows = false;
+        this.ignore_first_rows = 1;
+  	  	this.mapping_options = {};
+  	  	this.upload_pos = 0;
+		this.upload_step_pos = 0;
+		this.import_pos = 0;
+		this.import_step_pos = 0;
+		this.error_pos = 0;
+  	  	this.upload_status = '';
+		this.upload_step = '';
+		this.import_status = '';
+		this.import_step = '';
+		this.error_status = '';
     },
     setImportForAllFields: function() {
         for(var i in this.server_file_info.preview.headers) {
@@ -572,15 +607,20 @@ export default {
         this.mappingOptions;
     },
 	updateFieldNames: function(h, i){
-		if(this.editable_field_names[i]){
+
+		if(this.custom_field_title[i] || this.custom_field_title[i] != ''){
+			console.log("From field", this.custom_field_title[i], this.server_file_info.preview.headers[i]);
 			this.editable_field_names[i] = this.custom_field_title[i];
-			var selectVal = h.replace(/[^A-Za-z0-9_\-]+/, "");
-			var createIndex = this.mapping_options["values"][i].indexOf(selectVal);
-			this.mapping_options["options"][i][createIndex] = "Create field " + this.custom_field_title[i];
-			this.data_mapping[i] = this.mapping_options["values"][i][1];
-			this.mappingOptions;
-			this.$forceUpdate();
+		} else {
+			console.log("From headers", this.custom_field_title[i], this.server_file_info.preview.headers[i]);
+			this.editable_field_names[i] = this.server_file_info.preview.headers[i];
 		}
+		var selectVal = h.replace(/[^A-Za-z0-9_\-]+/, "");
+		var createIndex = this.mapping_options["values"][i].indexOf(selectVal);
+		this.mapping_options["options"][i][createIndex] = "Create field " + this.editable_field_names[i]
+		this.data_mapping[i] = this.mapping_options["values"][i][1];
+		this.mappingOptions;
+		this.$forceUpdate();
 	},
 	updateDataMapping: function(){
 		this.mappingOptions;
@@ -623,22 +663,18 @@ export default {
     upload_status: function(data){
 		this.upload_pos = data.pos;
 		this.upload_status = data.status;
-        //console.log("STATUS", data);
     },
 	upload_step: function(data){
 		this.upload_step_pos = data.pos;
 		this.upload_step = data.step;
-		//console.log("STEP", data);
 	},
 	import_status: function(data){
 		this.import_pos = data.pos;
 		this.import_status = data.status;
-        //console.log("IMPORT STATUS", data);
     },
 	import_step: function(data){
 		this.import_step_pos = data.pos;
 		this.import_step = data.step;
-		//console.log("IMPORT STEP", data);
 	},
 	error_status: function(data){
 		this.error_pos = data.pos;
