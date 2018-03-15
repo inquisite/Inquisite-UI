@@ -49,6 +49,9 @@ Vue.component('visualise-maps', VisualizeMaps)
 const SchemaEditor = require('./components/SchemaEditor.vue')
 Vue.component('schema-editor', SchemaEditor)
 
+const ListEditor = require('./components/ListEditor.vue')
+Vue.component('list-editor', ListEditor)
+
 const Search = require('./components/Search.vue')
 Vue.component('search', Search)
 
@@ -95,6 +98,7 @@ export default [
   { path: '/visualize/sheets', name: 'visualize-sheets', component: VisualizeSheets, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/maps', name: 'visualize-maps', component: VisualizeMaps, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/schema', name: 'schema-editor', component: SchemaEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/list', name: 'list-editor', component: ListEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/data/edit/:id', name: 'data-editor', component: DataEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
