@@ -8,9 +8,12 @@ import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
 import VueCharts from 'vue-chartjs'
 import VueSocketio from 'vue-socket.io'
 import config from './config.js'
+import {Tabs, Tab} from 'vue-tabs-component'
 
 Vue.use(VueRouter, Vuex, axios);
 Vue.use(VueSocketio, config.api_endpoint, store);
+Vue.component('tabs', Tabs);
+Vue.component('tab', Tab);
 
 const routes = require('./routes.js')
 const App = require('./components/App.vue')
@@ -18,7 +21,7 @@ const store = require('./store/store.js')
 
 // load token and set logged in status before creating router
 // as routes depend upon login status
-store.default.getters.getToken; 
+store.default.getters.getToken;
 const router = new VueRouter({
   routes: routes.default
 });

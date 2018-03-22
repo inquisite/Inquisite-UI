@@ -203,9 +203,17 @@ export default {
         state: this.$store.state
     }
   },
+  props: [
+      'id'
+  ],
   mounted: function(){
     this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']);
     this.$store.dispatch('schema/getFieldDataTypeList');
+  },
+  created: function(){
+      if(this.id){
+          this.editDataType(this.id);
+      }
   },
   computed: {
     isLoggedIn: function() {
@@ -242,6 +250,7 @@ export default {
                     }
                 }
                 this.editorDataTypeIndex = i;
+
                 break;
             }
         }
@@ -290,7 +299,7 @@ export default {
     getFieldDataTypeSettingsForDisplay: function(tid) {
 	    var o = this.fieldDataTypes[tid]['order'];
 		var s = this.fieldDataTypes[tid]['settings'];
-		
+
 	    if (!o || !s) { return null; }
 	    var acc = [];
 	    for(var i in o) { acc.push(s[o[i]]); }

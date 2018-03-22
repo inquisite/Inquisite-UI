@@ -1,3 +1,4 @@
+
 <template>
 <div id="search">
   <div class="row">
@@ -10,51 +11,42 @@
 
           <flashmessage/>
             <div v-if="results.length == 0"><h2>Nothing found</h2></div>
-            <div v-for="r,t in results">
-                <div class="row">
-                    <div class="col-12">
-                        <h2>{{t}} ({{counts[t]}})</h2>
-                    </div>
-                </div>
-                <div class="row">
-                    <div v-if="t == 'Data'" v-for="v, k in r" class="col-12 col-sm-12 col-md-6 col-lg-4">
-                        <div class="card">
-                            <div class="card-block">
-                                <div class="row">
-                                    <div class="col-6 text-left">
-                                        <strong>Repository</strong><br/><em><u>{{v.__repo_name}}</u></em>
+            <div v-else>
+                <tabs>
+                    <tab v-if="counts[t] > 0" v-for="r,t in results" :name="t + ' (' + counts[t] + ' of ' + totalCounts[t] + ')'">
+                        <div class="row">
+                            <div v-for="v, k in r" class="col-12 col-sm-12 col-md-6 col-lg-3">
+                                <div class="card">
+                                    <div class="card-block search-result-block">
+                                        <div class="row">
+                                            <div class="col-5 text-left search-result-text">
+                                                <strong>Repository</strong><br/><em><u>{{v.__repo_name}}</u></em><br/>
+                                                <strong>Schema</strong><br/><em><u>{{v.__schema_name}}</u></em>
+                                            </div>
+                                            <div class="col-6 text-right search-result-text">
+                                                <router-link v-if="t == 'Data'" class="btn btn-primary btn-block" :to="'/data/edit/' + v.__id">Edit</router-link>
+                                                <router-link v-if="(t == 'SchemaField' || t == 'SchemaType') && v.__repo_id == activeRepoID" class="btn btn-primary btn-block" :to="'/schema/edit/' + v['__schema_id']">Edit</router-link>
+                                                <button v-if="v.__repo_id != activeRepoID && t != 'Data'" class="btn btn-secondary" disabled><small>Load Repo</small></button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-6 text-right">
-                                        <strong>Schema</strong><br/><em><u>{{v.__schema_name}}</u></em>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-block">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div v-for="x, y in displayDataForNode(v)" class="row">
-                                            <div class="col-12 search-result-text">
-                                                <h6>{{y}}</h6>
-                                                <p>{{x}}</p>
+                                    <div class="card-block search-result-block">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div v-for="x, y in displayDataForNode(v)" class="row">
+                                                    <div class="col-12 search-result-text">
+                                                        <h6>{{y}}</h6>
+                                                        <p>{{x}}</p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-block">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <router-link class="btn btn-primary btn-block" :to="'/data/edit/' + v.__id">Edit</router-link>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                </div>
-                <ol>
-                    <li v-if="t == 'Repository'" v-for="v, k in r"><router-link class="btn btn-primary btn-sm" :to="'/data/edit/' + v.__id">View</router-link> {{v.name}}{{v}}</li>
-                    <li v-if="t == 'Person'" v-for="v, k in r">{{v.forename}} {{v.surname}} ({{v.email}})</li>
-                </ol>
+                    </tab>
+                </tabs>
             </div>
         </div>
       </div>
@@ -63,6 +55,10 @@
 </div>
 
 </template>
+
+<style>
+  @import "~vue-tabs-component/docs/resources/tabs-component.css";
+</style>
 
 <script>
 
@@ -75,17 +71,24 @@ export default {
   },
   computed: {
 	results: function() {
+        console.log("hello", this.$store.getters['search/getResults']);
 	    return this.$store.getters['search/getResults'];
 	},
 	counts: function() {
 	    return this.$store.getters['search/getCounts'];
 	},
+    totalCounts: function() {
+        return this.$store.getters['search/getTotalCounts'];
+    },
 	count: function() {
 	    return this.$store.getters['search/getCount'];
 	},
 	expression: function() {
 	    return this.$store.getters['search/getLastSearch'];
-	}
+	},
+    activeRepoID: function() {
+        return this.$store.getters['repos/getActiveRepoID'];
+    }
   },
   methods: {
     displayDataForNode: function(v) {

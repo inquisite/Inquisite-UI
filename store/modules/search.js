@@ -7,7 +7,8 @@ const state = {
   history: [],
   results: {},
   counts: {},
-  count: 0
+  count: 0,
+  total_counts: {}
 }
 
 // getters
@@ -15,9 +16,10 @@ const getters = {
      getResults: state => { return state.results; },// results per-type
      getCounts: state => { return state.counts; },  // counts per-type
      getCount: state => { return state.count; },    // total number of results across all types
+     getTotalCounts: state => { return state.total_counts; }, // total number of results found (not just this page)
      getHistory: state => { return state.history; },
-     getLastSearch: state => { 
-        return state.history[state.history.length - 1]; 
+     getLastSearch: state => {
+        return state.history[state.history.length - 1];
     }
 }
 
@@ -28,12 +30,13 @@ const actions = {
      */
     quick: function(context, q) {
         if(!context.rootState.token) return false;
-        
+
         return api.get('/search?q=' + escape(q), {headers: apiHeaders({"auth": false, "form": true})})
-            .then(function(response) { 
+            .then(function(response) {
+                console.log("QUICK", response);
                 context.commit('QUICK_SEARCH', response);
                 return response;
-            }).catch(function(error) { 
+            }).catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
                 return extractAPIError(error);
             })
@@ -42,14 +45,15 @@ const actions = {
 
 // mutations
 const mutations = {
-    QUICK_SEARCH: function(state, response) { 
+    QUICK_SEARCH: function(state, response) {
         state.results = [];
         if (response.count > 0) {
             state.results = response.results;
             state.counts = response.counts;
             state.count = response.count;
-            if (state.history.indexOf(response['expression']) === -1) { 
-                state.history.push(response['expression']); 
+            state.total_counts = response.total_counts;
+            if (state.history.indexOf(response['expression']) === -1) {
+                state.history.push(response['expression']);
             }
         }
     }

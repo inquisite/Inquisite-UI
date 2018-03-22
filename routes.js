@@ -95,6 +95,7 @@ export default [
   { path: '/visualize/sheets', name: 'visualize-sheets', component: VisualizeSheets, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/visualize/maps', name: 'visualize-maps', component: VisualizeMaps, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/schema', name: 'schema-editor', component: SchemaEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/schema/edit/:id', name: 'schema-editor-edit', component: SchemaEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/data/edit/:id', name: 'data-editor', component: DataEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },

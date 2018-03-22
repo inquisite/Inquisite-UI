@@ -28,6 +28,7 @@
     "vue-resource": "1.0.3",
     "vue-router": "^2.0.2",
     "vue-socket.io": "^2.1.1-b",
+    "vue-tabs-component": "^1.4.0",
     "vue-template-compiler": "^2.4.4",
     "vue-template-es2015-compiler": "^1.5.1",
     "vue-virtual-scroller": "^0.6.1",
