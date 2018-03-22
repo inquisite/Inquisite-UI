@@ -112,18 +112,28 @@ const mutations = {
         if(response){
             var active_list = response['list_id'];
             state.active_list = active_list;
-            var list_items = response['list_items'];
+            var list_items = response['items'];
             state.active_list_items = list_items;
         }
     },
     EDIT_LIST: function(state, response){
-        console.log(response);
+        this.getListItemsForList(response['type']['id']);
     },
     ADD_LIST: function(state, response){
-        console.log(response);
+        if(response){
+            state.lists.push(response['type']);
+            state.active_list = response['type']['id'];
+        }
     },
     DELETE_LIST: function(state, response){
-        console.log(response);
+        if(response){
+            for(var i in state.lists) {
+                if (state.lists[i].id == response.list_id) {
+                    state.lists.splice(i, 1);
+                    break;
+                }
+            }
+        }
     }
 }
 

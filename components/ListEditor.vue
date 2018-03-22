@@ -88,7 +88,6 @@
 										</div>
 										<p class="text-center" v-if="!formContent.items || (formContent.items.length == 0)">
 											No List Items defined
-                                            {{formContent}}
 										</p>
 							</div><!-- end card-block -->
 							<div class="list-group-scroll">
@@ -188,7 +187,7 @@ export default {
     addList: function() {
         this.editorHeader = "Add new list";
         this.formContent = {};
-        this.editorDataTypeIndex = -1;
+        this.editorListIndex = -1;
     },
     editList: function(id) {
         for(var i in this.repoLists) {
@@ -217,9 +216,11 @@ export default {
             // add new type
             var self = this;
             this.$store.dispatch('list/addList', this.formContent).then(function(response) {
+                console.log(response);
                 self.editList(response.type.id);
             });
         }
+        this.$forceUpdate();
     },
     cancelListEdit: function() {
         this.editorHeader = '';
@@ -229,25 +230,28 @@ export default {
     deleteList: function(list_id) {
       this.$store.dispatch('list/deleteList', list_id);
       this.cancelListEdit();
+      //this.$forceUpdate()
     },
     // ------------------------------------
     // Fields form
     addListItem: function() {
         if (this.editorListIndex !== null) {
-            //this.dataTypes[this.editorDataTypeIndex]['fields'].unshift({'type': 'TextDataType'});
+            this.formContent.items.unshift({});
             var container = this.$el.querySelector("#itemList");
 			container.scrollTop = "1px";
+            this.$forceUpdate();
         }
     },
     deleteListItem: function(index) {
          if (this.editorListIndex !== null) {
-             console.log(index);
-            //var fieldToDelete = this.dataTypes[this.editorDataTypeIndex]['fields'].splice(index, 1);
-
-            //if (fieldToDelete && fieldToDelete[0].id) {
-            //    if(!this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete']) { this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'] = []; }
-            //    this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'].push(fieldToDelete[0].id);
-            //}
+            console.log(index);
+            var itemToDelete = this.formContent.items.splice(index, 1);
+            console.log(itemToDelete);
+            if (itemToDelete && itemToDelete[0].id) {
+                if(!this.formContent.itemsToDelete) { this.formContent.itemsToDelete = []; }
+                this.formContent.itemsToDelete.push(itemToDelete[0].id);
+            }
+            this.saveList();
         }
     }
   }
