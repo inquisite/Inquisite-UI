@@ -578,6 +578,17 @@ a{
 	  font-size: 14px;
   }
 
+.paging-buttons{
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 0.5rem;
+}
+
+  .paging-counts{
+	  display: inline-block;
+	  padding: 0 0.5rem
+  }
+
   .tabs-component-tab{
 	  transform: translateY(0) !important;
 	  border-bottom: 1px solid #ddd !important;
