@@ -76,6 +76,9 @@ Vue.component('password', Password)
 const PasswordReset = require('./components/PasswordReset.vue')
 Vue.component('PasswordReset', PasswordReset)
 
+const ExportData = require('./components/Export.vue')
+Vue.component('export-data', ExportData)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -100,6 +103,7 @@ export default [
   { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
   { path: '/admin/users', name: 'admin-users', component: AdminUsers, 'beforeEnter': function(f, t, n) { n(store.getters['people/userIsAdmin']);} },
+  { path: '/export-data/:repo_id?/:schema_id?', name: 'export-data', component: ExportData, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/password', name: 'password', component: Password },
   { path: '/password/reset', name: 'password-reset', component: PasswordReset },
   { path: '*', redirect: '/' }

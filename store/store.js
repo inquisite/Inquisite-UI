@@ -9,6 +9,7 @@ import data from './modules/data'
 import schema from './modules/schema'
 import search from './modules/search'
 import admin from './modules/admin'
+import export_data from './modules/export_data'
 import application from './modules/application'
 
 Vue.use(Vuex)
@@ -35,6 +36,7 @@ export default new Vuex.Store({
     search,
     admin,
     application,
+    export_data
   }
 })
 
