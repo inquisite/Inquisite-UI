@@ -18,7 +18,7 @@
                             <div class="col-12 col-sm-6 offset-sm-3 text-center">
                                 <button v-on:click.prevent="loadPage(expression, t, slices[t][0]-13, (slices[t][0]-1))" class="btn btn-primary btn-orange" :disabled="(slices[t][0]-12 < 0)">Prev</button>
                                 <h6 class="paging-counts">{{slices[t][0]}} - {{slices[t][1]}}</h6>
-                                <button v-on:click.prevent="loadPage(expression, t, slices[t][1], (slices[t][1]+12))" class="btn btn-primary btn-orange" :disabled="(slices[t][1]+12 > totalCounts[t])">Next</button>
+                                <button v-on:click.prevent="loadPage(expression, t, slices[t][1], (slices[t][1]+12))" class="btn btn-primary btn-orange" :disabled="(slices[t][0]+12 > totalCounts[t])">Next</button>
                             </div>
                         </div>
                         <div class="row">
