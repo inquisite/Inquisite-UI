@@ -6,7 +6,8 @@ import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 const state = {
   data_types: [],
   field_data_types: [],
-  default_data_type: null
+  default_data_type: null,
+  active_data_type: null
 }
 
 // getters
@@ -14,8 +15,8 @@ const getters = {
      getDataTypes: state => { return state.data_types; },
      getFieldDataTypeList: state => { return state.field_data_types; },
      getDefaultDataType: function() { return state.default_data_type; },
-
-     hasGeoreferences: function(state) {   
+     getActiveDataType: function() { return state.active_data_type; },
+     hasGeoreferences: function(state) {
          if (!state.data_types || !state.data_types.filter) { return false; }
          var types_with_georefs = state.data_types.filter(function(v, i, a) {
              if(!('fields' in v)){
@@ -34,9 +35,9 @@ const actions = {
      */
     getFieldDataTypeList: function(context) {
         return api.get('schema/getDataTypes', {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('GET_FIELD_DATA_TYPE_LIST', response);  
-                return response; 
+            .then(function(response) {
+                context.commit('GET_FIELD_DATA_TYPE_LIST', response);
+                return response;
             })
             .catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
@@ -50,9 +51,26 @@ const actions = {
         if(!context.rootState.token) return false;
 
         return api.get('schema/getTypes/' + repo_id, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('GET_DATA_TYPES', response); 
-                return response; 
+            .then(function(response) {
+                context.commit('GET_DATA_TYPES', response);
+                return response;
+            })
+            .catch(function(error) {
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
+    },
+
+    /**
+     *
+     */
+    getDataType: function(context, schema_id) {
+        if(!context.rootState.token) return false;
+
+        return api.get('schema/getType/' + context.rootGetters['repos/getActiveRepoID'] + '/' + schema_id, {headers: apiHeaders({"auth": true, "form": true})})
+            .then(function(response) {
+                context.commit('GET_DATA_TYPE', response);
+                return response;
             })
             .catch(function(error) {
                 context.commit('API_FAILURE', error, {'root': true });
@@ -140,6 +158,25 @@ const mutations = {
         }
 
         state.data_types = response;
+    },
+    GET_DATA_TYPE: function(state, response) {
+        if(response){
+            for(var i in state.data_types){
+                if(state.data_types[i]['id'] == response['id']){
+                    if (response.fields) {
+                        for(var j in response.fields) {
+                            if (response.fields[j].settings) {
+                                for(var k in response.fields[j].settings) {
+                                    response.fields[j]['settings_' + k] = response.fields[j].settings[k];
+                                }
+                            }
+                        }
+                    }
+                    state.data_types[i] = response;
+                    state.active_data_type = response;
+                }
+            }
+        }
     },
     ADD_DATA_TYPE: function(state, response) {
         response.type['fields'] = [];

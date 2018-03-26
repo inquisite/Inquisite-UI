@@ -26,10 +26,13 @@
 									<small>{{dataType.description}}</small>
 								</div>
 								<div>
-									<a @click="editDataType(dataType.id)" class="btn btn-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                                    <a @click="editDataType(dataType.id)" class="btn btn-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
 									<click-confirm placement="top" style="display:inline;">
 										<a @click="deleteDataType(dataType.id)" class="btn btn-orange  btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a>
 									</click-confirm>
+                                    <router-link :to="{path: '/export-data/0/' + dataType.id}">
+                                        <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
+                                    </router-link>
 								</div>
 							</li>
 						</ul>

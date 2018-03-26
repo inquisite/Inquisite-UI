@@ -9,7 +9,7 @@
                 </div>
                 <div class="card-block">
                     <flashmessage/>
-                    <div class="card-block">
+                    <div class="card-block" v-if="export_count > 0">
                         <form id="export-form" name="export-form" method="POST" action="">
                             <div class="row" v-if="export_info">
                                 <div class="col-12">
@@ -29,6 +29,18 @@
                                 <button v-on:submit.prevent="exportData" v-on:click.prevent="exportData" :disabled="!allow_export" class="btn btn-primary">Export</button>
                             </div>
                         </form>
+                        <div class="row">
+                            <div class="col-12" v-if="download_complete">
+                                <small>Your file should download automatically, if not please click <a id="download-link" :href="download_url" :download="export_name">here</a></small>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="card-block">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>No Records available for export</h2>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -53,6 +65,8 @@ export default {
       export_count: 0,
       export_info: false,
       allow_export: false,
+      download_complete: false,
+      download_url: '',
       tip: ''
     }
   },
@@ -67,17 +81,28 @@ export default {
       }
   },
   mounted: function(){
+      var source_id = null;
       if(this.repo_id && !this.schema_id){
+          source_id = this.repo_id
           this.repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](this.repo_id));
           this.export_source = this.repo.name;
           this.export_count = this.repo.data_element_count;
           this.export_type = "Repository";
       } else if(this.schema_id){
+          source_id = this.schema_id;
           console.log("EXPORT SCHEMA", this.schema_id);
+          var self = this;
+          this.$store.dispatch('schema/getDataType', this.schema_id).then(function(response){
+             self.schema = response;
+             self.export_source = response['name'];
+             self.export_count = response['data_count'];
+          });
+          this.export_type = "Schema";
       } else {
           console.log("EXPORT DATA");
       }
-      this.$store.dispatch('export_data/createExportSource', {"type": this.export_type, "source": this.repo_id})
+      console.log({"type": this.export_type, "source": source_id});
+      this.$store.dispatch('export_data/createExportSource', {"type": this.export_type, "repo": this.repo_id, "schema": this.schema_id})
       this.export_info = true;
   },
   methods: {
@@ -92,8 +117,10 @@ export default {
           this.allow_export = false;
       },
       exportData: function(){
-          this.$store.dispatch('export_data/generateExport').then(function(response){
-              console.log(response);
+          var self = this;
+          this.$store.dispatch('export_data/generateExport', self.export_name).then(function(response){
+              self.download_url = response.href;
+              self.download_complete = true;
           });
       }
   }
