@@ -604,3 +604,7 @@ a{
   .tabs-component-panels{
 	  padding: 1em !important;
   }
+
+  .export-card{
+	  border: 3px solid #1CB2C6 !important;
+  }

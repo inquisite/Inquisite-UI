@@ -21,8 +21,8 @@ const actions = {
      *
      */
     generateExport: function(context, export_filename) {
-        if(!context.rootState.token) return false;
-
+        if(!context.rootState.token) return false
+        console.log("PRE-EXPORT", state.export_source)
         return api.post('/export', state.export_source, {headers: apiHeaders({"auth": false, "form": true})})
             .then(function(response) {
                 let exp = new Blob([JSON.stringify(response)], {type: 'application/json'});
@@ -37,7 +37,11 @@ const actions = {
             })
     },
     createExportSource: function(context, source){
+        console.log(source);
         context.commit('SET_SOURCE', source);
+    },
+    storeExportRecords: function(context, recordList){
+        context.commit('STORE_RECORDS', recordList);
     }
 }
 
@@ -45,6 +49,9 @@ const actions = {
 const mutations = {
     SET_SOURCE: function(state, source){
         state.export_source = source;
+    },
+    STORE_RECORDS: function(state, recordList){
+        state.records = recordList;
     }
 }
 
