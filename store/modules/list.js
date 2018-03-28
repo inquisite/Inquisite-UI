@@ -56,7 +56,6 @@ const actions = {
         if (!context.rootState.token) return false;
         return api.post('/list/editList/' + context.rootGetters['repos/getActiveRepoID'] + '/' + data.id, data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {
-                context.commit('EDIT_LIST', response);
                 context.commit('SET_MESSAGE', 'Saved changes to list <em>' + data.name + '</em>', {'root': true});
                 return response;
             })
@@ -115,9 +114,6 @@ const mutations = {
             var list_items = response['items'];
             state.active_list_items = list_items;
         }
-    },
-    EDIT_LIST: function(state, response){
-        this.getListItemsForList(response['type']['id']);
     },
     ADD_LIST: function(state, response){
         if(response){

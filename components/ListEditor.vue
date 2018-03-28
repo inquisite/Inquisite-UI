@@ -209,9 +209,12 @@ export default {
         }
     },
     saveList: function() {
+        var self = this;
         if (this.formContent.id > 0) {
             // edit existing type
-            this.$store.dispatch('list/editList', this.formContent);
+            this.$store.dispatch('list/editList', this.formContent).then(function(response){
+                self.editList(self.formContent.id);
+            });
         } else {
             // add new type
             var self = this;
