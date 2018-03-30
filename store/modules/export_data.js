@@ -6,6 +6,8 @@ import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 const state = {
   records: [],
   export_source: null,
+  export_name: '',
+  export_user: null
 }
 
 // getters
@@ -23,7 +25,10 @@ const actions = {
     generateExport: function(context, export_filename) {
         if(!context.rootState.token) return false
         console.log("PRE-EXPORT", state.export_source)
-        return api.post('/export', state.export_source, {headers: apiHeaders({"auth": false, "form": true})})
+        var exporter = state.export_source;
+        exporter['name'] = state.export_name;
+        exporter['user'] = state.export_user;
+        return api.post('/export', exporter, {headers: apiHeaders({"auth": false, "form": true})})
             .then(function(response) {
                 let exp = new Blob([JSON.stringify(response)], {type: 'application/json'});
                 let exp_link = document.createElement('a');
@@ -40,8 +45,17 @@ const actions = {
         console.log(source);
         context.commit('SET_SOURCE', source);
     },
-    storeExportRecords: function(context, recordList){
-        context.commit('STORE_RECORDS', recordList);
+    storeExportRecords: function(context, recordInfo){
+        console.log(recordInfo);
+        var export_name = recordInfo[0];
+        var record_list = recordInfo[1];
+        var export_user = recordInfo[2];
+        context.commit('STORE_RECORDS', record_list);
+        context.commit('SET_EXPORT_INFO', [export_name, export_user]);
+    },
+    storeExportInfo: function(context, export_info){
+        console.log("STORE", export_info);
+        context.commit('SET_EXPORT_INFO', export_info);
     }
 }
 
@@ -52,6 +66,10 @@ const mutations = {
     },
     STORE_RECORDS: function(state, recordList){
         state.records = recordList;
+    },
+    SET_EXPORT_INFO: function(state, export_info){
+        state.export_name = export_info[0];
+        state.export_user = export_info[1]
     }
 }
 

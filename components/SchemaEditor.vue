@@ -30,7 +30,7 @@
 									<click-confirm placement="top" style="display:inline;">
 										<a @click="deleteDataType(dataType.id)" class="btn btn-orange  btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a>
 									</click-confirm>
-                                    <router-link :to="{path: '/export-data/0/' + dataType.id}">
+                                    <router-link :to="{path: '/export-data/' + activeRepoID + '/' + dataType.id}">
                                         <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
                                     </router-link>
 								</div>
@@ -226,6 +226,7 @@ export default {
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
+    activeRepoID: function() { return this.$store.getters['repos/getActiveRepoID']; },
 	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
 	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; },
 	fieldDataTypes: function() { return this.$store.getters['schema/getFieldDataTypeList']; }

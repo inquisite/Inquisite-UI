@@ -115,6 +115,9 @@ export default {
 	},
     activeRepoID: function() {
         return this.$store.getters['repos/getActiveRepoID'];
+    },
+    userInfo: function(){
+        return this.$store.getters['people/getUserInfo'];
     }
   },
   updated: function(){
@@ -161,9 +164,8 @@ export default {
         this.exportCount = this.exportRecords.length;
     },
     storeExportRecords:function(){
-        console.log("hello?", this.exportRecords);
         var self = this;
-        this.$store.dispatch('export_data/storeExportRecords', this.exportRecords).then(function(){
+        this.$store.dispatch('export_data/storeExportRecords', [this.expression, this.exportRecords, this.userInfo.email]).then(function(){
             self.$router.push('export-data');
         });
     }

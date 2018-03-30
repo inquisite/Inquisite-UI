@@ -80,13 +80,20 @@ export default {
           this.verifyExportName();
       }
   },
+  computed: {
+      userInfo: function(){
+          return this.$store.getters['people/getUserInfo'];
+      }
+  },
   mounted: function(){
       var source_id = null;
+      var user_name = this.userInfo.email;
       if(this.repo_id && !this.schema_id){
           source_id = this.repo_id
           this.repo = jQuery.extend({}, this.$store.getters['repos/getRepoByID'](this.repo_id));
           this.export_source = this.repo.name;
           this.export_count = this.repo.data_element_count;
+          this.$store.dispatch('export_data/storeExportInfo', [this.export_source, user_name]);
           this.export_type = "Repository";
           this.records = [];
       } else if(this.schema_id){
@@ -96,17 +103,16 @@ export default {
              self.schema = response;
              self.export_source = response['name'];
              self.export_count = response['data_count'];
+             self.$store.dispatch('export_data/storeExportInfo', [self.export_source, user_name]);
           });
           this.export_type = "Schema";
           this.records = [];
       } else {
-          console.log("EXPORT DATA");
           this.records = this.$store.getters['export_data/getExportRecords'];
           this.export_type = "Records";
           this.export_source = "Search";
           this.export_count = this.records.length;
       }
-      console.log({"type": this.export_type, "source": source_id});
       this.$store.dispatch('export_data/createExportSource', {"type": this.export_type, "repo": this.repo_id, "schema": this.schema_id, "records": JSON.stringify(this.records)})
       this.export_info = true;
   },
