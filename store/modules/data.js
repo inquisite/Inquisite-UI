@@ -20,7 +20,7 @@ const getters = {
 
      getDataHeaders: function(state) {
         if (state.loaded_data) {
-            return state.loaded_data.columns.filter(function(v) { return v != 'uuid'});
+            return state.loaded_data.columns.filter(function(v) { return v != 'uuid'}).map(x => state.loaded_data.columnNames[x]);
         }
         return [];
      },
@@ -28,7 +28,7 @@ const getters = {
         if (state.loaded_data) {
             return state.loaded_data.columns.filter(function(v) { return v != 'uuid'}).map(function(v) { return {
                 'data': v,
-                'column': v
+                'column': state.loaded_data.columnNames[v]
             }});
         }
         return [];
