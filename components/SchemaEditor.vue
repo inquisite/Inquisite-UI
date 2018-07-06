@@ -132,7 +132,7 @@
 													<div class="form-group">
 														<label for="type" class="form-label">Type</label>
 														<select v-model="f.type" class="custom-select form-control">
-															<option v-for="t,k in fieldDataTypes" :value="k">{{t.name}}</option>
+															<option v-for="t,k in fieldDataTypes" :value="k" :disabled="f.has_data">{{t.name}}</option>
 														</select>
 													</div>
 												</div>
