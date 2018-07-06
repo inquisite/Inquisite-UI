@@ -43,8 +43,10 @@
 					<ul class="dropdown-menu">
                      <li class="dropdown-item"><router-link :to="{path: '/edit-repo/' + activeRepo.id}" class="nav-link" >Repository Info</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/schema">Schema</router-link></li>
+                     <li class="dropdown-item"><router-link class="nav-link" to="/list">Lists</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/manage-collaborators">Collaborators</router-link></li>
                      <li class="dropdown-item"><router-link class="nav-link" to="/import-history">Import history</router-link></li>
+                     <li class="dropdown-item"><router-link :to="{path: '/export-data/' + activeRepo.id}" class="nav-link" >Export</router-link></li>
                    </ul>
                 </li><li class="nav-item dropdown" v-if="hasData">
                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">

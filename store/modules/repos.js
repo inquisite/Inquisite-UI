@@ -118,6 +118,15 @@ const actions = {
             .then(function(response) {
                 context.commit('DELETE_REPO', response);
                 context.commit('SET_MESSAGE', 'Deleted repository', {'root': true});
+                
+                let repo_count = context.state.user_repos.length;
+                
+                context.dispatch('people/getRepos', {}, { 'root': true }).then(function() { 
+                     if(repo_count == 0) {
+                       context.commit('SET_ACTIVE_REPO', new_repo_id);
+                     }     
+                });
+                
                 if (router) { router.push("/"); }
                 return response;
             })

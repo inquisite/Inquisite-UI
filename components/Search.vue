@@ -15,7 +15,10 @@
                 <tabs :options="{useUrlFragment: false}">
                     <tab v-if="counts[t] > 0" v-for="r,t in results" :name="t + ' (' + totalCounts[t] + ')'">
                         <div class="row paging-buttons" v-if="totalCounts[t] > 12">
-                            <div class="col-12 col-sm-6 offset-sm-3 text-center">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-primary" @click="storeExportRecords"><i class="fa fa-download" aria-hidden="true"></i> Export {{exportCount}} Records</button>
+                            </div>
+                            <div class="col-6 text-right">
                                 <button v-on:click.prevent="loadPage(expression, t, slices[t][0]-13, (slices[t][0]-1))" class="btn btn-primary btn-orange" :disabled="(slices[t][0]-12 < 0)">Prev</button>
                                 <h6 class="paging-counts">{{slices[t][0]}} - {{slices[t][1]}}</h6>
                                 <button v-on:click.prevent="loadPage(expression, t, slices[t][1], (slices[t][1]+12))" class="btn btn-primary btn-orange" :disabled="(slices[t][0]+12 > totalCounts[t])">Next</button>
@@ -23,7 +26,7 @@
                         </div>
                         <div class="row">
                             <div v-for="v, k in r" class="col-12 col-sm-12 col-md-6 col-lg-3">
-                                <div class="card">
+                                <div v-bind:class="'card ' + [exportRecords.indexOf(v.__id) >= 0 ? 'export-card' : '']">
                                     <div class="card-block search-result-block">
                                         <div class="row">
                                             <div v-if="t != 'Person'" class="col-5 text-left search-result-text">
@@ -45,6 +48,7 @@
                                                 <router-link v-if="t == 'Data'" class="btn btn-primary btn-block" :to="'/data/edit/' + v.__id">Edit</router-link>
                                                 <router-link v-if="(t == 'SchemaField' || t == 'SchemaType') && v.__repo_id == activeRepoID" class="btn btn-primary btn-block" :to="'/schema/edit/' + v['__schema_id']">Edit</router-link>
                                                 <button v-if="v.__repo_id != activeRepoID && t != 'Data'" class="btn btn-secondary" disabled><small>Load Repo</small></button>
+                                                <button v-if="t == 'Data'" class="btn btn-primary btn-sm btn-block" v-on:click="addToExport(v.__id)"><small>Export</small></button>
                                             </div>
                                         </div>
                                     </div>
@@ -85,7 +89,9 @@ export default {
   data: function() {
     return {
       state: this.$store.state,
-      initialTab: false
+      initialTab: false,
+      exportRecords: [],
+      exportCount: 0
     }
   },
   computed: {
@@ -109,13 +115,15 @@ export default {
 	},
     activeRepoID: function() {
         return this.$store.getters['repos/getActiveRepoID'];
+    },
+    userInfo: function(){
+        return this.$store.getters['people/getUserInfo'];
     }
   },
   updated: function(){
     var clicked = false;
     if(!this.initialTab){
         var tab_els = document.querySelectorAll("a[role='tab']");
-        console.log(document, tab_els);
         for(var i = 0; i < tab_els.legnth; i++){
             if(tab_els[i].href.indexOf('Data') > -1){
                 var tab_el = tab_els[i];
@@ -145,6 +153,21 @@ export default {
 	},
     loadPage: function(exp, node, start, end) {
         this.$store.dispatch('search/pagingSearch', [exp, node, start, end]);
+    },
+    addToExport:function(data_id){
+        var data_pos = this.exportRecords.indexOf(data_id);
+        if(data_pos < 0){
+            this.exportRecords.push(data_id);
+        } else {
+            this.exportRecords.splice(data_pos, 1);
+        }
+        this.exportCount = this.exportRecords.length;
+    },
+    storeExportRecords:function(){
+        var self = this;
+        this.$store.dispatch('export_data/storeExportRecords', [this.expression, this.exportRecords, this.userInfo.email]).then(function(){
+            self.$router.push('export-data');
+        });
     }
   }
 }

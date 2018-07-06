@@ -26,10 +26,13 @@
 									<small>{{dataType.description}}</small>
 								</div>
 								<div>
-									<a @click="editDataType(dataType.id)" class="btn btn-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+                                    <a @click="editDataType(dataType.id)" class="btn btn-primary btn-sm"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
 									<click-confirm placement="top" style="display:inline;">
 										<a @click="deleteDataType(dataType.id)" class="btn btn-orange  btn-sm"><i class="fa fa-times-circle" aria-hidden="true"></i> Delete</a>
 									</click-confirm>
+                                    <router-link :to="{path: '/export-data/' + activeRepoID + '/' + dataType.id}">
+                                        <button type="button" class="btn btn-primary btn-sm"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
+                                    </router-link>
 								</div>
 							</li>
 						</ul>
@@ -153,8 +156,8 @@
                                                             <div class="form-group row">
                                                                 <label :for="'settings_' + t.label" class="col-sm-3 col-formlabel">{{t.label}}</label>
                                                                 <div class="col-sm-3">
-        														    <span v-if="(t.type == 'text') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
-        														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select class="form-control"></select></span>
+                                                                    <span v-if="(t.type == 'text') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
+        														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select class="form-control" :name="'setting_' + f.code" v-model="f['settings_' + t.code]"><option v-for="l in repoLists" :value="l.code">{{l.name}}</option></select></span>
         														    <span v-else-if="(t.type == 'integer') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
         														    <span v-else-if="(t.type == 'integer') && (t.render == 'select')"><select class="form-control"></select></span>
         														    <span v-else-if="(t.type == 'float') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
@@ -200,6 +203,7 @@ export default {
         formContent: null,
         editorDataTypeIndex: null,
         search_display_values: [],
+        listArray: [],
         state: this.$store.state
     }
   },
@@ -209,6 +213,7 @@ export default {
   mounted: function(){
     this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']);
     this.$store.dispatch('schema/getFieldDataTypeList');
+    this.$store.dispatch('list/getListsForRepo', this.$store.getters['repos/getActiveRepoID']);
   },
   created: function(){
       if(this.id){
@@ -223,9 +228,11 @@ export default {
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
+    activeRepoID: function() { return this.$store.getters['repos/getActiveRepoID']; },
 	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
 	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; },
-	fieldDataTypes: function() { return this.$store.getters['schema/getFieldDataTypeList']; }
+	fieldDataTypes: function() { return this.$store.getters['schema/getFieldDataTypeList']; },
+    repoLists: function() { return this.$store.getters['list/getListsForRepo']; }
   },
   methods: {
     // ------------------------------------
@@ -285,6 +292,12 @@ export default {
 			container.scrollTop = "1px";
         }
     },
+
+    getFieldDataTypeSettings: function(dataType){
+        var type = this.fieldDataTypes[dataType];
+        var typeSettings = type['settings'];
+        return typeSettings
+    },
     deleteDataTypeField: function(index) {
          if (this.editorDataTypeIndex !== null) {
             var fieldToDelete = this.dataTypes[this.editorDataTypeIndex]['fields'].splice(index, 1);
@@ -299,9 +312,9 @@ export default {
     getFieldDataTypeSettingsForDisplay: function(tid) {
 	    var o = this.fieldDataTypes[tid]['order'];
 		var s = this.fieldDataTypes[tid]['settings'];
-
+		
 	    if (!o || !s) { return null; }
-	    var acc = [];
+        var acc = [];
 	    for(var i in o) { acc.push(s[o[i]]); }
 	    return acc;
 	}

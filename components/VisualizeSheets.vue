@@ -9,7 +9,7 @@
       <div class="pull-right"  style="color:white;" v-if="isSaving"><i class="fa fa-cog fa-spin fa-fw"></i> Saving...</div>
 		 </div>
         <div class="card-block" style="display:flex; overflow-x: auto;">
-            <HotTable ref="datagrid"
+            <HotTable ref="datagrid" style="height: 600px;"
                 :root="datagrid" :data="data"
                 :columns="colspec" :colWidths="200" :colHeaders="colheaders" :rowHeaders="true" :columnSorting="true" :sortIndicator="true" 
                 :onAfterChange="handleEdit"
@@ -37,14 +37,20 @@ export default {
   },
   mounted: function() {
     var self = this;
-    this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']).then(function() {
-        self.showType = self.$store.getters['schema/getDefaultDataType'];
-        self.updateDataGrid();
-    });
+    // this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']).then(function() {
+//         self.showType = self.$store.getters['schema/getDefaultDataType'];
+//         console.log("mepw", self.dataTypes);
+//         if (!self.showType) { self.showType = self.dataTypes[0]; }
+//         self.updateDataGrid();
+//     });
   },
   computed: { 
     activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
-    dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
+    dataTypes: function() { 
+        let dt = this.$store.getters['schema/getDataTypes']; 
+        if (!this.showType && dt && dt[0]) { this.showType = dt[0]['id']; this.updateDataGrid(); }
+        return dt;
+    },
     data: function() { return this.$store.getters['data/getData']; },
     colheaders: function() { return this.$store.getters['data/getDataHeaders']; },
     colspec: function() { return this.$store.getters['data/getDataColumnSpec']; }

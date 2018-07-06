@@ -49,6 +49,9 @@ Vue.component('visualise-maps', VisualizeMaps)
 const SchemaEditor = require('./components/SchemaEditor.vue')
 Vue.component('schema-editor', SchemaEditor)
 
+const ListEditor = require('./components/ListEditor.vue')
+Vue.component('list-editor', ListEditor)
+
 const Search = require('./components/Search.vue')
 Vue.component('search', Search)
 
@@ -76,6 +79,9 @@ Vue.component('password', Password)
 const PasswordReset = require('./components/PasswordReset.vue')
 Vue.component('PasswordReset', PasswordReset)
 
+const ExportData = require('./components/Export.vue')
+Vue.component('export-data', ExportData)
+
 export default [
   { path: '/', name: 'home', component: Home },
   { path: '/signup', name: 'signup', component: Signup },
@@ -96,10 +102,12 @@ export default [
   { path: '/visualize/maps', name: 'visualize-maps', component: VisualizeMaps, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/schema', name: 'schema-editor', component: SchemaEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/schema/edit/:id', name: 'schema-editor-edit', component: SchemaEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
+  { path: '/list', name: 'list-editor', component: ListEditor, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/data/edit/:id', name: 'data-editor', component: DataEditor, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
   { path: '/admin/users', name: 'admin-users', component: AdminUsers, 'beforeEnter': function(f, t, n) { n(store.getters['people/userIsAdmin']);} },
+  { path: '/export-data/:repo_id?/:schema_id?', name: 'export-data', component: ExportData, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/password', name: 'password', component: Password },
   { path: '/password/reset', name: 'password-reset', component: PasswordReset },
   { path: '*', redirect: '/' }

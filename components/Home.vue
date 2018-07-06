@@ -74,6 +74,10 @@
 			<router-link to="/schema">
 				<button type="button" class="btn btn-primary"><i class="fa fa-cubes" aria-hidden="true"></i> Schema</button>
 			</router-link>
+            &nbsp;&nbsp;
+            <router-link :to="{path: '/export-data/' + activeRepo.id}">
+                <button type="button" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true"></i> Export</button>
+            </router-link>
 		</div>
 	</div>
 	<div class="row"><div class="col spacerRow"></div></div>
