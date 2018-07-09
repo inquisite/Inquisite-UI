@@ -122,20 +122,24 @@ export default {
     }
   },
   mounted: function() {
+    var self = this;
     if (this.isLoggedIn) {
         // Load initial data
         this.$store.dispatch('boot', this.$store.getters['repos/getActiveRepoID']).then(function() {
-            // NOOP
+            if(self.user){
+                self.$socket.emit('send_user_id', {"id": self.user.id});
+            }
         });
     }
   },
   watch: {
-    '$route': 'pageChangeActions',
-    user: function(data){
-        if(this.user.id){
-            this.$socket.emit('send_user_id', {"id": this.user.id});
-        }
-    }
+      isLoggedIn: function(login){
+          if(login){
+              if(this.user.id){
+                  this.$socket.emit('send_user_id', {"id": this.user.id});
+              }
+          }
+      }
   },
   computed: {
     isLoggedIn: function() {
@@ -185,16 +189,6 @@ export default {
 
         return length;
 
-    },
-
-    pageChangeActions: function() {
-      // Clear form msg
-      store.dispatch('resetMessage');
-
-      // Get User Repos if logged in and we don't have them
-    //   if( this.isLoggedIn && !this.hasRepos) {
-    //     store.dispatch('people/getRepos').then(function() { store.dispatch('data/getDataNodes', { data: { repo_id: store.state.active_repo_id }}); });
-    //   }
     },
     setActiveRepo: function(repo_id) {
       store.commit('repos/SET_ACTIVE_REPO', repo_id);
