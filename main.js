@@ -33,8 +33,10 @@ Vue.component('v-map', Vue2Leaflet.Map);
 Vue.component('v-tilelayer', Vue2Leaflet.TileLayer);
 Vue.component('v-marker', Vue2Leaflet.Marker);
 Vue.component('v-polygon', Vue2Leaflet.Polygon);
+Vue.component('v-polyline', Vue2Leaflet.Polyline);
 Vue.component('v-rectangle', Vue2Leaflet.Rectangle);
 Vue.component('v-popup', Vue2Leaflet.Popup);
+Vue.component('v-geo-json', Vue2Leaflet.GeoJson);
 Vue.component('v-marker-cluster', Vue2LeafletMarkerCluster);
 
 new Vue({

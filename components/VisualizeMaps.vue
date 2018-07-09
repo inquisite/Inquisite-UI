@@ -30,7 +30,9 @@
                                     <v-marker-cluster>
                                         <v-marker v-if="points.length > 0" v-for="p, i in points" :lat-lng="p"><v-popup :content="pointLabels[i]"></v-popup></v-marker>
                                         <v-polygon v-if="polygons.length > 0" v-for="p, i in polygons" :lat-lngs="p"><v-popup :content="polygonLabels[i]"></v-popup></v-polygon>
+                                        <v-polyline v-if="lines.length > 0" v-for="p, i in lines" :lat-lngs="p"><v-popup :content="lineLabels[i]"></v-popup></v-polyline>
                                     </v-marker-cluster>
+                                    <v-geo-json :geojson="geojson"></v-geo-json>
                                 </v-map>
                             </div>
                         </div>
@@ -55,7 +57,9 @@ export default {
       showField: null,
       displayFields: [],
       dataTypeShow: [],
-      coords: {"polygons": [], "polygon_labels": [], "points": [], "point_labels": []}
+      coords: {"polygons": [], "polygon_labels": [], "points": [], "point_labels": [], "lines": [], "line_labels": []},
+      geojson: [],
+      workingGeo: [],
     }
   },
   mounted: function() {
@@ -101,7 +105,7 @@ export default {
         }
         return field_values.join("<br/>\n");
       });
-  },
+    },
     polygons: function() {
       var c = this.coords;
       return c["polygons"];
@@ -111,6 +115,26 @@ export default {
       var c = this.coords;
       var display_fields = this.displayFields;
       return c["polygon_labels"].map((v, i) => {
+        var field_values = [];
+        for(var f in display_fields) {
+          //if (display_fields[f] == self.showField) { continue; }
+          var t = self.dataTypes.filter((v) => v.id == self.showType);
+          var l = t[0]["fields"].filter((v) => v.code === display_fields[f]);
+          var field_label = (l && l[0]) ? l[0].name : "???";
+          field_values.push(field_label + ": " + v[display_fields[f]]);
+        }
+        return field_values.join("<br/>\n");
+      });
+    },
+    lines: function() {
+      var c = this.coords;
+      return c["lines"];
+    },
+    lineLabels: function() {
+      var self = this;
+      var c = this.coords;
+      var display_fields = this.displayFields;
+      return c["line_labels"].map((v, i) => {
         var field_values = [];
         for(var f in display_fields) {
           //if (display_fields[f] == self.showField) { continue; }
@@ -139,7 +163,7 @@ export default {
         if (this.showType > 0) {
 
             var self = this;
-            this.$store.dispatch('data/getDataForType', {"repo_id": this.activeRepo.id, "type": this.showType}).then(function(r) {
+            this.$store.dispatch('data/getDataForType', {"repo_id": this.$store.getters['repos/getActiveRepoID'], "type": this.showType}).then(function(r) {
                 self.getCoords();
                 self.setMapCenterZoom();
             });
@@ -164,7 +188,7 @@ export default {
         this.loadMap();
     },
     getCoords: function() {
-      this.coords = {"polygons": [], "polygon_labels": [], "points": [], "point_labels": []}
+      this.coords = {"polygons": [], "polygon_labels": [], "points": [], "point_labels": [], "lines": [], "line_labels": []}
       var d = this.mapData;
       var count = 0;
       for(var i in d) {
@@ -172,30 +196,36 @@ export default {
             // TODO: improve performance and remove limit
             if (count > 3000) break;
             var c = JSON.parse(d[i][this.showField]);
+            this.geojson.push(c);
             if (c['coordinates']) {
               count++;
 
+              var type_array = "";
+              var type_label_array = "";
               switch(c['type']) {
                 case "polygon":
-                  for(var g in c['coordinates']) {
-                    var p = [];
-                    for(var cs in c['coordinates'][g]) {
-                      // flip long/lat (GeoJSON) to lat/long (Leaflet)
-                      p.push([c['coordinates'][g][cs][1], c['coordinates'][g][cs][0]])
-                    }
-                    this.coords['polygons'].push(p);
-                    this.coords['polygon_labels'].push(Object.keys(d[i]).filter(key => key !== 'coordinates')
-                          .reduce((obj, key) => { obj[key] = d[i][key]; return obj; }, {}));
-                  }
+                case "multipolygon":
+                  type_array = 'polygons';
+                  type_label_array = 'polygon_labels';
                   break;
                 case "point":
-                  var p = [c['coordinates'][1], c['coordinates'][0]];
-
-                  this.coords['points'].push(p);
-                  this.coords['point_labels'].push(Object.keys(d[i]).filter(key => key !== 'coordinates')
-                        .reduce((obj, key) => { obj[key] = d[i][key]; return obj; }, {}));
+                  type_array = 'points';
+                  type_label_array = 'point_labels';
+                  break;
+                case "linestring":
+                case "multilinestring":
+                  type_array = 'lines';
+                  type_label_array = 'line_labels';
+                  break;
+                default:
                   break;
               }
+
+              var p = this.convertNestedGeoref(c['coordinates']);
+              this.coords[type_array].push(p);
+
+              this.coords[type_label_array].push(Object.keys(d[i]).filter(key => key !== 'coordinates')
+                .reduce((obj, key) => { obj[key] = d[i][key]; return obj; }, {}));
             }
         }
       }
@@ -206,30 +236,83 @@ export default {
       var minLon = 180;
       var maxLat = -90;
       var maxLon = -180;
-      var totalLon = 0
-      var measureCount = 0;
-      if(this.coords["polygons"].length < 1 && this.coords["points"].length < 1){
+      var maxMins = [];
+      if(this.coords["polygons"].length < 1 && this.coords["points"].length < 1 && this.coords["lines"].length < 1){
           return [0,0];
       }
       var polygons = this.coords["polygons"];
       var points = this.coords["points"];
-      for(var i in polygons){
-          for(var j in polygons[i]['coordinates']){
-              if(maxLon < polygons[i]['coordinates'][j][1]){ maxLon = polygons[i]['coordinates'][j][1]}
-              if(maxLat < polygons[i]['coordinates'][j][0]){ maxLat = polygons[i]['coordinates'][j][0]}
-              if(minLon > polygons[i]['coordinates'][j][1]){ minLon = polygons[i]['coordinates'][j][1]}
-              if(minLat > polygons[i]['coordinates'][j][0]){ minLat = polygons[i]['coordinates'][j][0]}
+      var lines = this.coords["lines"];
+      if(polygons){
+          maxMins = this.getMaxMinCoords(polygons, [maxLon, maxLat, minLon, minLat]);
+          /*
+          for(var i in coords){
+              for(var j in polygons[i]){
+                  if(maxLon < polygons[i][j][1]){ maxLon = polygons[i][j][1]}
+                  if(maxLat < polygons[i][j][0]){ maxLat = polygons[i][j][0]}
+                  if(minLon > polygons[i][j][1]){ minLon = polygons[i][j][1]}
+                  if(minLat > polygons[i][j][0]){ minLat = polygons[i][j][0]}
+              }
           }
+          */
       }
-      for(var k in points){
-          if(maxLon < points[k][1]){ maxLon = points[k][1]}
-          if(maxLat < points[k][0]){ maxLat = points[k][0]}
-          if(minLon > points[k][1]){ minLon = points[k][1]}
-          if(minLat > points[k][0]){ minLat = points[k][0]}
+      if(points){
+          maxMins = this.getMaxMinCoords(points, maxMins);
+          /*
+          for(var k in points){
+              if(maxLon < points[k][1]){ maxLon = points[k][1]}
+              if(maxLat < points[k][0]){ maxLat = points[k][0]}
+              if(minLon > points[k][1]){ minLon = points[k][1]}
+              if(minLat > points[k][0]){ minLat = points[k][0]}
+          }
+          */
       }
+      if(lines){
+          maxMins = this.getMaxMinCoords(lines, maxMins);
+      }
+      maxLon = maxMins[0];
+      maxLat = maxMins[1];
+      minLon = maxMins[2];
+      minLat = maxMins[3];
       this.$refs.map.mapObject.fitBounds([[minLat, minLon], [maxLat, maxLon]], {"padding": [30, 30]})
       //return [avgLon, avgLat];
     },
+
+    convertNestedGeoref: function(georef) {
+        var geoLen = georef.length;
+        for(var i = 0; i < geoLen; i++){
+            var test = georef[i];
+            var type = typeof test;
+            if(type == 'array' || type == 'object'){
+                var converted = this.convertNestedGeoref(test);
+                georef[i] = converted;
+            } else {
+                var leafLatLng = [georef[1], georef[0]];
+                georef = leafLatLng;
+                break;
+            }
+        }
+        return georef;
+    },
+
+    getMaxMinCoords: function(georefs, maxMins){
+        var geoLen = georefs.length;
+        for(var i = 0; i < geoLen; i++){
+            var test = georefs[i];
+            var type = typeof test;
+            if(type == 'array' || type == 'object'){
+                maxMins = this.getMaxMinCoords(test, maxMins);
+            } else {
+                if(maxMins[0] < georefs[1]){ maxMins[0] = georefs[1]}
+                if(maxMins[1] < georefs[0]){ maxMins[1] = georefs[0]}
+                if(maxMins[2] > georefs[1]){ maxMins[2] = georefs[1]}
+                if(maxMins[3] > georefs[0]){ maxMins[3] = georefs[0]}
+                return maxMins;
+            }
+        }
+        return maxMins;
+    }
+
   }
 }
 </script>
