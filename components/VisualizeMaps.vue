@@ -220,7 +220,6 @@ export default {
                 default:
                   break;
               }
-
               var p = this.convertNestedGeoref(c['coordinates']);
               this.coords[type_array].push(p);
 
@@ -245,27 +244,9 @@ export default {
       var lines = this.coords["lines"];
       if(polygons){
           maxMins = this.getMaxMinCoords(polygons, [maxLon, maxLat, minLon, minLat]);
-          /*
-          for(var i in coords){
-              for(var j in polygons[i]){
-                  if(maxLon < polygons[i][j][1]){ maxLon = polygons[i][j][1]}
-                  if(maxLat < polygons[i][j][0]){ maxLat = polygons[i][j][0]}
-                  if(minLon > polygons[i][j][1]){ minLon = polygons[i][j][1]}
-                  if(minLat > polygons[i][j][0]){ minLat = polygons[i][j][0]}
-              }
-          }
-          */
       }
       if(points){
           maxMins = this.getMaxMinCoords(points, maxMins);
-          /*
-          for(var k in points){
-              if(maxLon < points[k][1]){ maxLon = points[k][1]}
-              if(maxLat < points[k][0]){ maxLat = points[k][0]}
-              if(minLon > points[k][1]){ minLon = points[k][1]}
-              if(minLat > points[k][0]){ minLat = points[k][0]}
-          }
-          */
       }
       if(lines){
           maxMins = this.getMaxMinCoords(lines, maxMins);
