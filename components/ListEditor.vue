@@ -50,30 +50,35 @@
 					<div class="card card-form">
 						<div class="card-header text-center">Basic Information</div>
 						<div class="card-block">
-
-								<div class="row">
-									<div class="col-sm-6">
-										<div class="form-group">
-											<label for="name" class="form-label">Name</label>
-											<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="formContent.name">
-										</div>
-									</div>
-									<div class="col-sm-6">
-										<div class="form-group">
-											<label for="code" class="form-label">Code</label>
-											<input type="text" class="form-control" id="code" name="code" placeholder="Code" v-model="formContent.code">
-										</div>
+                            <div class="row">
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label for="name" class="form-label">Name</label>
+										<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="formContent.name">
 									</div>
 								</div>
-								<div class="row">
-									<div class="col-sm-12">
-										<div class="form-group">
-											<label for="description" class="form-label">Description</label>
-											<textarea class="form-control" rows="3" cols="80" v-model="formContent.description"></textarea>
-										</div>
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label for="code" class="form-label">Code</label>
+										<input type="text" class="form-control" id="code" name="code" placeholder="Code" v-model="formContent.code">
 									</div>
 								</div>
-						 </div><!-- end card-block -->
+                                <div class="col-sm-2">
+									<div class="form-group">
+										<label for="merge" class="form-label">Allow Merge?</label>
+                                        <select v-model="formContent.merge_allowed" :name="Merge" id="merge" class="form-control" ><option value="1">Yes</option><option value="0">No</option></select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label for="description" class="form-label">Description</label>
+										<textarea class="form-control" rows="3" cols="80" v-model="formContent.description"></textarea>
+									</div>
+								</div>
+							</div>
+						</div><!-- end card-block -->
 					</div><!-- end card -->
 				</div><!-- end col -->
 			</div><!-- end row -->
@@ -219,7 +224,6 @@ export default {
             // add new type
             var self = this;
             this.$store.dispatch('list/addList', this.formContent).then(function(response) {
-                console.log(response);
                 self.editList(response.type.id);
             });
         }

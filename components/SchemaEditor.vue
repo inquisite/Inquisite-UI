@@ -312,7 +312,7 @@ export default {
     getFieldDataTypeSettingsForDisplay: function(tid) {
 	    var o = this.fieldDataTypes[tid]['order'];
 		var s = this.fieldDataTypes[tid]['settings'];
-		
+
 	    if (!o || !s) { return null; }
         var acc = [];
 	    for(var i in o) { acc.push(s[o[i]]); }

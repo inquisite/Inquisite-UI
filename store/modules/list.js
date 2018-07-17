@@ -6,7 +6,8 @@ import { apiHeaders, extractAPIError } from '../../lib/utils.js'
 const state = {
   lists: [],
   active_list: null,
-  active_list_items: []
+  active_list_items: [],
+  active_list_info: [],
 }
 
 const getters = {
@@ -42,6 +43,7 @@ const actions = {
         return api.get('list/getListItems/' + context.rootGetters['repos/getActiveRepoID'] + '/' + list_id, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response){
                 context.commit('GET_LIST_ITEMS', response);
+                context.commit('GET_LIST_INFO', response);
                 return response;
             })
             .catch(function(error){
@@ -113,6 +115,17 @@ const mutations = {
             state.active_list = active_list;
             var list_items = response['items'];
             state.active_list_items = list_items;
+        }
+    },
+    GET_LIST_INFO: function(state, response){
+        var list_info = [];
+        if(response){
+            list_info['id'] = response['list_id'];
+            list_info['name'] = response['name'];
+            list_info['code'] = response['code'];
+            list_info['description'] = response['description'];
+            list_info['merge_allowed'] = response['merge_allowed'];
+            state.active_list_info = list_info;
         }
     },
     ADD_LIST: function(state, response){

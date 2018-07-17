@@ -100,8 +100,11 @@
 						<div class="col-sm-2">
 							<h6>Data Type</h6>
 						</div>
-						<div class="col-sm-2">
-							<h6>Display in Search?</h6>
+						<div class="col-sm-1">
+							<h6>Search Display?</h6>
+						</div>
+						<div class="col-sm-1">
+							<h6>List Merge?</h6>
 						</div>
 					</div>
 					<div v-for="(h,i) in server_file_info.preview.headers" class="row">
@@ -171,8 +174,11 @@
 								<option v-for="(t,k) in fieldDataTypes" :value="k">{{t.name}}</option>
 							</select>
 						</div>
-						<div class="col-sm-2 columnSelect">
+						<div class="col-sm-1 columnSelect">
 							<select v-model="search_result_include[i]" :name="'search_include_' + h"><option value="1">Yes</option><option value="0">No</option></select>
+						</div>
+						<div class="col-sm-1 columnSelect">
+							<select v-model="allow_list_merge[i]" :name="'list_merge_' + h" :disabled="checkIfList(i)"><option value="1">Yes</option><option value="0">No</option></select>
 						</div>
 					</div>
 					<div class="row">
@@ -327,6 +333,7 @@ export default {
 	  editable_field_names: [],
 	  data_type_recommended: [],
 	  search_result_include: [],
+	  allow_list_merge: [],
 	  mapping_options: {},
 	  new_schema_name: null,
 	  display_preview: false,
@@ -352,6 +359,7 @@ export default {
   mounted: function(){
     this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']);
     this.$store.dispatch('schema/getFieldDataTypeList');
+	this.$store.dispatch('list/getListsForRepo', this.$store.getters['repos/getActiveRepoID']);
   },
   computed: {
     isLoggedIn: function() { return this.$store.getters.isLoggedIn; },
@@ -364,7 +372,7 @@ export default {
 	repos: function() { return this.$store.getters['people/getUserRepos']; },
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
-
+	lists: function() { return this.$store.getters['list/getListsForRepo']; },
 	canImport: function() {
 	    return this.data_mapping.filter(function(v) {
 	        return v != 0;
@@ -449,16 +457,29 @@ export default {
 					opts[i].unshift("Create field " + optionName);
                     vals[i].unshift(optionVal);
 					types[i].unshift(this.data_type_recommended[i])
+					if(this.data_type_recommended[i] == 'ListDataType'){ this.allow_list_merge[i] = "0"; }
 					break;
                 } else if (parseInt(dt['id']) == parseInt(this.import_as)) {
                     // field for target type
                     for(var k in dt['fields']) {
 						var fieldRegEx = new RegExp("[^A-Za-z0-9_]+", "g")
-                        if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i].replace(fieldRegEx, "_").toLowerCase()) {
+						if(dt['fields'][k]['code'] == this.server_file_info.preview.headers[i].replace(fieldRegEx, "_").toLowerCase()) {
                             allowCreateNew = false;
 							opts[i].unshift(dt['fields'][k]['name'] + " (" + data_types[j]['name'] + ")");
                             vals[i].unshift(dt['fields'][k]['id']);
 							types[i].unshift(dt['fields'][k]['type']);
+							if(dt['fields'][k]['type'] == 'ListDataType'){
+								var list_code = dt['fields'][k]['settings_list_code'];
+								for(var l in this.lists){
+									if(this.lists[l]['code'] == list_code){
+										var list = this.lists[l];
+										var allow_merge = list['merge_allowed'];
+										if(!allow_merge){ allow_merge = "0"; }
+										this.allow_list_merge[i] = allow_merge;
+									}
+								}
+							}
+							this.search_result_include[i] = dt['fields'][k]['settings_search_display'];
                         }
                     }
 
@@ -487,11 +508,10 @@ export default {
                     }
                 }
             }
-
             opts[i].unshift("Do not import");
             vals[i].unshift(0);
 	    }
-		console.log(types);
+
 		this.mapping_options = {"options": opts, "values": vals}
 		this.data_type_recommended = types.map(type => type[0]);
 		return {"options": opts, "values": vals};
@@ -525,6 +545,7 @@ export default {
 				self.setRecommendedSchema();
 				self.data_mapping = Array(self.server_file_info.preview.headers.length).fill(0);
 				self.search_result_include = Array(self.server_file_info.preview.headers.length).fill(0);
+				self.allow_list_merge = Array(self.server_file_info.preview.headers.length).fill(null);
 				self.dataTypeRecommended;
 				self.updateDataMapping();
 				self.emptyFieldDescriptions();
@@ -553,7 +574,7 @@ export default {
 		});
 
 
-		this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names.join("|"), schema_name: this.new_schema_name, column_types: this.data_type_recommended.join("|"), field_descriptions: this.field_description.join("|"), field_search_display: this.search_result_include.join("|") }}).then(function(data) {
+		this.$store.dispatch('data/importData', {data: { repo_id: this.activeRepo.id, filename: this.server_file_info.filename, data_mapping: this.data_mapping.join("|"), type: this.import_as, ignore_first: this.ignore_first_rows, original_filename: this.server_file_info.original_filename, field_names: this.editable_field_names.join("|"), schema_name: this.new_schema_name, column_types: this.data_type_recommended.join("|"), field_descriptions: this.field_description.join("|"), field_search_display: this.search_result_include.join("|"), allow_list_merge: this.allow_list_merge.join("|") }}).then(function(data) {
             self.import_results = {
                 "errors": data.errors,
                 "error_count": data.error_count,
@@ -600,6 +621,7 @@ export default {
 		this.editable_field_names = [];
 		this.data_type_recommended = [];
 		this.search_result_include = [];
+		this.allow_list_merge = [];
         this.ignore_rows = false;
         this.ignore_first_rows = 1;
   	  	this.mapping_options = {};
@@ -625,10 +647,8 @@ export default {
 	updateFieldNames: function(h, i){
 
 		if(this.custom_field_title[i] || this.custom_field_title[i] != ''){
-			console.log("From field", this.custom_field_title[i], this.server_file_info.preview.headers[i]);
 			this.editable_field_names[i] = this.custom_field_title[i];
 		} else {
-			console.log("From headers", this.custom_field_title[i], this.server_file_info.preview.headers[i]);
 			this.editable_field_names[i] = this.server_file_info.preview.headers[i];
 		}
 		var selectVal = h.replace(/[^A-Za-z0-9_\-]+/, "");
@@ -662,6 +682,12 @@ export default {
 			}
 		}
 		return false;
+	},
+	checkIfList: function(i){
+		if(this.data_type_recommended[i] == 'ListDataType'){
+			return false;
+		}
+		return true;
 	},
 	togglePreview: function(){
 		this.display_preview = !this.display_preview;
