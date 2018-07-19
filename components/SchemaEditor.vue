@@ -148,8 +148,15 @@
 													</div>
 												</div>
 											</div>
+                                            <div v-if="fieldAlert[i]" class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-danger">
+                                                        {{fieldAlert[i]}}
+                                                    </div>
+                                                </div>
+                                            </div>
 											<div class="row" v-if="fieldDataTypes[f.type] && fieldDataTypes[f.type]['order']">
-												<div class="col-sm-12">
+                                                <div class="col-sm-12">
 													<div class="form-group">
 														<label for="description" class="form-label">Settings</label>
                                                         <div v-for="t in getFieldDataTypeSettingsForDisplay(f.type)">
@@ -157,7 +164,7 @@
                                                                 <label :for="'settings_' + t.label" class="col-sm-3 col-formlabel">{{t.label}}</label>
                                                                 <div class="col-sm-3">
                                                                     <span v-if="(t.type == 'text') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
-        														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select class="form-control" :name="'setting_' + f.code" v-model="f['settings_' + t.code]"><option v-for="l in repoLists" :value="l.code">{{l.name}}</option></select></span>
+        														    <span v-else-if="(t.type == 'text') && (t.render == 'select')"><select class="form-control" :name="'setting_' + f.code" v-model="f['settings_' + t.code]" v-on:change="settingAlert(t.code, i)"><option v-for="l in repoLists" :value="l.code">{{l.name}}</option></select></span>
         														    <span v-else-if="(t.type == 'integer') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
         														    <span v-else-if="(t.type == 'integer') && (t.render == 'select')"><select class="form-control"></select></span>
         														    <span v-else-if="(t.type == 'float') && (t.render == 'field')"><input type="text" :id="'setting_' + t.code" :name="'setting_' + f.code" class="form-control" v-model="f['settings_' + t.code]" :style="'width:' + t.width"/></span>
@@ -204,6 +211,7 @@ export default {
         editorDataTypeIndex: null,
         search_display_values: [],
         listArray: [],
+        fieldAlert: [],
         state: this.$store.state
     }
   },
@@ -265,6 +273,7 @@ export default {
     saveDataType: function() {
         if (this.formContent.id > 0) {
             // edit existing type
+            console.log(this.formContent);
             this.$store.dispatch('schema/editDataType', this.formContent);
         } else {
             // add new type
@@ -317,8 +326,13 @@ export default {
         var acc = [];
 	    for(var i in o) { acc.push(s[o[i]]); }
 	    return acc;
-	}
+	},
 	// ------------------------------------
+    settingAlert(setting_code, i){
+        if(setting_code == "list_code"){
+            this.fieldAlert[i] = "WARNING! Changing the list associated with this field will cause existing values to be checked against the newly assigned list. If that list does not allow merging, non-matching values will be deleted! Please review your data and/or set the list being switched to allow merging."
+        }
+    }
   },
 }
 </script>
