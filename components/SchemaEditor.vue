@@ -73,7 +73,7 @@
                 <div class="col-sm-8" v-if="(editorDataTypeIndex !== null) && (editorDataTypeIndex >= 0)">
                     <div class="row">
                         <div class="col-8">
-                            <h4>Fields</h4>
+                            <h4>Fields <a href="#" data-toggle="modal" data-target="#color-guide-modal"><i class="fa fa-info-circle"></i></a></h4>
                         </div>
                         <div class="col-4 text-right">
                             <a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Field</a>
@@ -222,10 +222,55 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button v-on:submit.prevent="saveFieldEdit" v-on:click.prevent="saveFieldEdit" class="btn btn-primary btn-orange" data-dismiss="modal">Save</button>
+                    <click-confirm placement="left" style="display:inline;">
+                        <button v-on:click.prevent="deleteDataTypeField(currentField.pos)" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                    </click-confirm>
                   </div>
                 </div>
               </div>
             </div>
+        </div>
+        <div class="modal fade" id="color-guide-modal" tabindex="-1" role="dialog" aria-labelledby="color-guide" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="edit-field-label">Field Type Color Guide</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <p>The colors of each Data Type Field provide a guide to the type of data that they contain:</p>
+                  <div class="row color-row">
+                      <div class="col-4 text-center">
+                        <div style="background-color: #54b15c;" class="color-block"><h6>Text</h6></div>
+                      </div>
+                      <div class="col-4 text-center">
+                        <div style="background-color: #798ae7;" class="color-block"><h6>Integer</h6></div>
+                      </div>
+                      <div class="col-4 text-center">
+                        <div style="background-color: #e0462f;" class="color-block"><h6>Boolean</h6></div>
+                      </div>
+                  </div>
+                  <div class="row color-row">
+                      <div class="col-4 text-center">
+                        <div style="background-color: #e08e33;" class="color-block"><h6>List</h6></div>
+                      </div>
+                      <div class="col-4 text-center">
+                        <div style="background-color: #e0c14e;" class="color-block"><h6>Georeference</h6></div>
+                      </div>
+                      <div class="col-4 text-center">
+                        <div style="background-color: #993456;" class="color-block"><h6>Float</h6></div>
+                      </div>
+                  </div>
+                  <div class="row color-row">
+                      <div class="col-4 text-center offset-sm-4">
+                        <div style="background-color: #e49ae1;" class="color-block"><h6>Date</h6></div>
+                      </div>
+                  </div>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
 
@@ -297,8 +342,10 @@ export default {
             if (this.dataTypes[i].id == id) {
                 this.editorHeader = "Editing Data Type: <em>" + this.dataTypes[i].name + "</em>";
                 this.formContent = this.dataTypes[i];
-                this.currentField = this.formContent['fields'][0];
-                this.currentField['pos'] = i;
+                if(this.formContent['fields'].length > 0){
+                    this.currentField = this.formContent['fields'][0];
+                    this.currentField['pos'] = i;
+                }
                 for(var j in this.formContent.fields){
                     for(var k in this.formContent.fields[j]){
                         if(k.indexOf("settings_") > -1){
@@ -350,7 +397,7 @@ export default {
     addDataTypeField: function() {
         if (this.editorDataTypeIndex !== null) {
             this.dataTypes[this.editorDataTypeIndex]['fields'].unshift({'type': 'TextDataType'});
-            var container = this.$el.querySelector("#fieldList");
+            var container = this.$el.querySelector("#schemaEditor-form");
 			container.scrollTop = "1px";
         }
     },
@@ -397,7 +444,25 @@ export default {
         var headerClass = 'card-gray';
         switch(type){
             case 'TextDataType':
-                headerClass = 'card-green';
+                headerClass = 'card-schema-green';
+                break;
+            case 'IntegerDataType':
+                headerClass = 'card-blue';
+                break;
+            case 'BooleanDataType':
+                headerClass = 'card-red';
+                break;
+            case 'ListDataType':
+                headerClass = 'card-orange';
+                break;
+            case 'GeoreferenceDataType':
+                headerClass = 'card-yellow';
+                break;
+            case 'FloatDataType':
+                headerClass = 'card-purple';
+                break;
+            case 'DateDataType':
+                headerClass = 'card-pink';
                 break;
             default:
                 break;
