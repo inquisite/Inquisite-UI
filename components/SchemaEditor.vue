@@ -323,8 +323,10 @@ export default {
   },
   filters: {
       truncateDescription: function(desc){
-          if(desc.length > 90){
-              return desc.substr(0, 87) + '...';
+          if(desc){
+              if(desc.length > 90){
+                  return desc.substr(0, 87) + '...';
+              }
           }
           return desc;
       }
