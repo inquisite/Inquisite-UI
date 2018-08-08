@@ -169,7 +169,7 @@ export default {
     		  }
     		  localGraph['nodes'].push(repo);
               var typeCount = self.dataTypes.length;
-              var typePos = 1;
+              var typePos = 0;
     		  for(var i = 0; i < self.dataTypes.length; i++){
     			  var type = self.dataTypes[i];
                   var typeDisplay = '';
@@ -219,17 +219,18 @@ export default {
                              }
                          }
                          var dataNode = {
-                             "id": 'data_'+data.id,
+                             "id": data.uuid,
                              "type": "data",
                              "name": "Data",
                              "text": dataText
                          }
                          localGraph['nodes'].push(dataNode);
                          localGraph['links'].push({"source": dataType.id, "target": dataNode.id});
-                         typePos++;
-                         if(typePos >= typeCount){
-                           resolve(localGraph);
-                         }
+                     }
+                     typePos++;
+                     if(typePos >= typeCount){
+                       console.log("HELLO?")
+                       resolve(localGraph);
                      }
                   });
     		  }
