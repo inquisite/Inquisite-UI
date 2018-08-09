@@ -41,6 +41,23 @@ const actions = {
                 return extractAPIError(error);
             })
     },
+    portalExport: function(context, export_filename) {
+        var exporter = state.export_source;
+        exporter['name'] = state.export_name;
+        exporter['user'] = state.export_user;
+        return api.post('/portalExport', exporter, {headers: apiHeaders({"auth": false, "form": true})})
+            .then(function(response) {
+                let exp = new Blob([JSON.stringify(response)], {type: 'application/json'});
+                let exp_link = document.createElement('a');
+                exp_link.href = window.URL.createObjectURL(exp);
+                exp_link.download = export_filename;
+                exp_link.click()
+                return exp_link;
+            }).catch(function(error) {
+                context.commit('API_FAILURE', error, {'root': true });
+                return extractAPIError(error);
+            })
+    },
     createExportSource: function(context, source){
         console.log(source);
         context.commit('SET_SOURCE', source);

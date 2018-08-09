@@ -21,10 +21,10 @@ const getters = {
         var activeRepo = $.grep(state.user_repos, function(repo) { return parseInt(repo.id) === active_repo_id; });
         return (activeRepo && activeRepo.length > 0) ? activeRepo[0] : {};
     },
-    
+
     /**
      * Get info for repository with id. Repository must be accessible to the current user.
-     * 
+     *
      * @param id integer repository id
      * @return Object with repository data or null if no repository is found
      *
@@ -65,21 +65,21 @@ const actions = {
         if (!context.rootState.token) return false;
         var setAsActive = data.makeActive ? true : false;
         return api.post('/repositories/add', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('ADD_REPO', response); 
+            .then(function(response) {
+                context.commit('ADD_REPO', response);
                 var new_repo_id = response.id;
 
-                context.dispatch('people/getRepos', {}, { 'root': true }).then(function() { 
+                context.dispatch('people/getRepos', {}, { 'root': true }).then(function() {
                     if((context.state.user_repos.length == 0) || setAsActive) {
                       context.commit('SET_ACTIVE_REPO', new_repo_id);
-                    }     
+                    }
                 });
             if (data.message !== false) {
                 context.commit('SET_MESSAGE', 'Created new repository <em>' + response.name + '</em>', {'root': true});
             }
             return response;
         })
-        .catch(function(error) { 
+        .catch(function(error) {
             context.commit('API_FAILURE', error, { root: true });
             return extractAPIError(error);
         });
@@ -96,12 +96,12 @@ const actions = {
         if (!context.rootState.token) return false;
         var setAsActive = data.makeActive ? true : false;
         return api.post('/repositories/' +  data['id'] + '/edit', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('EDIT_REPO', response); 
+            .then(function(response) {
+                context.commit('EDIT_REPO', response);
                 context.commit('SET_MESSAGE', 'Saved changes', {'root': true});
                 return response;
             })
-            .catch(function(error) { 
+            .catch(function(error) {
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);
             });
@@ -118,19 +118,19 @@ const actions = {
             .then(function(response) {
                 context.commit('DELETE_REPO', response);
                 context.commit('SET_MESSAGE', 'Deleted repository', {'root': true});
-                
+
                 let repo_count = context.state.user_repos.length;
-                
-                context.dispatch('people/getRepos', {}, { 'root': true }).then(function() { 
+
+                context.dispatch('people/getRepos', {}, { 'root': true }).then(function() {
                      if(repo_count == 0) {
                        context.commit('SET_ACTIVE_REPO', new_repo_id);
-                     }     
+                     }
                 });
-                
+
                 if (router) { router.push("/"); }
                 return response;
             })
-            .catch(function(error) { 
+            .catch(function(error) {
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);
             });
@@ -142,11 +142,11 @@ const actions = {
     getRepoUsers: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/repositories/users', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('GET_REPO_USERS', response); 
+            .then(function(response) {
+                context.commit('GET_REPO_USERS', response);
                 return response;
             })
-            .catch(function(error) { 
+            .catch(function(error) {
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);
             });
@@ -158,11 +158,11 @@ const actions = {
     addPersonToRepo: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/repositories/add_collaborator', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('ADD_PERSON_REPO', response); 
+            .then(function(response) {
+                context.commit('ADD_PERSON_REPO', response);
                 context.commit('SET_MESSAGE', 'Added collaborator', {'root': true});
                 return response;
-            }).catch(function(error) { 
+            }).catch(function(error) {
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);
             });
@@ -174,23 +174,38 @@ const actions = {
     removePersonFromRepo: function(context, data) {
         if (!context.rootState.token) return false;
         return api.post('/repositories/remove_collaborator', data.data, {headers: apiHeaders({"auth": true, "form": true})})
-            .then(function(response) { 
-                context.commit('REMOVE_PERSON_REPO', response); 
+            .then(function(response) {
+                context.commit('REMOVE_PERSON_REPO', response);
                 context.commit('SET_MESSAGE', 'Removed collaborator', {'root': true});
                 return response;
-            }).catch(function(error) { 
+            }).catch(function(error) {
                 context.commit('API_FAILURE', error, { root: true });
                 return extractAPIError(error);
             });
-    }   
+    },
+
+    /**
+     * Get Data for Repo loaded through the portal
+     * Should double-check that we're only loading a published repo
+     * @param uuid uuid string for repository
+     * @return Object with repository metadata and sample of data from repo
+     */
+     getRepoForPortal: function(context, uuid) {
+         return api.get('repositories/portalGetRepo/' + uuid, {headers: apiHeaders({"auth": false, "form": true})})
+             .then(function(response) {
+                 return response;
+             }).catch(function(error) {
+                 return extractAPIError(error);
+             })
+     }
 }
 
 // mutations
 const mutations = {
     ADD_REPO: function(state, response) { state.message = response.msg },
-    EDIT_REPO: function(state, response) { 
+    EDIT_REPO: function(state, response) {
             state.message = response.msg;
-            
+
             var repo_id = parseInt(response.repo_id);
             $.each(state.user_repos, function(k, v) {   // find current repo in repo list
                 if (parseInt(v.id) === repo_id) {
@@ -200,16 +215,16 @@ const mutations = {
                     });
                 }
             });
-            
+
             // Upload local storage copy of user repo list
             window.localStorage.setItem('repos', JSON.stringify(state.user_repos));
     },
     ADD_PERSON_REPO: function(state, response) { state.message = response.msg },
     REMOVE_PERSON_REPO: function(state, response) { state.message = response.msg },
-    DELETE_REPO: function(state, response) { 
-        state.message = response.msg 
+    DELETE_REPO: function(state, response) {
+        state.message = response.msg
         var deleted_repo_id = response.repo_id;
-        
+
         // remove deleted repo from repolist
         for(var i in state.user_repos) {
             if (state.user_repos[i].id && (parseInt(state.user_repos[i].id) == parseInt(deleted_repo_id))) {
@@ -222,12 +237,12 @@ const mutations = {
             state.active_repo_id = active_repo_id;
         }
     },
-    GET_REPO_USERS: function(state, response) { 
+    GET_REPO_USERS: function(state, response) {
         var active_repo_id = parseInt(state.active_repo_id);
         var activeRepo = $.grep(state.user_repos, function(repo) { return parseInt(repo.id) === active_repo_id; });
-        
+
         if (activeRepo && activeRepo.length > 0) {
-            activeRepo[0].users = response; 
+            activeRepo[0].users = response;
         }
         state.message = response.msg;
     },
@@ -239,7 +254,7 @@ const mutations = {
             state.active_repo_id = state.user_repos[0]['id'];
         }
     },
-    SET_ACTIVE_REPO: function(state, active_repo_id) { 
+    SET_ACTIVE_REPO: function(state, active_repo_id) {
         window.sessionStorage.setItem('repo_id', active_repo_id);
         state.active_repo_id = active_repo_id;
     }

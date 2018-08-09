@@ -7,6 +7,9 @@ import store from './store/store.js'
 const Home = require('./components/Home.vue')
 Vue.component('home', Home)
 
+const Portal = require('./components/Portal.vue')
+Vue.component('portal', Portal)
+
 const Signup = require('./components/Signup.vue')
 Vue.component('signup', Signup)
 
@@ -84,6 +87,7 @@ Vue.component('export-data', ExportData)
 
 export default [
   { path: '/', name: 'home', component: Home },
+  { path: '/portal', name: 'portal', component: Portal },
   { path: '/signup', name: 'signup', component: Signup },
   { path: '/login', name: 'login', component: Login },
   { path: '/help/getting-started', name: 'getting-started', component: GettingStarted },
