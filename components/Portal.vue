@@ -1,9 +1,9 @@
 <template>
 <div id="portal" class="container">
     <div v-if="!repoDisplay">
-        <div class="row">
+        <div class="row bg-lt-gray mb-3">
             <div class="col-sm-10 offset-sm-1 text-center">
-                <h2>Welcome to the Inquisite Data Portal!</h2>
+                <h1>Welcome to the Inquisite Data Portal!</h1>
                 <p>Users can manage, collaborate and publish their data in Inquisite and this is where you can explore what other users have created and published.</p>
             </div>
         </div>
