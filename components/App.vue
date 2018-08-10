@@ -67,7 +67,7 @@
                     </ul>
                 </li>
             </ul>
-            <form class="form-inline" v-on:submit="search(search_expression)">
+            <form class="form-inline" v-on:submit="search(search_expression)" v-if="isLoggedIn">
 				<input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_expression">
 				<button class="btn btn-orange-reverse my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 			</form>

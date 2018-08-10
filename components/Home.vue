@@ -25,6 +25,12 @@
 					</div>
 				</div>
 				<div class="row"><div class="col spacerRow"></div></div>
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <router-link to="/portal"><h3>Browse Data Already in Inquisite!</h3></router-link>
+                    </div>
+                </div>
+                <div class="row"><div class="col spacerRow"></div></div>
 				<div class="row">
 					<div class="col-sm-6">
 						<p>

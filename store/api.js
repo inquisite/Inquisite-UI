@@ -12,8 +12,8 @@ var instance = axios.create({
 instance.interceptors.request.use((config) => {
 	let originalReq = config;
 	let token_exp_time = store.getters.getTokenExpiration;
-	
-	if ((config['url'].indexOf('/login') < 0) && (config['url'].indexOf('/register') < 0) && (config['url'].indexOf('/reset_password') < 0) && (config['url'].indexOf('/set_password') < 0) && !config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
+
+	if ((config['url'].indexOf('/login') < 0) && (config['url'].indexOf('/register') < 0) && (config['url'].indexOf('/reset_password') < 0) && (config['url'].indexOf('/set_password') < 0) && (config['url'].indexOf('/portal') < 0) && !config['isRefresh'] && (!token_exp_time || (token_exp_time < new Date().getTime()))) {
 		  //console.log("[INTERCEPT] Token expired");
       return instance.post('/refresh', null, {isRefresh: 1, headers: apiHeaders({"refresh": store.getters['getRWT']})}).then(function(refresh_response) {
 				//console.log("[INTERCEPT] Got new access token");
@@ -33,13 +33,13 @@ instance.interceptors.request.use((config) => {
 export default {
   get(url, req_config) {
 		req_config['validateStatus'] =  function (status) {
-			return status >= 200 && status < 420; 
+			return status >= 200 && status < 420;
 		};
     return instance.get(url, req_config)
       .then(function(response) {
       	console.log('API GET SUCCESS', response);
 				Promise.resolve(response.data);
-				
+
 				var d = response.data;
 				d['_status'] = response.status;
       	return d;
@@ -54,7 +54,7 @@ export default {
 
   post(url, data, req_config) {
 		req_config['validateStatus'] =  function (status) {
-			return status >= 200 && status < 420; 
+			return status >= 200 && status < 420;
 		};
 		var d = data;
     return instance.post(url, qs.stringify(data), req_config)
@@ -76,13 +76,13 @@ export default {
 
   put(url, data, req_config) {
 		req_config['validateStatus'] =  function (status) {
-			return status >= 200 && status < 420; 
+			return status >= 200 && status < 420;
 		};
     return instance.put(url, data, req_config)
       .then(function(response) {
       	console.log('API PUT SUCCESS', response);
 				Promise.resolve(response);
-				
+
 				var d = response.data;
 				d['_status'] = response.status;
       	return d;

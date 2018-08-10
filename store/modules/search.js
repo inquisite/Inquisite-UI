@@ -42,6 +42,14 @@ const actions = {
                 return extractAPIError(error);
             })
     },
+    portalSearch: function(context, q) {
+        return api.get('/portalSearch?q=' + escape(q), {headers: apiHeaders({"auth": false, "form": true})})
+            .then(function(response) {
+                return response;
+            }).catch(function(error) {
+                return extractAPIError(error);
+            })
+    },
     pagingSearch: function(context, qArray){
         if(!context.rootState.token) return false;
         var q = qArray[0];
