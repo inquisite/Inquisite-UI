@@ -499,6 +499,16 @@ a{
 	  max-width: 700px !important;
   }
 
+  .form-control-feedback{
+	  font-size: 14px;
+  }
+
+  .push-left{
+	  position: absolute;
+	  left: 15px;
+	  bottom: 15px;
+  }
+
   /* Upload Schema Screen */
 
   .teaser-container .progress{

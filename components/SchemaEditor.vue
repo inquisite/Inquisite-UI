@@ -56,7 +56,7 @@
     <div class="row" v-if="editorDataTypeIndex !== null">
     	<div class="col-12 col-sm-10 offset-sm-1">
     		<div class="pull-right">
-    			<button v-on:submit.prevent="saveDataType" v-on:click.prevent="saveDataType" class="btn btn-primary btn-orange">Save</button>&nbsp;&nbsp;
+    			<button v-on:submit.prevent="saveDataType" v-on:click.prevent="saveDataType" class="btn btn-primary btn-orange" :disabled="dataTypeNameError || dataTypeCodeError">Save</button>&nbsp;&nbsp;
                 <click-confirm placement="left" style="display:inline;">
                     <button v-on:click.prevent="deleteDataType(formContent.id)" class="btn btn-danger">Delete</button>
                 </click-confirm>
@@ -112,24 +112,26 @@
                         </div>
                     </div>
 				</div><!-- end col -->
-            	<div class="col-sm-4">
+            	<div v-bind:class="((editorDataTypeIndex !== null) && (editorDataTypeIndex < 0)) ? 'col-sm-6 offset-sm-3' : 'col-sm-4'">
 					<div class="card card-form">
 						<div class="card-header text-center">Basic Information</div>
 						<div class="card-block">
 
 								<div class="row">
 									<div class="col-sm-12">
-										<div class="form-group">
+										<div class="form-group" v-bind:class="{'has-danger': dataTypeNameError}">
 											<label for="name" class="form-label">Name</label>
-											<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="formContent.name">
-										</div>
+											<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="formContent.name" v-on:input="validateDataTypeInfo(editorDataTypeIndex)">
+                                            <div class="form-control-feedback">{{dataTypeNameError}}</div>
+                                        </div>
 									</div>
                                 </div>
                                 <div class="row">
 									<div class="col-sm-12">
-										<div class="form-group">
+										<div class="form-group" v-bind:class="{'has-danger': dataTypeCodeError}">
 											<label for="code" class="form-label">Code</label>
-											<input type="text" class="form-control" id="code" name="code" placeholder="Code" v-model="formContent.code">
+											<input type="text" class="form-control" id="code" name="code" placeholder="Code" v-model="formContent.code" readonly>
+                                            <div class="form-control-feedback">{{dataTypeCodeError}}</div>
 										</div>
 									</div>
 								</div>
@@ -160,15 +162,17 @@
                   <div class="modal-body" :id="'field' + currentField.id">
                         <div class="row">
                           <div class="col-sm-4">
-                              <div class="form-group">
+                              <div class="form-group" v-bind:class="{'has-danger': fieldNameError}">
                                   <label for="name" class="form-label">Name</label>
-                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Name" v-model="currentField.name">
+                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Name" v-model="currentField.name" v-on:input="validateNameChange()">
+                                  <div class="form-control-feedback">{{fieldNameError}}</div>
                               </div>
                           </div>
                           <div class="col-sm-4">
-                              <div class="form-group">
+                              <div class="form-group" v-bind:class="{'has-danger': fieldCodeError}">
                                   <label for="code" class="form-label">Code</label>
-                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Code" v-model="currentField.code">
+                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Code" v-model="currentField.code" readonly>
+                                  <div class="form-control-feedback">{{fieldCodeError}}</div>
                               </div>
                           </div>
                           <div class="col-sm-4">
@@ -219,12 +223,15 @@
                           </div>
                       </div>
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button v-on:submit.prevent="saveFieldEdit" v-on:click.prevent="saveFieldEdit" class="btn btn-primary btn-orange" data-dismiss="modal">Save</button>
+                  <div class="modal-footer justify-content-between">
                     <click-confirm placement="left" style="display:inline;">
-                        <button v-on:click.prevent="deleteDataTypeField(currentField.pos)" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                      <button v-on:click.prevent="deleteDataTypeField(currentField.pos)" class="btn btn-danger" data-dismiss="modal">Delete</button>
                     </click-confirm>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button v-on:submit.prevent="saveFieldEdit" v-on:click.prevent="saveFieldEdit" class="btn btn-primary btn-orange" data-dismiss="modal" :disabled="fieldNameError || fieldCodeError">Save</button>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -291,6 +298,10 @@ export default {
         fieldAlert: [],
         currentField: null,
         showFieldModal: false,
+        fieldNameError: null,
+        fieldCodeError: null,
+        dataTypeNameError: null,
+        datatypeCodeError: null,
         state: this.$store.state
     }
   },
@@ -344,6 +355,8 @@ export default {
             if (this.dataTypes[i].id == id) {
                 this.editorHeader = "Editing Data Type: <em>" + this.dataTypes[i].name + "</em>";
                 this.formContent = this.dataTypes[i];
+                this.dataTypeNameError = null;
+                this.dataTypeCodeError = null;
                 if(this.formContent['fields'].length > 0){
                     this.currentField = this.formContent['fields'][0];
                     this.currentField['pos'] = i;
@@ -398,10 +411,13 @@ export default {
     // Fields form
     addDataTypeField: function() {
         if (this.editorDataTypeIndex !== null) {
-            this.dataTypes[this.editorDataTypeIndex]['fields'].unshift({'type': 'TextDataType'});
+            var newField = {'type': 'TextDataType', 'code': '', 'description': '', 'has_data': false, 'name': ''}
+            this.dataTypes[this.editorDataTypeIndex]['fields'].unshift(newField);
             var container = this.$el.querySelector("#schemaEditor-form");
 			container.scrollTop = "1px";
+            this.saveDataType();
         }
+
     },
 
     getFieldDataTypeSettings: function(dataType){
@@ -417,6 +433,7 @@ export default {
                 if(!this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete']) { this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'] = []; }
                 this.dataTypes[this.editorDataTypeIndex]['fieldsToDelete'].push(fieldToDelete[0].id);
             }
+            this.saveDataType();
         }
     },
     // ------------------------------------
@@ -457,7 +474,7 @@ export default {
             case 'ListDataType':
                 headerClass = 'card-orange';
                 break;
-            case 'GeoreferenceDataType':
+            case 'GeorefDataType':
                 headerClass = 'card-yellow';
                 break;
             case 'FloatDataType':
@@ -475,6 +492,74 @@ export default {
         this.currentField = JSON.parse(JSON.stringify(field));
         this.currentField['pos'] = i;
         this.showFieldModal = true;
+        this.fieldNameError = null;
+        this.fieldCodeError = null;
+        this.validateNameChange();
+    },
+    validateNameChange: function(){
+        var name = this.currentField.name;
+        if(name.length < 2){
+            this.fieldNameError = "Field Name must be at least 2 characters long"
+        } else {
+            this.fieldNameError = null;
+            var new_code = name.replace(/\s+/, '_');
+            new_code = new_code.replace(/\W/, '').toLowerCase();
+            this.checkIfNameCodeExists(name, new_code, this.currentField.pos)
+            this.currentField.code = new_code
+        }
+    },
+    checkIfNameCodeExists: function(name, new_code, pos){
+        var breaker = false;
+        for(var i in this.formContent.fields){
+            if(pos == i){ continue; }
+            var field = this.formContent.fields[i];
+            var field_name = field['name'];
+            var field_code = field['code'];
+            if(field_name.toLowerCase() == name.toLowerCase()){
+                this.fieldNameError = "Field Name Already Exists! Please select another";
+                breaker = true;
+            }
+            if(field_code.toLowerCase() == new_code.toLowerCase()){
+                this.fieldCodeError = "Field Code Already Exists! Please select another";
+                breaker = true;
+            } else {
+                this.fieldCodeError = null;
+            }
+            if(breaker){ break; }
+        }
+    },
+    validateDataTypeInfo: function(pos){
+        var name = this.formContent.name;
+        if(name.length < 4){
+            this.dataTypeNameError = "Data Type Name must be at least 4 characters long"
+        } else {
+            this.dataTypeNameError = null;
+            var new_code = name.replace(/\s+/, '_');
+            new_code = new_code.replace(/\W/, '').toLowerCase();
+            this.formContent.code = new_code;
+            this.checkIfDataTypeCodeExists(name, new_code, pos)
+
+        }
+    },
+    checkIfDataTypeCodeExists: function(name, new_code, pos){
+        var breaker = false;
+        for(var i in this.dataTypes){
+            if(pos == i){ continue; }
+            var type = this.dataTypes[i];
+            var type_name = type['name'];
+            var type_code = type['code'];
+            if(type_name.toLowerCase() == name.toLowerCase()){
+                this.dataTypeNameError = "Field Name Already Exists! Please select another";
+                breaker = true;
+            }
+            if(type_code.toLowerCase() == new_code.toLowerCase()){
+                this.dataTypeCodeError = "Field Code Already Exists! Please select another";
+                breaker = true;
+            } else {
+                this.dataTypeCodeError = null;
+            }
+            if(breaker){ break; }
+        }
     }
   },
 }
