@@ -4,85 +4,88 @@ import store from './store/store.js'
 
 
 // Load Template Components
-const Home = require('./components/Home.vue')
+const Home = require('./components/Home.vue').default
 Vue.component('home', Home)
 
-const Portal = require('./components/Portal.vue')
+const Portal = require('./components/Portal.vue').default
 Vue.component('portal', Portal)
 
-const Signup = require('./components/Signup.vue')
+const Signup = require('./components/Signup.vue').default
 Vue.component('signup', Signup)
 
-const Login = require('./components/Login.vue')
+const Login = require('./components/Login.vue').default
 Vue.component('login', Login)
 
-const UploadData = require('./components/UploadData.vue')
+const UploadData = require('./components/UploadData.vue').default
 Vue.component('upload-data', UploadData)
 
-const UserPrefs = require('./components/UserPrefs.vue')
+const UserPrefs = require('./components/UserPrefs.vue').default
 Vue.component('user-prefs', UserPrefs)
 
-const UserProfile = require('./components/UserProfile.vue')
+const UserProfile = require('./components/UserProfile.vue').default
 Vue.component('user-profile', UserProfile)
 
-const MyProfile = require('./components/MyProfile.vue')
+const MyProfile = require('./components/MyProfile.vue').default
 Vue.component('my-profile', MyProfile)
 
-const UserActivityLog = require('./components/UserActivityLog.vue')
+const UserActivityLog = require('./components/UserActivityLog.vue').default
 Vue.component('user-activity', UserActivityLog)
 
-const AddRepo = require('./components/AddRepo.vue')
+const AddRepo = require('./components/AddRepo.vue').default
 Vue.component('add-repo', AddRepo)
 
-const EditRepo = require('./components/EditRepo.vue')
+const EditRepo = require('./components/EditRepo.vue').default
 Vue.component('edit-repo', EditRepo)
 
-const ManageRepoCollaborators = require('./components/ManageRepoCollaborators.vue')
+const ManageRepoCollaborators = require('./components/ManageRepoCollaborators.vue').default
 Vue.component('manage-collaborators', ManageRepoCollaborators)
 
-const VisualizeNodes = require('./components/VisualizeNodes.vue')
+const VisualizeNodes = require('./components/VisualizeNodes.vue').default
 Vue.component('visualize-nodes', VisualizeNodes)
 
-const VisualizeSheets = require('./components/VisualizeSheets.vue')
+const VisualizeSheets = require('./components/VisualizeSheets.vue').default
 Vue.component('visualise-sheets', VisualizeSheets)
 
-const VisualizeMaps = require('./components/VisualizeMaps.vue')
+const VisualizeMaps = require('./components/VisualizeMaps.vue').default
 Vue.component('visualise-maps', VisualizeMaps)
 
-const SchemaEditor = require('./components/SchemaEditor.vue')
+const SchemaEditor = require('./components/SchemaEditor.vue').default
 Vue.component('schema-editor', SchemaEditor)
 
-const ListEditor = require('./components/ListEditor.vue')
+const ListEditor = require('./components/ListEditor.vue').default
 Vue.component('list-editor', ListEditor)
 
-const Search = require('./components/Search.vue')
+const Search = require('./components/Search.vue').default
 Vue.component('search', Search)
 
-const DataEditor = require('./components/DataEditor.vue')
+const DataEditor = require('./components/DataEditor.vue').default
 Vue.component('data-editor', DataEditor)
 
-const ImportHistory = require('./components/ImportHistory.vue')
+const ImportHistory = require('./components/ImportHistory.vue').default
 Vue.component('import-history', ImportHistory)
 
-const AdminUsers = require('./components/AdminUsers.vue')
+const AdminUsers = require('./components/AdminUsers.vue').default
 Vue.component('admin-users', AdminUsers)
 
-const GettingStarted = require('./components/GettingStarted.vue')
+const AdminRepos = require('./components/AdminRepos.vue').default
+Vue.component('admin-repos', AdminRepos)
+
+const GettingStarted = require('./components/GettingStarted.vue').default
 Vue.component('getting-started', GettingStarted)
 
-const ContactUs = require('./components/ContactUs.vue')
+const ContactUs = require('./components/ContactUs.vue').default
 Vue.component('contact-us', ContactUs)
 
-const FAQ = require('./components/FAQ.vue')
+const FAQ = require('./components/FAQ.vue').default
 Vue.component('faq', FAQ)
 
-const Password = require('./components/Password.vue')
+const Password = require('./components/Password.vue').default
 Vue.component('password', Password)
 
-const PasswordReset = require('./components/PasswordReset.vue')
+const PasswordReset = require('./components/PasswordReset.vue').default
 Vue.component('PasswordReset', PasswordReset)
 
-const ExportData = require('./components/Export.vue')
+const ExportData = require('./components/Export.vue').default
 Vue.component('export-data', ExportData)
 
 export default [
@@ -111,6 +114,7 @@ export default [
   { path: '/import-history', name: 'import-history', component: ImportHistory, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/search', name: 'search', component: Search },
   { path: '/admin/users', name: 'admin-users', component: AdminUsers, 'beforeEnter': function(f, t, n) { n(store.getters['people/userIsAdmin']);} },
+  { path: '/admin/repos', name: 'admin-repos', component: AdminRepos, 'beforeEnter': function(f, t, n) { n(store.getters['people/userIsAdmin']);} },
   { path: '/export-data/:repo_id?/:schema_id?', name: 'export-data', component: ExportData, props: true, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
   { path: '/password', name: 'password', component: Password },
   { path: '/password/reset', name: 'password-reset', component: PasswordReset },

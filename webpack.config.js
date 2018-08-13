@@ -1,6 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
-
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 module.exports = {
   entry: './main.js',
   output: {
@@ -8,28 +8,45 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'build.js'
   },
+  plugins: [
+      new VueLoaderPlugin()
+  ],
   module: {
-    loaders: [
-      { test: /\.vue$/,
-        loader: 'vue-loader',
-        //options: {
-        //  loaders: { html: 'raw' }
-        //} 
-      },
-      { 
-        test:/\.js$/,
-        exclude: /(node_modules)/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015'],
-          cacheDirectory: ['true']
+    rules: [
+        {
+            test: /\.vue$/,
+            use: ['vue-loader'],
+        },{
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: [{
+                loader: "babel-loader",
+                options: { presets: ['es2015'] }
+            }]
+        },{
+            test: /\.(png|jpg|gif|svg)$/,
+            use: [
+                "file",
+                {
+                    loader: "file",
+                    options: { name: '[name].[ext]?[hash]' }
+                }
+            ]
+        },{
+            test: /\.css$/,
+            use: [
+                {
+                    loader: 'vue-style-loader'
+                },
+                {
+                    loader: 'css-loader',
+                    options: {
+                        modules: true,
+                        localIdentName: '[local]_[hash:base64:8]'
+                    }
+                }
+            ]
         }
-      },
-      {
-        test: /\.(png|jpg|gif|svg)$/,
-        loader: "file",
-        options: { name: '[name].[ext]?[hash]' }
-      }
     ]
   },
   resolve: {

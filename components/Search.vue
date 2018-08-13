@@ -13,7 +13,7 @@
             <div v-if="results.length == 0"><h2>Nothing found</h2></div>
             <div v-else>
                 <tabs :options="{useUrlFragment: false}">
-                    <tab v-if="counts[t] > 0" v-for="r,t in results" :name="t + ' (' + totalCounts[t] + ')'">
+                    <tab v-if="counts[t] > 0" :key="t" v-for="r,t in results" :name="t + ' (' + totalCounts[t] + ')'">
                         <div class="row paging-buttons" v-if="totalCounts[t] > 12">
                             <div class="col-6">
                                 <button type="button" class="btn btn-primary" @click="storeExportRecords"><i class="fa fa-download" aria-hidden="true"></i> Export {{exportCount}} Records</button>

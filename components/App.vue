@@ -64,6 +64,7 @@
                    </a>
                     <ul class="dropdown-menu">
                         <li class="nav-item" ><router-link to="/admin/users" class="nav-link">Users</router-link></li>
+                        <li class="nav-item" ><router-link to="/admin/repos" class="nav-link">Repositories</router-link></li>
                     </ul>
                 </li>
             </ul>

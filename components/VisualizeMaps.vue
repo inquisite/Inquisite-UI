@@ -28,9 +28,9 @@
                                 <v-map ref="map" :zoom="13">
                                     <v-tilelayer url="https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png"></v-tilelayer>
                                     <v-marker-cluster>
-                                        <v-marker v-if="points.length > 0" v-for="p, i in points" :lat-lng="p"><v-popup :content="pointLabels[i]"></v-popup></v-marker>
-                                        <v-polygon v-if="polygons.length > 0" v-for="p, i in polygons" :lat-lngs="p"><v-popup :content="polygonLabels[i]"></v-popup></v-polygon>
-                                        <v-polyline v-if="lines.length > 0" v-for="p, i in lines" :lat-lngs="p"><v-popup :content="lineLabels[i]"></v-popup></v-polyline>
+                                        <v-marker v-if="points.length > 0" :key="i" v-for="p, i in points" :lat-lng="p"><v-popup :content="pointLabels[i]"></v-popup></v-marker>
+                                        <v-polygon v-if="polygons.length > 0" :key="i" v-for="p, i in polygons" :lat-lngs="p"><v-popup :content="polygonLabels[i]"></v-popup></v-polygon>
+                                        <v-polyline v-if="lines.length > 0" :key="i" v-for="p, i in lines" :lat-lngs="p"><v-popup :content="lineLabels[i]"></v-popup></v-polyline>
                                     </v-marker-cluster>
                                     <v-geo-json :geojson="geojson"></v-geo-json>
                                 </v-map>

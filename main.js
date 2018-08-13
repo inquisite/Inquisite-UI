@@ -16,7 +16,7 @@ Vue.component('tabs', Tabs);
 Vue.component('tab', Tab);
 
 const routes = require('./routes.js')
-const App = require('./components/App.vue')
+const App = require('./components/App.vue').default
 const store = require('./store/store.js')
 
 // load token and set logged in status before creating router
