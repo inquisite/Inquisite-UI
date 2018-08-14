@@ -197,7 +197,20 @@ const actions = {
              }).catch(function(error) {
                  return extractAPIError(error);
              })
-     }
+     },
+     /**
+      * Get all repositories for admin users
+      * @return Object with basic metadata for all repositories in the system
+      */
+      getAllRepos: function(context, uuid) {
+          if (!context.rootState.token) return false;
+          return api.get('repositories', {headers: apiHeaders({"auth": true, "form": true})})
+              .then(function(response) {
+                  return response;
+              }).catch(function(error) {
+                  return extractAPIError(error);
+              })
+      }
 }
 
 // mutations

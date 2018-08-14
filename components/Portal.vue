@@ -14,13 +14,13 @@
                 </form>
                 <div class="row mt-3">
                     <div class="col-sm-12 col-md-4 text-center">
-                        <button class="btn btn-primary" v-on:click="browseInquisite('featured')"><i class="fa fa-flag"></i> Featured</button>
+                        <button class="btn" v-bind:class="browseType == 'featured' ? 'btn-orange' : 'btn-primary'" v-on:click="browseInquisite('featured')"><i class="fa fa-flag"></i> Featured</button>
                     </div>
                     <div class="col-sm-12 col-md-4 text-center">
-                        <button class="btn btn-primary" v-on:click="browseInquisite('updated')"><i class="fa fa-clock-o"></i> Recently Updated</button>
+                        <button class="btn" v-bind:class="browseType == 'updated' ? 'btn-orange' : 'btn-primary'" v-on:click="browseInquisite('updated')"><i class="fa fa-clock-o"></i> Recently Updated</button>
                     </div>
                     <div class="col-sm-12 col-md-4 text-center">
-                        <button class="btn btn-primary" v-on:click="browseInquisite('created')"><i class="fa fa-check"></i> Recently Created</button>
+                        <button class="btn" v-bind:class="browseType == 'published' ? 'btn-orange' : 'btn-primary'" v-on:click="browseInquisite('published')"><i class="fa fa-check"></i> Recently Published</button>
                     </div>
                 </div>
                 <div class="row">
@@ -138,7 +138,8 @@
                 searching: false,
                 noResults: false,
                 repoDisplay: null,
-                activeRepo: {}
+                activeRepo: {},
+                browseType: null
           }
         },
 		computed: {
@@ -151,7 +152,6 @@
                     this.searching = true;
                     self.noResults = false;
                     this.$store.dispatch('search/portalSearch', this.searchQuery).then(function(data){
-                        console.log(data['nodes']);
                         if(data['nodes'].length == 0){
                             self.noResults = true;
                             self.searching = false;
@@ -166,11 +166,20 @@
                 }
             },
             browseInquisite: function(type){
-                    if(type == 'featured'){
-                        return false;
-                    } else {
-                        return false;
-                    }
+                    var self = this;
+                    this.browseType = type;
+                    var query = ''
+                    this.$store.dispatch('search/portalBrowse', type).then(function(data){
+                        console.log(data['nodes']);
+                        if(data['nodes'].length == 0){
+                            self.noResults = true;
+                            self.searching = false;
+                        } else {
+                            self.searchResponse = data['nodes'];
+                            self.searching = false;
+                            self.noResults = false;
+                        }
+                    })
             },
             mergeHits: function(hits) {
                 var hitHTML = '';

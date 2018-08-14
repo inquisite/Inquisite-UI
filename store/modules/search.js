@@ -50,6 +50,14 @@ const actions = {
                 return extractAPIError(error);
             })
     },
+    portalBrowse: function(context, type) {
+        return api.get('/portalBrowse?type=' + escape(type), {headers: apiHeaders({"auth": false, "form": true})})
+            .then(function(response){
+                return response;
+            }).catch(function(error){
+                return extractAPIError(error);
+            })
+    },
     pagingSearch: function(context, qArray){
         if(!context.rootState.token) return false;
         var q = qArray[0];
