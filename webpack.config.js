@@ -1,15 +1,25 @@
 var path = require('path')
 var webpack = require('webpack')
+var jquery = require('jquery')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 module.exports = {
-  entry: './main.js',
+  entry: {
+      app: [
+          './main.js',
+          './assets/scss/main.scss'
+      ]
+  },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
     filename: 'build.js'
   },
   plugins: [
-      new VueLoaderPlugin()
+      new VueLoaderPlugin(),
+      new webpack.ProvidePlugin({
+        jQuery: 'jquery',
+        $: 'jquery',
+      })
   ],
   module: {
     rules: [
@@ -25,27 +35,23 @@ module.exports = {
             }]
         },{
             test: /\.(png|jpg|gif|svg)$/,
+            use: [{
+                loader: "file-loader",
+                options: { name: '[name].[ext]?[hash]' }
+            }]
+        },{
+            test: /\.scss$/,
             use: [
-                "file",
-                {
-                    loader: "file",
-                    options: { name: '[name].[ext]?[hash]' }
-                }
+                "style-loader", // creates style nodes from JS strings
+                "css-loader", // translates CSS into CommonJS
+                "sass-loader" // compiles Sass to CSS, using Node Sass by default
             ]
         },{
             test: /\.css$/,
-            use: [
-                {
-                    loader: 'vue-style-loader'
-                },
-                {
-                    loader: 'css-loader',
-                    options: {
-                        modules: true,
-                        localIdentName: '[local]_[hash:base64:8]'
-                    }
-                }
-            ]
+            use: ['style-loader', 'css-loader']
+        },{
+            test: /.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+            use: 'url-loader?limit=10000',
         }
     ]
   },
