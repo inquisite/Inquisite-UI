@@ -11,12 +11,12 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
-        <div class="card-block">
+        <div class="card-body">
         
           <div class="row">
             <div class="col-sm-6">  
               <div class="card">
-                  <div class="card-block">
+                  <div class="card-body">
                   <div>Name: {{person.name}}</div>
                   <div>Email: {{person.email}}</div>
                   <div>Location: {{person.location}}</div>

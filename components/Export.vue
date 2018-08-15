@@ -7,9 +7,9 @@
                 <div class="card-header text-center">
                     Export Data
                 </div>
-                <div class="card-block">
+                <div class="card-body">
                     <flashmessage/>
-                    <div class="card-block" v-if="export_count > 0">
+                    <div class="card-body" v-if="export_count > 0">
                         <form id="export-form" name="export-form" method="POST" action="">
                             <div class="row" v-if="export_info">
                                 <div class="col-12">
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-else class="card-block">
+                    <div v-else class="card-body">
                         <div class="row">
                             <div class="col-12 text-center">
                                 <h2>No Records available for export</h2>

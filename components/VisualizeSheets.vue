@@ -8,7 +8,7 @@
 
       <div class="pull-right"  style="color:white;" v-if="isSaving"><i class="fa fa-cog fa-spin fa-fw"></i> Saving...</div>
 		 </div>
-        <div class="card-block" style="display:flex; overflow-x: auto;">
+        <div class="card-body" style="display:flex; overflow-x: auto;">
             <HotTable ref="datagrid" style="height: 600px;"
                 :root="datagrid" :data="data"
                 :columns="colspec" :colWidths="200" :colHeaders="colheaders" :rowHeaders="true" :columnSorting="true" :sortIndicator="true" 

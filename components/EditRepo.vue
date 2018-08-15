@@ -5,7 +5,7 @@
         <div class="card-header text-center">
 			Edit Repository Details
 		 </div>
-        <div class="card-block">
+        <div class="card-body">
 
           <flashmessage/>
 

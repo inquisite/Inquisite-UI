@@ -94,7 +94,7 @@
         <div class="card-header">
           Repository Stats
         </div>
-          <div v-if="activeRepo.data" class="card-block">
+          <div v-if="activeRepo.data" class="card-body">
             <div class="row">
               <div class="col-4 text-center">
                 <div class="h1">{{activeRepo.schema_type_count}}</div>
@@ -134,7 +134,7 @@
 				</li>
 			</ul>
 
-			<div class="card-block text-center">
+			<div class="card-body text-center">
 				<router-link to="/manage-collaborators">
 					<button type="button" class="btn btn-primary"><i class="fa fa-square-plus" aria-hidden="true"></i> Manage collaborators</button>
 				</router-link>

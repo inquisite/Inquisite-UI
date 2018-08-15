@@ -6,7 +6,7 @@
         <div class="card-header text-center">
 			Reset your password
 		 </div>
-        <div class="card-block">
+        <div class="card-body">
        
           <flashmessage/>
 

@@ -5,7 +5,7 @@
         <div class="card-header text-center">
 			Your Preferences
 		 </div>
-        <div class="card-block">
+        <div class="card-body">
 
          <form id="signup-form" name="signup-form" method="POST" action="">
 

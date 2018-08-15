@@ -6,7 +6,7 @@
 		<div class="card-header">
 			Data Network from <em>{{activeRepo.name}}</em>
 		 </div>
-		<div class="card-block" style="display:flex; overflow-x: auto;">
+		<div class="card-body" style="display:flex; overflow-x: auto;">
 			<div class="svg-container" :style="{width: settings.width + '%'}">
 	            <svg id="svg" pointer-events="all" viewBox="0 0 960 600" preserveAspectRatio="xMinYMin meet">
 	                <g :id="links"></g>

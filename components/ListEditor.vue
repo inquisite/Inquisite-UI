@@ -49,7 +49,7 @@
             	<div class="col-sm-12">
 					<div class="card card-form">
 						<div class="card-header text-center">Basic Information</div>
-						<div class="card-block">
+						<div class="card-body">
                             <div class="row">
 								<div class="col-sm-5">
 									<div class="form-group">
@@ -78,7 +78,7 @@
 									</div>
 								</div>
 							</div>
-						</div><!-- end card-block -->
+						</div><!-- end card-body -->
 					</div><!-- end card -->
 				</div><!-- end col -->
 			</div><!-- end row -->
@@ -87,14 +87,14 @@
 					<div class="card card-form">
 						<div class="card-header text-center">List Items</div>
 
-							<div class="card-block">
+							<div class="card-body">
 										<div>
 											<a @click="addListItem" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New List Item</a>
 										</div>
 										<p class="text-center" v-if="!formContent.items || (formContent.items.length == 0)">
 											No List Items defined
 										</p>
-							</div><!-- end card-block -->
+							</div><!-- end card-body -->
 							<div class="list-group-scroll">
 								<ul id="itemList" class="list-group list-group-flush">
 									<li class="list-group-item" v-for="f, i in formContent.items" v-if="formContent.items && (formContent.items.length > 0)">

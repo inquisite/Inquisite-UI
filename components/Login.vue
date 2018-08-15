@@ -6,7 +6,7 @@
         <div class="card-header text-center">
 			Login to Inquisite
 		 </div>
-        <div class="card-block">
+        <div class="card-body">
        
           <flashmessage/>
 

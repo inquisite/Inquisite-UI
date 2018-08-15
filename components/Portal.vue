@@ -49,7 +49,7 @@
                                 <h4>{{d.type}}</h4>
                             </div>
                             <div v-if="d.type == 'Repository'">
-                                <div class="card-block portal-search-block">
+                                <div class="card-body portal-search-block">
                                     <div class="row">
                                         <div class="col-12">
                                             <h6>Name</h6><p>{{d.name}}</p>
@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                             <div v-else>
-                                <div class="card-block portal-search-block">
+                                <div class="card-body portal-search-block">
                                     <div class="row">
                                         <div class="col-12">
                                             <h6>Repository</h6><p>{{d.repo_name}}</p>

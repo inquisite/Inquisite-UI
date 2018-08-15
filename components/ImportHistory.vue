@@ -6,7 +6,7 @@
         <div class="card-header">
 			    Import history for <em>{{activeRepo.name}}</em>
 		    </div>
-        <div class="card-block" style="display:flex; overflow-x: auto;">
+        <div class="card-body" style="display:flex; overflow-x: auto;">
               <div class="row">
                     <ul>
                       <li v-for="e in importHistory">Imported file <em>{{e.original_filename}}</em> 
