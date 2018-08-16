@@ -6,7 +6,7 @@
                 <div class="card-header">
                     Map from <em>{{activeRepo.name}}</em>
                 </div>
-                <div class="card-block">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-2 schema-map-list">
                             <div class="schema-map-item" v-for="k, v in dataTypes">

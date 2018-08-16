@@ -6,7 +6,7 @@
 						<div class="card-header text-center">
 							Your Profile
 						</div>
-						<div class="card-block">
+						<div class="card-body">
 						
 				
 						<div>Name: {{user.forename}} {{user.surname}}</div>

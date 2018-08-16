@@ -8,7 +8,7 @@
                 <div class="card-header text-center">
                     Data Editor: {{nodeTypeName}} #{{id}}
                 </div>
-                <div class="card-block">
+                <div class="card-body">
                     <div v-for="v,k in node" class="row">
                         <div class="col-sm-4">{{k}}</div><div class="col-sm-8"><input type="text" v-model="node[k]" size="60"/></div>
                     </div>

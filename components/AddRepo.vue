@@ -4,7 +4,7 @@
     <div class="col-sm-6 offset-sm-3">
         <div class="card card-form">
             <div class="card-header text-center">Add Repository</div>
-            <div class="card-block">
+            <div class="card-body">
 				<div class="alert alert-info" v-show="repositoryCount == 0">
 					This looks like your first repository. It will be set as your active repository!
 				</div>

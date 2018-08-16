@@ -6,7 +6,7 @@
         <div class="card-header">
 			    Users ({{people.length}})
 		    </div>
-        <div class="card-block" style="overflow-x: auto;">
+        <div class="card-body" style="overflow-x: auto;">
           <div class="row">
             <div class="col-sm-12">
               <ul class="list-group">
@@ -39,7 +39,7 @@
         </div>
         <div class="modal-body" id="PersonInfoContent">
           <div class="card">
-            <div class="card-block">
+            <div class="card-body">
               <div class="pull-right">
                 <span v-if="person_info.is_admin == 1" class="badge badge-pill badge-success">Admin</span>
                 <span v-if="person_info.is_disabled == 1" class="badge badge-pill badge-danger">Disabled</span>

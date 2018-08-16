@@ -28,7 +28,7 @@
                             <div class="card-header">
                                 <h4>{{dataType.name}} (<em>{{dataType.code}}</em>)</h4>
                             </div>
-                            <div class="card-block">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
                                         <p>{{dataType.description | truncateDescription}}</p>
@@ -99,7 +99,7 @@
                                             <div v-if="!f.id" class="btn btn-danger btn-sm">NEW</div>
                                             <span v-if="f.name"><strong>{{f.name}}</strong></span>
                                         </div>
-                						<div class="card-block schema-field-card-body">
+                						<div class="card-body schema-field-card-body">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <small>{{f.description}}<span v-if="!f.description"><em>No Description</em></span></small>
@@ -115,7 +115,7 @@
             	<div v-bind:class="((editorDataTypeIndex !== null) && (editorDataTypeIndex < 0)) ? 'col-sm-6 offset-sm-3' : 'col-sm-4'">
 					<div class="card card-form">
 						<div class="card-header text-center">Basic Information</div>
-						<div class="card-block">
+						<div class="card-body">
 
 								<div class="row">
 									<div class="col-sm-12">
@@ -143,7 +143,7 @@
 										</div>
 									</div>
 								</div>
-						 </div><!-- end card-block -->
+						 </div><!-- end card-body -->
 					</div><!-- end card -->
 				</div><!-- end col -->
 			</div><!-- end row -->

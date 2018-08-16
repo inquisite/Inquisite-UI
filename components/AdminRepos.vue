@@ -6,7 +6,7 @@
         <div class="card-header">
 			    Repositories ({{repos.length}})
 		    </div>
-        <div class="card-block" style="overflow-x: auto;">
+        <div class="card-body" style="overflow-x: auto;">
           <div class="row">
             <div class="col-sm-12">
               <ul class="list-group">

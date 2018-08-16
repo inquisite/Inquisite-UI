@@ -22,7 +22,7 @@
             	<div class="card-header text-center">
 					Add collaborators
 			 	</div>
-                <div class="card-block">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-md-5">
                             <autocomplete

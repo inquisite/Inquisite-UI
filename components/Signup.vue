@@ -8,7 +8,7 @@
         <div class="card-header text-center">
 			Sign up to manage your data with Inquisite
 		 </div>
-        <div class="card-block">
+        <div class="card-body">
 
          <flashmessage/>
 

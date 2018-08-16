@@ -5,12 +5,12 @@
 				<div class="card-header text-center">
 					Upload Data
 		 		</div>
-				<div class="card-block">
+				<div class="card-body">
        				<p>Adding data to <em>{{activeRepo.name}}</em></p>
 
                     <flashmessage/>
 				</div>
-				<div class="card-block">
+				<div class="card-body">
           			<form id="signup-form" name="signup-form" method="POST" action="">
 						<div class="form-group row">
 							<label for="name" class="col-2 col-form-label">File</label>
@@ -25,7 +25,7 @@
                         </div>
 					</form>
 				</div>
-				<div class="card-block">
+				<div class="card-body">
 					<div class="teaser-container" v-if="is_uploading">
 						<!--<p><i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_uploading"></i> Upload {{upload_progress}}% complete</p>-->
 						<div class="progress">
@@ -45,7 +45,7 @@
       		    <div class="card-header text-center">
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
 		 		</div>
-				<div class="card-block">
+				<div class="card-body">
 					<div class="row">
 						<div class="col-12">
 							<h3>Displaying first rows from <em>{{server_file_info.original_filename}}</em></h3>
@@ -67,7 +67,7 @@
 						</div>
       		        </div>
 				</div>
-				<div class="card-block basicStats">
+				<div class="card-body basicStats">
 					<div class="row">
 						<div class="col-12 col-sm-6">
 							<h5>Basic Statistics</h5>
@@ -88,7 +88,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="card-block" style="overflow: auto;">
+				<div class="card-body" style="overflow: auto;">
 					<div class="row">
 						<div class="col-sm-2">
 							<h6>Column Title</h6>
@@ -183,7 +183,7 @@
 					</div>
 					<div class="row">
 						<div class="col-12 col-md-7">
-							<div class="card-block">
+							<div class="card-body">
 								<div class="teaser-container" v-if="is_importing">
 									<!--<p><i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_uploading"></i> Upload {{upload_progress}}% complete</p>-->
 									<h3>Import Step</h3>
@@ -236,7 +236,7 @@
       		    <div class="card-header text-center">
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
 		 		</div>
-				<div class="card-block">
+				<div class="card-body">
 					<div class="row">
 						<div class="col-12 col-sm-8">
       		        		<h3>Import from <em>{{server_file_info.original_filename}}</em> completed</h3>
@@ -250,7 +250,7 @@
 
 
 				</div>
-				<div class="card-block">
+				<div class="card-body">
 					<div>
 						<div class="row">
 							<div class="col-12 col-sm-8">

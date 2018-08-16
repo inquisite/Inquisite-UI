@@ -7,7 +7,7 @@
         <div class="card-header text-center">
 			Search results<span v-if="expression">: <em>{{expression}}</em></span>
 		 </div>
-        <div class="card-block">
+        <div class="card-body">
 
           <flashmessage/>
             <div v-if="results.length == 0"><h2>Nothing found</h2></div>
@@ -27,7 +27,7 @@
                         <div class="row">
                             <div v-for="v, k in r" class="col-12 col-sm-12 col-md-6 col-lg-3">
                                 <div v-bind:class="'card ' + [exportRecords.indexOf(v.__id) >= 0 ? 'export-card' : '']">
-                                    <div class="card-block search-result-block">
+                                    <div class="card-body search-result-block">
                                         <div class="row">
                                             <div v-if="t != 'Person'" class="col-5 text-left search-result-text">
                                                 <strong>Repository</strong><br/><em><u>{{v.__repo_name}}</u></em><br/>
@@ -52,7 +52,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-block search-result-block">
+                                    <div class="card-body search-result-block">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div v-for="x, y in displayDataForNode(v)" class="row">
