@@ -1,17 +1,15 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-toggleable-md navbar-light fixed-top shadowed">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#mainNavigation" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top shadowed">
         <router-link to="/" class="navbar-brand">
             <img class="logo" src="assets/images/logo.png">
         </router-link>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavigation" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <div class="collapse navbar-collapse justify-content-end" id="mainNavigation">
-
-
-			<ul class="navbar-nav" v-if="!isLoggedIn">
+        <div class="collapse navbar-collapse" id="mainNavigation">
+			<ul class="navbar-nav mr-auto" v-if="!isLoggedIn">
 			  <li class="nav-item">
 				<router-link class="nav-link" to="/signup">Sign up</router-link>
 			  </li>
@@ -20,7 +18,7 @@
 			  </li>
 			</ul>
 
-            <ul class="navbar-nav" v-if="isLoggedIn">
+            <ul class="navbar-nav mr-auto" v-if="isLoggedIn">
 
                 <li class="nav-item dropdown">
                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -68,7 +66,7 @@
                     </ul>
                 </li>
             </ul>
-            <form class="form-inline" v-on:submit="search(search_expression)" v-if="isLoggedIn">
+            <form class="form-inline my-2 my-lg-0" v-on:submit="search(search_expression)" v-if="isLoggedIn">
 				<input class="form-control mr-sm-2" type="text" placeholder="Search" v-model="search_expression">
 				<button class="btn btn-orange-reverse my-2 my-sm-0" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 			</form>
