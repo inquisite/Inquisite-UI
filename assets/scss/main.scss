@@ -1,6 +1,16 @@
+/*
+ * Main SASS file for Inquisite
+ * All of the child CSS/SCSS files
+ * are loaded here and managed through
+ * webpack
+*/
 
+/* These are locally defined styles that take priority */
 @import 'custom';
 @import 'LoginReg';
+@import 'editors';
+
+/* These are the dependency libraries we are using */
 @import '~bootstrap/scss/bootstrap';
 $fa-font-path: "~font-awesome/fonts";
 @import '~font-awesome/scss/font-awesome';
