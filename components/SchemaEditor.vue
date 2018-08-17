@@ -119,19 +119,19 @@
 
 								<div class="row">
 									<div class="col-sm-12">
-										<div class="form-group" v-bind:class="{'has-danger': dataTypeNameError}">
+										<div class="form-group">
 											<label for="name" class="form-label">Name</label>
-											<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="formContent.name" v-on:input="validateDataTypeInfo(editorDataTypeIndex)">
-                                            <div class="form-control-feedback">{{dataTypeNameError}}</div>
+											<input type="text" class="form-control" id="name" name="name" placeholder="Name" v-model="formContent.name" v-on:input="validateDataTypeInfo(editorDataTypeIndex)" v-bind:class="{'is-invalid': dataTypeNameError}">
+                                            <div class="invalid-feedback">{{dataTypeNameError}}</div>
                                         </div>
 									</div>
                                 </div>
                                 <div class="row">
 									<div class="col-sm-12">
-										<div class="form-group" v-bind:class="{'has-danger': dataTypeCodeError}">
+										<div class="form-group">
 											<label for="code" class="form-label">Code</label>
-											<input type="text" class="form-control" id="code" name="code" placeholder="Code" v-model="formContent.code" readonly>
-                                            <div class="form-control-feedback">{{dataTypeCodeError}}</div>
+											<input type="text" class="form-control" id="code" name="code" placeholder="Code" v-model="formContent.code" readonly v-bind:class="{'is-invalid': dataTypeCodeError}">
+                                            <div class="invalid-feedback">{{dataTypeCodeError}}</div>
 										</div>
 									</div>
 								</div>
@@ -162,17 +162,17 @@
                   <div class="modal-body" :id="'field' + currentField.id">
                         <div class="row">
                           <div class="col-sm-4">
-                              <div class="form-group" v-bind:class="{'has-danger': fieldNameError}">
+                              <div class="form-group">
                                   <label for="name" class="form-label">Name</label>
-                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Name" v-model="currentField.name" v-on:input="validateNameChange()">
-                                  <div class="form-control-feedback">{{fieldNameError}}</div>
+                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Name" v-model="currentField.name" v-on:input="validateNameChange()" v-bind:class="{'is-invalid': fieldNameError}">
+                                  <div class="invalid-feedback">{{fieldNameError}}</div>
                               </div>
                           </div>
                           <div class="col-sm-4">
-                              <div class="form-group" v-bind:class="{'has-danger': fieldCodeError}">
+                              <div class="form-group">
                                   <label for="code" class="form-label">Code</label>
-                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Code" v-model="currentField.code" readonly>
-                                  <div class="form-control-feedback">{{fieldCodeError}}</div>
+                                  <input type="text" class="form-control" :id="'field_' + currentField.code" :name="'field_' + currentField.code" placeholder="Code" v-model="currentField.code" readonly v-bind:class="{'is-invalid': fieldCodeError}">
+                                  <div class="invalid-feedback">{{fieldCodeError}}</div>
                               </div>
                           </div>
                           <div class="col-sm-4">
@@ -192,10 +192,10 @@
                               </div>
                           </div>
                       </div>
-                      <div v-if="fieldAlert[i]" class="row">
+                      <div v-if="fieldAlert" class="row">
                           <div class="col-sm-12">
                               <div class="alert alert-danger">
-                                  {{fieldAlert[i]}}
+                                  {{fieldAlert}}
                               </div>
                           </div>
                       </div>
@@ -295,7 +295,7 @@ export default {
         editorDataTypeIndex: null,
         search_display_values: [],
         listArray: [],
-        fieldAlert: [],
+        fieldAlert: null,
         currentField: null,
         showFieldModal: false,
         fieldNameError: null,
@@ -449,7 +449,7 @@ export default {
 	// ------------------------------------
     settingAlert(setting_code, i){
         if(setting_code == "list_code"){
-            this.fieldAlert[i] = "WARNING! Changing the list associated with this field will cause existing values to be checked against the newly assigned list. If that list does not allow merging, non-matching values will be deleted! Please review your data and/or set the list being switched to allow merging."
+            this.fieldAlert = "WARNING! Changing the list associated with this field will cause existing values to be checked against the newly assigned list. If that list does not allow merging, non-matching values will be deleted! Please review your data and/or set the list being switched to allow merging."
         }
     },
     checkGreen: function(i) {
@@ -494,7 +494,7 @@ export default {
         this.showFieldModal = true;
         this.fieldNameError = null;
         this.fieldCodeError = null;
-        this.validateNameChange();
+        //this.validateNameChange();
     },
     validateNameChange: function(){
         var name = this.currentField.name;
@@ -502,8 +502,8 @@ export default {
             this.fieldNameError = "Field Name must be at least 2 characters long"
         } else {
             this.fieldNameError = null;
-            var new_code = name.replace(/\s+/, '_');
-            new_code = new_code.replace(/\W/, '').toLowerCase();
+            var new_code = name.replace(/[\s\-]+/g, '_');
+            new_code = new_code.replace(/\W/g, '').toLowerCase();
             this.checkIfNameCodeExists(name, new_code, this.currentField.pos)
             this.currentField.code = new_code
         }
@@ -534,8 +534,8 @@ export default {
             this.dataTypeNameError = "Data Type Name must be at least 4 characters long"
         } else {
             this.dataTypeNameError = null;
-            var new_code = name.replace(/\s+/, '_');
-            new_code = new_code.replace(/\W/, '').toLowerCase();
+            var new_code = name.replace(/[\s\-]+/g, '_');
+            new_code = new_code.replace(/\W/g, '').toLowerCase();
             this.formContent.code = new_code;
             this.checkIfDataTypeCodeExists(name, new_code, pos)
 
