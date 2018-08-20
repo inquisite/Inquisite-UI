@@ -1,7 +1,7 @@
 <template>
 <div id="addRepo">
   <div class="row">
-    <div class="col-sm-6 offset-sm-3">
+    <div class="col-sm-8 offset-sm-2">
         <div class="card card-form">
             <div class="card-header text-center">Add Repository</div>
             <div class="card-body">
@@ -24,7 +24,7 @@
 						<div class="col-9">
 							<textarea class="form-control" v-model="readme" rows="10" cols="80" placeholder="# Hello! This is your new repository"></textarea>
 						</div>
-					</div>
+					</div> 
 
 					<div class="form-group row">
 						<label for="name" class="col-3 col-form-label">URL</label>

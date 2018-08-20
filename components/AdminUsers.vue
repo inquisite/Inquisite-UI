@@ -38,7 +38,7 @@
           </button>
         </div>
         <div class="modal-body" id="PersonInfoContent">
-          <div class="card">
+          
             <div class="card-body">
               <div class="pull-right">
                 <span v-if="person_info.is_admin == 1" class="badge badge-pill badge-success">Admin</span>
@@ -56,7 +56,7 @@
               <h6 class="card-subtitle mb-2 text-muted" v-if="person_info.tagline">{{person_info.url}}</h6>
               <p class="card-text">{{person_info.email}}</p>
             </div>
-          </div>
+
           <div class="pull-right">
             <button v-if="!person_info.is_disabled" type="button" class="btn btn-danger btn-sm" v-on:click.prevent="toggleUserEnabled($event, person_info.id, false)">Disable</button>
             <button v-if="person_info.is_disabled" type="button" class="btn btn-success btn-sm" v-on:click.prevent="toggleUserEnabled($event, person_info.id, true)">Enable</button>

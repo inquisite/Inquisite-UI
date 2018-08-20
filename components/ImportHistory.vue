@@ -1,7 +1,7 @@
 <template>
 <div id="import-history">
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-8 offset-sm-2">
       <div class="card card-gray">
         <div class="card-header">
 			    Import history for <em>{{activeRepo.name}}</em>

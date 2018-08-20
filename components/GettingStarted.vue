@@ -10,15 +10,16 @@
             <div class="row"><div class="col spacerRow"></div></div>
             <div class="row">
                 <div class="col-sm-12">
+                	<h4>What is it?</h4>
                     <p>
-                        <h4>What is it?</h4>
+                        
                         Inquisite is a tool for collaboratively organizing, assembling and sharing
                         research data. It provides a hub for storage, discovery and reuse, encouraging the 
                         formation of open research communities and providing users access to content that previously might 
                         have languished in hidden databases, spreadsheets or text files.
                     </p>
+                    <h4>How does it work?</h4>
                     <p>
-                        <h4>How does it work?</h4>
                         Inquisite users create <em>repositories</em>, self-contained sandboxes for research data that
                         can be shared, explored and combined. Within a repository you may define as many types of data as
                         required each with its own set of specialized fields. Fields may contain text, numbers or more
@@ -51,12 +52,13 @@
                         public on the forthcoming Inquisite public data portal.
                     </p>
 
-                    <figure class="figure pull-right" style="width: 700px; padding: 10px;">
+                    <figure class="figure pull-right" style="width: 700px;">
                         <img src="/figures/dashboard.png" class="figure-img img-fluid rounded" alt="Dashboard"/>
                         <figcaption class="figure-caption">Dashboard</figcaption>
                     </figure>
+                    <h4>Current status</h4>
                     <p>
-                        <h4>Current status</h4>
+                       
                         Inquisite is currently in development. Core functionality, including the ability to create new
                         repositories for your data, manage repository data schemas (the structure of your data), and 
                         import data in CSV, TAB, Excel and GeoJSON formats with simple crosswalks to your schema is available now. 
@@ -66,12 +68,12 @@
                         and report bugs and ideas.
                     </p>
 
-                    <figure class="figure pull-left" style="width: 300px; padding: 10px;">
+                    <figure class="figure pull-left" style="width: 500px;">
                         <img src="/figures/edit_repo.png" class="figure-img img-fluid rounded" alt="Edit repository"/>
                         <figcaption class="figure-caption">Edit repository</figcaption>
                     </figure>
+                    <h4>How to get started</h4>
                     <p>
-                        <h4>How to get started</h4>
                         The first step is to <router-link to="/signup">sign up</router-link> for an 
                         Inquisite account. (<strong>note that you must have an NYU.edu email address to register for 
                             Inquisite</strong>). Upon registration you will be presented with the dashboard for an initial, 
@@ -84,8 +86,8 @@
                         of "private" to "published" will cause the repository to be visible on the forthcoming Inquisite public data portal,
                         so be sure to set publication status only when you're ready for the world to have access to your work.
                     </p>
-                    <p>
-                        <h4>Uploading data</h4>
+                    <h4>Uploading data</h4>
+                    <p> 
                         You can upload CSV, TAB, Excel and GeoJSON format files to Inquisite. Rows in a data file are 
                         assumed to contain data for a single data type in your schema. For example, if you have set up data types 
                         in your repository for people, venues and performances Inquisite assumes that the file you're uploading is 
@@ -106,12 +108,14 @@
                         size of the uploaded file the import may take from a few seconds to a few minutes to complete. A report with any
                         errors will be displayed when the import is finished.
                     </p>
+                    <h4>Viewing data</h4>
                     <p>
-                        <h4>Viewing data</h4>
+                        
                         To come
-                    </p>  
+                    </p>
+                    <h4>Editing data</h4>  
                     <p>
-                        <h4>Editing data</h4>
+                        
                         To come
                     </p>                    
                 </div>

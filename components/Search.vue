@@ -5,9 +5,9 @@
     <div class="col-sm-12">
       <div class="card card-form">
         <div class="card-header text-center">
-			Search results<span v-if="expression">: <em>{{expression}}</em></span>
+			Search Results<span v-if="expression">: <em>{{expression}}</em></span>
 		 </div>
-        <div class="card-body">
+        <div class="">
 
           <flashmessage/>
             <div v-if="results.length == 0"><h2>Nothing found</h2></div>
@@ -25,11 +25,11 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div v-for="v, k in r" class="col-12 col-sm-12 col-md-6 col-lg-3">
-                                <div v-bind:class="'card ' + [exportRecords.indexOf(v.__id) >= 0 ? 'export-card' : '']">
-                                    <div class="card-body search-result-block">
+                            <div v-for="v, k in r" class="col-12">
+                                <div v-bind:class="'card searchBlock' + [exportRecords.indexOf(v.__id) >= 0 ? 'export-card' : '']">
+                                    <div class="search-result-block">
                                         <div class="row">
-                                            <div v-if="t != 'Person'" class="col-5 text-left search-result-text">
+                                            <div v-if="t != 'Person'" class="col-10 text-left search-result-text">
                                                 <strong>Repository</strong><br/><em><u>{{v.__repo_name}}</u></em><br/>
                                                 <div v-if="t != 'Repository'" class="search-result-text">
                                                     <strong>Schema</strong><br/><em><u>{{v.__schema_name}}</u></em>
@@ -44,7 +44,7 @@
                                                     None
                                                 </div>
                                             </div>
-                                            <div v-if="t != 'Person'" class="col-6 text-right search-result-text">
+                                            <div v-if="t != 'Person'" class="col-2 text-right search-result-text">
                                                 <router-link v-if="t == 'Data'" class="btn btn-primary btn-block" :to="'/data/edit/' + v.__id">Edit</router-link>
                                                 <router-link v-if="(t == 'SchemaField' || t == 'SchemaType') && v.__repo_id == activeRepoID" class="btn btn-primary btn-block" :to="'/schema/edit/' + v['__schema_id']">Edit</router-link>
                                                 <button v-if="v.__repo_id != activeRepoID && t != 'Data'" class="btn btn-secondary" disabled><small>Load Repo</small></button>
@@ -52,16 +52,16 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-body search-result-block">
+                                    <div class="search-result-block">
                                         <div class="row">
-                                            <div class="col-12">
-                                                <div v-for="x, y in displayDataForNode(v)" class="row">
-                                                    <div class="col-12 search-result-text">
+
+                                                <div v-for="x, y in displayDataForNode(v)" class="col-3 search-result-text">
+
                                                         <h6>{{y}}</h6>
                                                         <p>{{x}}</p>
-                                                    </div>
+
                                                 </div>
-                                            </div>
+
                                         </div>
                                     </div>
                                 </div>

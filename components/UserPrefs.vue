@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-sm-6 offset-sm-3">
+    <div class="col-sm-8 offset-sm-2">
       <div class="card card-form">
         <div class="card-header text-center">
 			Your Preferences

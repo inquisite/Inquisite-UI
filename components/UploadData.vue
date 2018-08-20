@@ -1,16 +1,14 @@
 <template>
 	<div class="row">
-		<div class="col-sm-6 offset-sm-3" v-if="(server_file_info === null) && !import_complete">
+		<div class="col-sm-8 offset-sm-2" v-if="(server_file_info === null) && !import_complete">
 			<div class="card card-form">
 				<div class="card-header text-center">
 					Upload Data
 		 		</div>
 				<div class="card-body">
-       				<p>Adding data to <em>{{activeRepo.name}}</em></p>
+				    <p>Adding data to <em>{{activeRepo.name}}</em></p>
 
                     <flashmessage/>
-				</div>
-				<div class="card-body">
           			<form id="signup-form" name="signup-form" method="POST" action="">
 						<div class="form-group row">
 							<label for="name" class="col-2 col-form-label">File</label>
@@ -20,7 +18,7 @@
 							</div>
 						</div>
 
-                        <div class="item" style="padding: 10px 0">
+                        <div class="item submit" >
                           <button v-on:submit.prevent="processData" v-on:click.prevent="processData" :disabled="!allow_upload" class="btn btn-primary">Submit</button>
                         </div>
 					</form>

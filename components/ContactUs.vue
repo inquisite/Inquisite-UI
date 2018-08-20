@@ -10,12 +10,12 @@
             <div class="row"><div class="col spacerRow"></div></div>
             <div class="row">
                 <div class="col-sm-12">
+                	<h4>Questions</h4>
                     <p>
-                        <h4>Questions</h4>
                         Contact the developers at info@inquisite.org 
-                    </p>  
-                    <p>
-                        <h4>Bug reports</h4>
+                    </p> 
+                    <h4>Bug reports</h4> 
+                    <p>       
                         Please post bug reports using the issues tracker on our
                         <a href="https://github.com/inquisite">GitHub repository</a>
                     </p>                  

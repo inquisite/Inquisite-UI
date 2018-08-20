@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-sm-6 offset-sm-3">
+    <div class="col-sm-8 offset-sm-2">
       <div class="card card-form">
         <div class="card-header text-center">
 			Edit Repository Details
@@ -47,10 +47,10 @@
 			</div>
 
 			<div class="form-group row">
-				<div class="col-sm-6">
+				<div class="col-sm-12 text-center">
 					<button v-on:submit.prevent="editRepo" v-on:click.prevent="editRepo" class="btn btn-primary">Save</button>
 				</div>
-				<div class="col-sm-6 text-right">
+				<div class="col-sm-12 text-right deleteRepo">
 					<click-confirm placement="top" style="display: inline;">
 						<a @click="deleteRepo(activeRepo.id)">
 							<button type="button" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></span> Delete Repository</button>

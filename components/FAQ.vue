@@ -10,8 +10,8 @@
             <div class="row"><div class="col spacerRow"></div></div>
             <div class="row">
                 <div class="col-sm-12">
+                	<h4>What goes here?</h4>
                     <p>
-                        <h4>What goes here?</h4>
                         Content to come...
                     </p>                 
                 </div>

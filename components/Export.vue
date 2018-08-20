@@ -2,7 +2,7 @@
 <template>
 <div id="export-data">
     <div class="row">
-        <div class="col-12 col-sm-6 offset-sm-3">
+        <div class="col-12 col-sm-8 offset-sm-2">
             <div class="card card-form">
                 <div class="card-header text-center">
                     Export Data
@@ -25,7 +25,7 @@
                                     <small id="exportHelp" class="form-text text-muted">Name your data export file.</small>
                                 </div>
                             </div>
-                            <div class="item" style="padding: 10px 0">
+                            <div class="item text-center" style="padding: 10px 0">
                                 <button v-on:submit.prevent="exportData" v-on:click.prevent="exportData" :disabled="!allow_export" class="btn btn-primary">Export</button>
                             </div>
                         </form>
@@ -38,7 +38,7 @@
                     <div v-else class="card-body">
                         <div class="row">
                             <div class="col-12 text-center">
-                                <h2>No Records available for export</h2>
+                                <h6>No Records available for export</h6>
                             </div>
                         </div>
                     </div>
