@@ -99,6 +99,16 @@ a{
 .btn-icon a{
 	color: #fff !important;
 }
+
+.btn-secondary {
+	background-color: #fff !important;
+	border: 1px solid #ced4da !important;
+	&:hover{
+		color: #1CB2C6 !important;
+		background-color: #ced4da !important;
+	}
+}
+
 .dropdown-toggle-icon::after {
     display:none !important;
 }
@@ -106,6 +116,9 @@ a{
 	background-color:#333;
 	color:#FFF;
 	padding:30px;
+	& p {
+		color: #fff;
+	}
 }
 .bg-md-gray {
 	background-color:#666;
