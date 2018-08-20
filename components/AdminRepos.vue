@@ -11,7 +11,7 @@
             <div class="col-sm-12">
               <ul class="list-group">
                 <li class="list-group-item justify-content-between" v-for="r, i in repos">
-                  <div>
+                  <div class="pull-left">
                     {{r.name}}<br/>
                       <small>Created: {{displayCreated(r.created_on)}}</small><br/>
                       <small>Owner: {{r.owner}} ({{r.email}})</small>
@@ -88,11 +88,12 @@ export default {
                 'name': repo.name,
                 'url': repo.url,
                 'readme': repo.readme,
-                'featured': feat,
+                'featured': String(feat),
                 'published': repo.published,
                 'license': repo.license
             }
         }
+        console.log(repoUpdate);
         var self = this;
         this.$store.dispatch("repos/editRepo", repoUpdate).then(function(data){
             self.repos[pos].featured = feat;

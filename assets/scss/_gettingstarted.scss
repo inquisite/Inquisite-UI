@@ -1,0 +1,68 @@
+/*
+ * Styles for Inquisite Getting Started Pages
+ * This includes forms on
+ * GettingStarted.vue
+ * and its sub-pages
+*/
+
+
+/* Setting some color variables */
+$turq: #1CB2C6;
+$lt-gray: #f2f2f2;
+$orange: #F79D59;
+
+.info-img{
+	max-width: 50% !important;
+	padding: 15px 0;
+}
+
+.info-img-lg{
+	max-width: 66% !important;
+	padding: 15px 0;
+}
+
+.highlight{
+	color: $turq;
+	font-weight: bold;
+}
+
+.bg-header {
+	background-color: $turq;
+	color:#fff;
+	padding:15px;
+	margin-top:15px;
+	& h1, p {
+		color: #fff;
+	}
+}
+
+.starting-card, .starting-card .card-body{
+	border-radius: 15px !important;
+}
+
+.starting-section-card{
+	min-height: 100px !important;
+	background-color: $lt-gray !important;
+	border-radius: 15px !important;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	border: 5px solid $orange !important;
+}
+
+.starting-card-link{
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#fixed-back-button{
+	top: 148px;
+	position: fixed;
+	padding-left: 30px;
+	& a {
+		color: $orange !important;
+	}
+}

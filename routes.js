@@ -73,6 +73,12 @@ Vue.component('admin-repos', AdminRepos)
 const GettingStarted = require('./components/GettingStarted.vue').default
 Vue.component('getting-started', GettingStarted)
 
+const AboutInquisite = require('./components/guides/AboutInquisite.vue').default
+Vue.component('about-inquisite', AboutInquisite)
+
+const ManagingRepos = require('./components/guides/ManagingRepos.vue').default
+Vue.component('managing-repositories', ManagingRepos)
+
 const ContactUs = require('./components/ContactUs.vue').default
 Vue.component('contact-us', ContactUs)
 
@@ -94,6 +100,8 @@ export default [
   { path: '/signup', name: 'signup', component: Signup },
   { path: '/login', name: 'login', component: Login },
   { path: '/help/getting-started', name: 'getting-started', component: GettingStarted },
+  { path: '/help/about-inquisite', name: 'about-inquisite', component: AboutInquisite },
+  { path: '/help/managing-repositories', name: 'managing-repositories', component: ManagingRepos },
   { path: '/help/faq', name: 'faq', component: FAQ },
   { path: '/help/contact', name: 'contact-us', component: ContactUs },
   { path: '/upload', name: 'upload-data', component: UploadData, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },
