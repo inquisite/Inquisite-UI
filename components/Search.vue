@@ -13,25 +13,25 @@
             <div v-if="results.length == 0"><h2>Nothing found</h2></div>
             <div v-else>
                 <tabs :options="{useUrlFragment: false}">
-                    <tab v-if="counts[t] > 0" :key="t" v-for="r,t in results" :name="t + ' (' + totalCounts[t] + ')'">
-                        <div class="row paging-buttons" v-if="totalCounts[t] > 12">
+                    <tab v-if="counts[results[i]['type']] > 0" :key="results[i]['type']" v-for="r,i in results" :name="results[i]['type'] + ' (' + totalCounts[results[i]['type']] + ')'" v-bind:class="i == 0 ? 'is-active': ''">
+                        <div class="row paging-buttons" v-if="totalCounts[results[i]['type']] > 12">
                             <div class="col-6">
                                 <button type="button" class="btn btn-primary" @click="storeExportRecords"><i class="fa fa-download" aria-hidden="true"></i> Export {{exportCount}} Records</button>
                             </div>
                             <div class="col-6 text-right">
-                                <button v-on:click.prevent="loadPage(expression, t, slices[t][0]-13, (slices[t][0]-1))" class="btn btn-primary btn-orange" :disabled="(slices[t][0]-12 < 0)">Prev</button>
-                                <h6 class="paging-counts">{{slices[t][0]}} - {{slices[t][1]}}</h6>
-                                <button v-on:click.prevent="loadPage(expression, t, slices[t][1], (slices[t][1]+12))" class="btn btn-primary btn-orange" :disabled="(slices[t][0]+12 > totalCounts[t])">Next</button>
+                                <button v-on:click.prevent="loadPage(expression, results[i]['type'], slices[results[results[i]['type']]['type']][0]-13, (slices[results[i]['type']][0]-1))" class="btn btn-primary btn-orange" :disabled="(slices[results[i]['type']][0]-12 < 0)">Prev</button>
+                                <h6 class="paging-counts">{{slices[results[i]['type']][0]}} - {{slices[results[i]['type']][1]}}</h6>
+                                <button v-on:click.prevent="loadPage(expression, results[i]['type'], slices[results[i]['type']][1], (slices[results[i]['type']][1]+12))" class="btn btn-primary btn-orange" :disabled="(slices[results[i]['type']][0]+12 > totalCounts[results[i]['type']])">Next</button>
                             </div>
                         </div>
                         <div class="row">
-                            <div v-for="v, k in r" class="col-12 col-sm-12 col-md-6 col-lg-3">
+                            <div v-for="v, k in r['results']" class="col-12 col-sm-12 col-md-6 col-lg-3">
                                 <div v-bind:class="'card ' + [exportRecords.indexOf(v.__id) >= 0 ? 'export-card' : '']">
                                     <div class="card-body search-result-block">
                                         <div class="row">
-                                            <div v-if="t != 'Person'" class="col-5 text-left search-result-text">
+                                            <div v-if="results[i]['type'] != 'Person'" class="col-5 text-left search-result-text">
                                                 <strong>Repository</strong><br/><em><u>{{v.__repo_name}}</u></em><br/>
-                                                <div v-if="t != 'Repository'" class="search-result-text">
+                                                <div v-if="results[i]['type'] != 'Repository'" class="search-result-text">
                                                     <strong>Schema</strong><br/><em><u>{{v.__schema_name}}</u></em>
                                                 </div>
                                             </div>
@@ -44,11 +44,11 @@
                                                     None
                                                 </div>
                                             </div>
-                                            <div v-if="t != 'Person'" class="col-6 text-right search-result-text">
-                                                <router-link v-if="t == 'Data'" class="btn btn-primary btn-block" :to="'/data/edit/' + v.__id">Edit</router-link>
-                                                <router-link v-if="(t == 'SchemaField' || t == 'SchemaType') && v.__repo_id == activeRepoID" class="btn btn-primary btn-block" :to="'/schema/edit/' + v['__schema_id']">Edit</router-link>
-                                                <button v-if="v.__repo_id != activeRepoID && t != 'Data'" class="btn btn-secondary" disabled><small>Load Repo</small></button>
-                                                <button v-if="t == 'Data'" class="btn btn-primary btn-sm btn-block" v-on:click="addToExport(v.__id)"><small>Export</small></button>
+                                            <div v-if="results[i]['type'] != 'Person'" class="col-6 text-right search-result-text">
+                                                <router-link v-if="results[i]['type'] == 'Data'" class="btn btn-primary btn-block" :to="'/data/edit/' + v.__id">Edit</router-link>
+                                                <router-link v-if="(results[i]['type'] == 'SchemaField' || results[i]['type'] == 'SchemaType') && v.__repo_id == activeRepoID" class="btn btn-primary btn-block" :to="'/schema/edit/' + v['__schema_id']">Edit</router-link>
+                                                <button v-if="v.__repo_id != activeRepoID && results[i]['type'] != 'Data'" class="btn btn-primary" v-on:click="setActiveRepo(v.__repo_id)"><small>Load Repo</small></button>
+                                                <button v-if="results[i]['type'] == 'Data'" class="btn btn-primary btn-sm btn-block" v-on:click="addToExport(v.__id)"><small> Add to Export</small></button>
                                             </div>
                                         </div>
                                     </div>
@@ -83,6 +83,7 @@
 </style>
 
 <script>
+import store from '../store/store.js'
 
 export default {
   name: 'search',
@@ -96,7 +97,17 @@ export default {
   },
   computed: {
 	results: function() {
-	    return this.$store.getters['search/getResults'];
+        var ret = []
+	    var res = this.$store.getters['search/getResults'];
+        for(var type in res){
+            var typeRes = res[type];
+            var typeRet = {"type": type, "results": []}
+            for(var i in typeRes){
+                if(typeRes[i] != null){ typeRet['results'].push(typeRes[i]); }
+            }
+            ret.push(typeRet);
+        }
+        return ret
 	},
 	counts: function() {
 	    return this.$store.getters['search/getCounts'];
@@ -168,6 +179,13 @@ export default {
         this.$store.dispatch('export_data/storeExportRecords', [this.expression, this.exportRecords, this.userInfo.email]).then(function(){
             self.$router.push('export-data');
         });
+    },
+    setActiveRepo: function(repo_id) {
+      store.commit('repos/SET_ACTIVE_REPO', repo_id);
+       if(this.activeRepo) {
+            this.$store.dispatch('schema/getDataTypes', this.activeRepo.id);
+        }
+      this.$router.push("/");   // force back to dashboard for new repo
     }
   }
 }
