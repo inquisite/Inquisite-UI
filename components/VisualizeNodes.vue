@@ -201,6 +201,7 @@ export default {
                       "start": 0,
                       "limit": type.size
                   }
+                  let typeID = 'type_' + type.id;
                   self.$store.dispatch("data/getDataForType", getData).then(function(resp){
                      for(var j = 0; j < resp.data.length; j++){
                          var data = resp.data[j];
@@ -225,11 +226,10 @@ export default {
                              "text": dataText
                          }
                          localGraph['nodes'].push(dataNode);
-                         localGraph['links'].push({"source": dataType.id, "target": dataNode.id});
+                         localGraph['links'].push({"source": typeID, "target": dataNode.id});
                      }
                      typePos++;
                      if(typePos >= typeCount){
-                       console.log("HELLO?")
                        resolve(localGraph);
                      }
                   });
