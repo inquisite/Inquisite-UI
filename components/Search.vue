@@ -26,7 +26,7 @@
                         </div>
                         <div class="row">
                             <div v-for="v, k in r['results']" class="col-12 col-sm-12 col-md-6 col-lg-3">
-                                <div v-bind:class="'card searchBlock  + [exportRecords.indexOf(v.__id) >= 0 ? 'export-card' : '']">
+                                <div v-bind:class="'card searchBlock ' + [exportRecords.indexOf(v.__id) >= 0 ? 'export-card' : '']">
                                     <div class="search-result-block">
                                         <div class="row">
                                             <div v-if="results[i]['type'] != 'Person'" class="col-5 text-left search-result-text">
