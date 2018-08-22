@@ -79,6 +79,9 @@ Vue.component('about-inquisite', AboutInquisite)
 const ManagingRepos = require('./components/guides/ManagingRepos.vue').default
 Vue.component('managing-repositories', ManagingRepos)
 
+const StructuredDataGuide = require('./components/guides/StructuredData.vue').default
+Vue.component('structured-data-guide', StructuredDataGuide)
+
 const ContactUs = require('./components/ContactUs.vue').default
 Vue.component('contact-us', ContactUs)
 
@@ -102,6 +105,7 @@ export default [
   { path: '/help/getting-started', name: 'getting-started', component: GettingStarted },
   { path: '/help/about-inquisite', name: 'about-inquisite', component: AboutInquisite },
   { path: '/help/managing-repositories', name: 'managing-repositories', component: ManagingRepos },
+  { path: '/help/structured-data', name: 'structured-data-guide', component: StructuredDataGuide },
   { path: '/help/faq', name: 'faq', component: FAQ },
   { path: '/help/contact', name: 'contact-us', component: ContactUs },
   { path: '/upload', name: 'upload-data', component: UploadData, 'beforeEnter': function(f, t, n) { n(store.getters.isLoggedIn);} },

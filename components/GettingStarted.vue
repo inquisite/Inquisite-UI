@@ -17,6 +17,7 @@
                 <div class="col-6 text-center">
                     <div class="card starting-card">
                         <div class="card-body bg-dk-gray">
+                            <router-link to="/help/structured-data" class="starting-card-link"></router-link>
                             <h4>I have structured data.</h4>
                             <p>Choose this option if your data is tabular (i.e. looks like a table or spreadsheet). Accepted file formats: .csv, .txt, .xls, .xlsx</p>
                         </div>
@@ -25,6 +26,7 @@
                 <div class="col-6 text-center">
                     <div class="card starting-card">
                         <div class="card-body bg-dk-gray">
+                            <div class="inactive-help-page"><h3 class="mt-5">Coming Soon</h3></div>
                             <h4>How should I model my data?</h4>
                             <p>Learn about structured vs. semi-structured data to better understand what model might be right for your project.</p>
                         </div>
@@ -55,6 +57,7 @@
                         </div>
                         <div class="col-sm-6 col-lg-4">
                             <div class="card starting-section-card">
+                                <div class="inactive-help-page"><h3 class="mt-5">Coming Soon</h3></div>
                                 <div class="card-body">
                                     <i class="fa fa-database fa-4x"></i>
                                 </div>
@@ -63,6 +66,7 @@
                         </div>
                         <div class="col-sm-6 col-lg-4">
                             <div class="card starting-section-card">
+                                <div class="inactive-help-page"><h3 class="mt-5">Coming Soon</h3></div>
                                 <div class="card-body">
                                     <i class="fa fa-files-o fa-4x"></i>
                                 </div>
