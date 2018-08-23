@@ -38,7 +38,7 @@
 				</div>
       		</div>
       	</div>
-      	<div class="col-sm-12" v-if="(server_file_info !== null) && !import_complete">
+      	<div class="col-sm-12 col-md-10 offset-md-1" v-if="(server_file_info !== null) && !import_complete">
       		<div class="card card-form">
       		    <div class="card-header text-center">
 					Upload Data in <em>{{server_file_info.original_filename}}</em>
@@ -229,71 +229,83 @@
       		</div>
     	</div>
 
-    	<div class="col-sm-12" v-if="import_complete">
-    	    <div class="card card-form">
-      		    <div class="card-header text-center">
-					Upload Data in <em>{{server_file_info.original_filename}}</em>
-		 		</div>
-				<div class="card-body">
+    	<div class="col-sm-12 col-md-10 offset-md-1" v-if="import_complete">
+			<div class="row">
+		        <div class="col-sm-8">
+                    <h2>Import from <em>{{server_file_info.original_filename}}</em> completed</h2>
+                </div>
+                <div class="col-sm-4 text-right">
+                    <button v-on:submit.prevent="reset" v-on:click.prevent="reset" class="btn btn-primary">Do another import</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr/>
+                </div>
+            </div>
+			<div class="row">
+				<div class="col-sm-12 col-md-4">
 					<div class="row">
-						<div class="col-12 col-sm-8">
-      		        		<h3>Import from <em>{{server_file_info.original_filename}}</em> completed</h3>
-						</div>
-						<div class="col-12 col-sm-4">
-							<div class="item pull-right">
-		                      <button v-on:submit.prevent="reset" v-on:click.prevent="reset" class="btn btn-primary">Do another import</button>
-		                    </div>
+						<div class="col-12">
+							<div class="card card-gray">
+								<div class="card-header">
+									<h4>Result Summary</h4>
+								</div>
+								<div class="card-body">
+									<p><strong>Total Rows</strong> {{import_results.counts.source_total}}<br/>
+									<strong>Imported</strong> {{import_results.counts.total}}<br/>
+									<strong>Errors</strong> {{import_results.error_count}}<br/>
+									<strong>Skipped</strong> {{ignore_first_rows}}</p>
+									<div class="row">
+										<div class="col-12 align-self-center text-center">
+											<h6>View Results</h6>
+											<router-link to="/visualize/maps">
+								              <button type="button" class="btn btn-primary mr-3">Map</button>
+								            </router-link>
+											<router-link to="/visualize/sheets">
+								              <button type="button" class="btn btn-primary mr-3">Sheet</button>
+								            </router-link>
+											<router-link to="/visualize/nodes">
+								              <button type="button" class="btn btn-primary">Nodes</button>
+								            </router-link>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-
-
+					<div class="row">
+						<div class="col-12">
+							<div class="card card-gray" v-if="importErrors.length > 0">
+								<div class="card-header">
+									<h4>Errors</h4>
+								</div>
+								<div class="card-body">
+									<div id="importErrorList">
+					      		        <div v-for="(errs, line) in importErrors">
+					      		            Row {{line}}: {{errs}}
+					      		        </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div class="card-body">
-					<div>
-						<div class="row">
-							<div class="col-12 col-sm-8">
-		                        <h4>Import Results</h4>
-								<h5>Imported {{import_results.counts.total}} {{import_results.counts.type}} Records | {{import_results.error_count}} Errors | {{ignore_first_rows}} Skipped | {{import_results.counts.source_total}} Total Rows</h5>
-							</div>
-							<div class="col-12 col-sm-4 text-right">
-								<h4>View Data</h4>
-								<router-link to="/visualize/maps">
-					              <button type="button" class="btn btn-primary">Map</button>
-					            </router-link>
-								<router-link to="/visualize/sheets">
-					              <button type="button" class="btn btn-primary">Sheet</button>
-					            </router-link>
-								<router-link to="/visualize/nodes">
-					              <button type="button" class="btn btn-primary">Nodes</button>
-					            </router-link>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12 col-sm-6 resultChart">
-								<div :is="current_chart" :data="result_chart_data" :options="{responsive: false, maintainAspectRatio: false, scales: {yAxes: [{display: true, ticks: {beginAtZero: true}}]}}" :height="400"></div>
-							</div>
-							<div class="col-12 col-sm-6">
-								<div class="row" v-if="import_results.error_count > 0">
-									<div class="col-10">
-										<h4>Errors ({{import_results.error_count}})</h4>
-									</div>
-							    	<div class="col-2">
-										<button v-on:click.prevent="showErrors" class="btn btn-primary"><i class="fa fa-arrows-v"></i></button>
-									</div>
+				<div class="col-sm-12 col-md-8">
+					<div class="row">
+						<div class="col-12">
+							<div class="card card-gray">
+								<div class="card-header">
+									<h4>Charts</h4>
 								</div>
-								<div class="row" v-else>
-									<h4>No Errors</h4>
-								</div>
-								<div id="importErrorList" v-if="show_errors">
-				      		        <div v-for="(errs, line) in importErrors">
-				      		            Row {{line}}: {{errs}}
-				      		        </div>
+								<div class="card-body">
+									<div :is="current_chart" :data="result_chart_data" :options="{responsive: true, maintainAspectRatio: false, scales: {yAxes: [{display: true, ticks: {beginAtZero: true}}]}}" :height="400"></div>
 								</div>
 							</div>
 						</div>
-                    </div>
-      		    </div>
-      		</div>
+					</div>
+				</div>
+			</div>
     	</div>
 	</div>
 </div>
