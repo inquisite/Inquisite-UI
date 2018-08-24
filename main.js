@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import BootstrapVue from 'bootstrap-vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import axios from 'axios'
@@ -13,6 +14,7 @@ import {Tabs, Tab} from 'vue-tabs-component'
 
 Vue.use(VueRouter, Vuex, axios);
 Vue.use(VueSocketio, config.api_endpoint, store);
+Vue.use(BootstrapVue)
 Vue.component('tabs', Tabs);
 Vue.component('tab', Tab);
 

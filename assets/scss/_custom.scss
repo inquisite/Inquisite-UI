@@ -244,7 +244,7 @@ a{
 	font-family:rubik;
 }
 #signup-form #datafile.form-control {
-	margin-bottom:40px;
+	margin-bottom:0px;
 	border:0px;
 }
 input[type="file" i] {
@@ -256,7 +256,7 @@ input[type="file" i] {
 	box-shadow:none;
 	border:0px;
 	border-bottom:1px solid #ccc !important;
-	margin-bottom:20px;	
+	margin-bottom:20px;
 }
 .search-result-text {
 	padding-bottom:20px;
@@ -285,7 +285,7 @@ input[type="file" i] {
 }
 .navbar{
 	background-color:#FFF;
-	padding:.2rem 1rem !important; 
+	padding:.2rem 1rem !important;
 }
 .shadowed {
     /*box-shadow: 0 0 5px #888;*/
@@ -303,7 +303,7 @@ input[type="file" i] {
 	width:140px !important;
 	height:auto;
 	background-color:#FFF;
-	float:left; 
+	float:left;
 }
 .navbar-brand {
 	padding-top:0px !important;
@@ -364,7 +364,7 @@ input[type="file" i] {
 }
 .navbar .form-inline input.form-control::placeholder, .navbar .form-inline input {
 	color:#333 !important;
-	font-weight:300; 
+	font-weight:300;
 }
 input[type="text"], textarea {
 	outline: none;
@@ -630,7 +630,7 @@ input[type="text"], textarea {
 	  bottom: 15px;
   }
   .item.submit {
-  	padding-top:40px;
+  	padding-top:15px;
   	text-align:center;
   }
   .deleteRepo {
@@ -648,7 +648,7 @@ input[type="text"], textarea {
   	padding:1rem;
   	font-size:.8em;
   	border:0px;
-  	box-shadow: 0 0 5px #888; 
+  	box-shadow: 0 0 5px #888;
   	border-radius:2px;
   }
   .popover h3{
@@ -696,7 +696,7 @@ input[type="text"], textarea {
 
   .statsButton{
 	  height: 21px;
-	  padding: 2px 8px 0 8px !important;
+	  padding: 0px 8px !important;
 	  font-size: 14px !important;
 	  margin: 0;
 	  border-radius: 3px !important;
@@ -704,7 +704,7 @@ input[type="text"], textarea {
   }
 
   .titleEditButton{
-	  padding: 2px 2px 0 3px !important;
+	  padding: 0 0 0 3px !important;
   }
 
   .basicStats{
@@ -833,7 +833,7 @@ input[type="text"], textarea {
   }
   .close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
  	  color:#fff;
- 	  opacity:1; 
+ 	  opacity:1;
   }
 
   /* Search Styles */
@@ -977,4 +977,13 @@ input[type="text"], textarea {
   .portal-repo-data-item p{
 	  font-size: 14px;
 	  margin-bottom: 0;
+  }
+
+  .tooltip-inner {
+      font-size: 17px;
+      line-height: 17px;
+      background-color: #111;
+      width: 300px;
+      opacity: 1;
+      padding: 10px;
   }

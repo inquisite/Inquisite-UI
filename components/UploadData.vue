@@ -11,8 +11,8 @@
                     <flashmessage/>
           			<form id="signup-form" name="signup-form" method="POST" action="">
 						<div class="form-group row">
-							<label for="name" class="col-2 col-form-label">File</label>
-							<div class="col-10">
+							<label for="name" class="col-2 col-lg-1 col-form-label">File</label>
+							<div class="col-10 col-lg-11">
 								<input type="file" class="form-control" id="datafile" name="datafile" placeholder="Data File" @change="onFileChange">
 								<small id="fileHelp" class="form-text text-muted">Select a data file to upload to your repository.</small>
 							</div>
@@ -22,9 +22,13 @@
                           <button v-on:submit.prevent="processData" v-on:click.prevent="processData" :disabled="!allow_upload" class="btn btn-primary">Submit</button>
                         </div>
 					</form>
+					<b-alert variant="secondary" class="mt-3" show>
+						<strong>Inquisite currently supports the following file formats: .csv, .xls, .xlsx, .txt, .geojson, .json</strong><br/>
+						Because Inquisite parses data on submission, we encourage you to read the documentation on how to best to format your data for optimal results, particularly if it contains geospatial or date range information, or controlled vocabularies/lists.
+					</b-alert>
 				</div>
-				<div class="card-body">
-					<div class="teaser-container" v-if="is_uploading">
+				<div class="card-body" v-if="is_uploading">
+					<div class="teaser-container">
 						<!--<p><i class="fa fa-cog fa-spin fa-2x fa-fw" v-if="is_uploading"></i> Upload {{upload_progress}}% complete</p>-->
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" :style="'width: ' + upload_step_pos + '%'" :aria-valuenow="upload_step_pos"></div>
@@ -54,10 +58,16 @@
 							<div class="form-group row rowInput">
 								<label class="col-4 col-sm-2 col-form-label">Import as</label>
 								<select name="import_info" class="col-7 col-sm-5" v-model="import_as" @change="updateDataMapping"><option v-for="(h,x) in data_types" :value="h.id">{{h.code}}</option></select>
+								<div class="col-1">
+									<i class="fa fa-question-circle" v-b-tooltip.html.right title="<small>As you upload data, all the schemata associated with the repository will be listed here. You can apply a previously used schema to new data of the same type and format.</small>"></i>
+								</div>
 							</div>
 							<div class="form-group row rowInput" v-if="import_as < 0">
 								<label class="col-4 col-sm-2 col-form-label">Name</label>
 								<input class="col-7 col-sm-5" v-model="new_schema_name" placeholder="New Schema Name"/>
+								<div class="col-1">
+									<i class="fa fa-question-circle" v-b-tooltip.html.right title="<small>Input a name for this schema. For example, if your data set describes restaurants in New York City, you might call your schema (or data type) 'restaurant' or 'nyc_restaurant'</small>"></i>
+								</div>
 							</div>
 							<h6>Recommended Schema: {{server_file_info.recommended_schema['name']}}</h6>
 						</div>
@@ -80,7 +90,7 @@
 							<div class="row ">
 								<div class="col-12 rowInput">
 								 	<div class="pull-right"><input type="checkbox" v-model="ignore_rows"/>
-								 	Ignore first <input type="type" size="4" v-model="ignore_first_rows" v-if="ignore_rows"/> row(s)</div>
+								 	Ignore first <input type="type" size="4" v-model="ignore_first_rows" v-if="ignore_rows"/> row(s) <i class="fa fa-question-circle" v-b-tooltip.html.left title="<small>By default, Inquisite treats the data in your first row as field names.</small>"></i></div>
 								</div>
 		      		        </div>
 						</div>
@@ -96,10 +106,10 @@
 							<h6>Import Field</h6>
 						</div>
 						<div class="col-sm-2">
-							<h6>Data Type</h6>
+							<h6>Data Type <i class="fa fa-question-circle" v-b-tooltip.html.left title="<small>For more information on data types and formatting your data, please see the 'Guide to Data Types' in the 'Getting Started' section</small>"></i></h6>
 						</div>
 						<div class="col-sm-1">
-							<h6>Search Display?</h6>
+							<h6>Search Display? <i class="fa fa-question-circle" v-b-tooltip.html.left title="<small>Fields marked for search display will appear in internal search results of your own data, and when published for public searches. This will allow you to find data sets with similar fields uploaded by other sers and to enrich your research. Field names (but not content) may also appear in publically available repository metadata records.</small>"></i></h6>
 						</div>
 						<div class="col-sm-1">
 							<h6>List Merge?</h6>
