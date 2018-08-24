@@ -140,7 +140,7 @@ export default {
 		  this.getNodes().then(function(result){
              self.graph = result;
              self.simulation = d3.forceSimulation(self.graph.nodes)
-   		  	     .force("link", d3.forceLink(self.graph.links).id(function(d){ return d.id; }).distance(100).strength(0.1))
+   		  	     .force("link", d3.forceLink(self.graph.links).id(function(d){ return d.id; }).distance(50).strength(0.3))
    			     .force("charge", d3.forceManyBody())
    			     .force("center", d3.forceCenter(self.settings.svgWidth / 2, self.settings.svgHeight / 2));
           });
