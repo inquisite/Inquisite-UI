@@ -62,7 +62,8 @@
                 </click-confirm>
     			<button v-on:click="cancelDataTypeEdit" class="btn btn-cancel">Back</button>
             </div>
-    		<H1 v-html="editorHeader"></H1>
+            <H1 v-if="showHeader == 'add'">Add new data type</H1>
+    		<H1 v-if="showHeader == 'edit'">Editing data type: <em>{{editItem.name}}</em></H1>
             <div class="row">
                 <div class="col-12">
                     <hr/>
@@ -290,7 +291,7 @@ export default {
   name: 'schema-editor',
   data: function() {
     return {
-        editorHeader: '',
+        showHeader: false,
         formContent: null,
         editorDataTypeIndex: null,
         search_display_values: [],
@@ -346,14 +347,15 @@ export default {
     // ------------------------------------
     // Data type form
     addDataType: function() {
-        this.editorHeader = "Add new data type";
+        this.showHeader = "add";
         this.formContent = {};
         this.editorDataTypeIndex = -1;
     },
     editDataType: function(id) {
         for(var i in this.dataTypes) {
             if (this.dataTypes[i].id == id) {
-                this.editorHeader = "Editing Data Type: <em>" + this.dataTypes[i].name + "</em>";
+                this.showHeader = 'edit'; 
+                this.editItem = this.dataTypes[i];
                 this.formContent = this.dataTypes[i];
                 this.dataTypeNameError = null;
                 this.dataTypeCodeError = null;
@@ -387,6 +389,7 @@ export default {
                 self.editDataType(response.type.id);
             });
         }
+        this.editItem = null;
         this.$forceUpdate();
     },
     saveFieldEdit: function() {
@@ -397,7 +400,7 @@ export default {
         this.saveDataType();
     },
     cancelDataTypeEdit: function() {
-        this.editorHeader = '';
+        this.showHeader = false;
         this.editorDataTypeIndex = null;
         this.formContent = null;
     },
