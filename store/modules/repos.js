@@ -44,8 +44,9 @@ const getters = {
      */
     getActiveRepoID: state => {
         var active_repo_id = state.active_repo_id;
-        if ((active_repo_id == null) && (state.user_repos) && (state.user_repos.length > 0)) {
+        if ((!(active_repo_id > 0)) && (state.user_repos) && (state.user_repos.length > 0)) {
             active_repo_id = state.user_repos[0]['id'];
+            state.active_repo_id = active_repo_id;
         }
         return active_repo_id;
     }

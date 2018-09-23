@@ -108,6 +108,7 @@ const actions = {
         if (!context.rootState.token) return false;
         return api.post('/schema/editType/' + context.rootGetters['repos/getActiveRepoID'] + '/' + data.id, data, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {
+                response['data'] = data;
                 context.commit('EDIT_DATA_TYPE', response);
                 context.commit('SET_MESSAGE', 'Saved changes to data type <em>' + data.name + '</em>', {'root': true});
                 return response;
@@ -183,15 +184,14 @@ const mutations = {
         state.data_types.push(response.type);
     },
     EDIT_DATA_TYPE: function(state, response) {
-
         // set field id's for newly created fields (ICK)
-        if(response.field_status) {
-            for(var k in response.field_status) {
+        if(response.type && response.type.field_status) {
+            for(var k in response.type.field_status) {
                 for(var i in state.data_types) {
                     for(var j in state.data_types[i]['fields']) {
                         if((state.data_types[i]['fields'][j]['code'] == k) && !state.data_types[i]['fields'][j]['id']) {
-                            state.data_types[i]['fields'][j]['id'] = response.field_status[k]['field_id'];
-                        }
+                            state.data_types[i]['fields'][j]['id'] = response.type.field_status[k]['field_id'];
+                        } 
                     }
                 }
             }

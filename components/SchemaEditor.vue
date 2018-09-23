@@ -77,7 +77,9 @@
                             <h4>Fields <a href="#" data-toggle="modal" data-target="#color-guide-modal"><i class="fa fa-info-circle"></i></a></h4>
                         </div>
                         <div class="col-4 text-right">
-                            <a @click="addDataTypeField" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> New Field</a>
+                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit-field-modal" v-on:click.prevent="addDataTypeField()">
+                                <i class="fa fa-plus" aria-hidden="true"></i> New Field
+                            </button>
                         </div>
                     </div>
                     <div class="row">
@@ -86,12 +88,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 text-center" v-if="!formContent.fields || (formContent.fields.length == 0)">
+                        <div class="col-12 text-center" v-if="!dataTypes[editorDataTypeIndex].fields || (dataTypes[editorDataTypeIndex].fields.length == 0)">
                             <p>No fields defined</p>
                         </div>
                         <div class="col-12 list-group-scroll">
                             <div class="row">
-                                <div class="col-xs-6 col-sm-4" v-for="f, i in formContent.fields" v-if="formContent.fields && (formContent.fields.length > 0)">
+                                <div class="col-xs-6 col-sm-4" v-for="f, i in dataTypes[editorDataTypeIndex].fields" v-if="dataTypes[editorDataTypeIndex].fields && (dataTypes[editorDataTypeIndex].fields.length > 0)">
                                     <div class="card schema-field-card" v-bind:class="typeCheck(f.type)">
                                         <button class="model-open-overlay text-center" data-toggle="modal" data-target="#edit-field-modal" v-on:click.prevent="setModalData(f, i)">
                                             <h5><i class="fa fa-pencil" aria-hidden="true"></i> Edit Field</h5>
@@ -155,7 +157,8 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="edit-field-label">Edit Field {{currentField.name}}</h5>
+                    <h5 class="modal-title" id="add-field-label" v-if="!currentField.id">Add Field <em>{{currentField.name}}</em></h5>
+                    <h5 class="modal-title" id="edit-field-label" v-if="currentField.id > 0">Edit Field <em>{{currentField.name}}</em></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -225,13 +228,14 @@
                       </div>
                   </div>
                   <div class="modal-footer justify-content-between">
-                    <click-confirm placement="left" style="display:inline;">
+                    <div>
+                        <button v-on:submit.prevent="saveFieldEdit" v-on:click.prevent="saveFieldEdit" class="btn btn-primary btn-orange" data-dismiss="modal" :disabled="fieldNameError || fieldCodeError">Save</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                    
+                    <click-confirm placement="left" style="display:inline;" v-if="currentField.id > 0">
                       <button v-on:click.prevent="deleteDataTypeField(currentField.pos)" class="btn btn-danger" data-dismiss="modal">Delete</button>
                     </click-confirm>
-                    <div>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button v-on:submit.prevent="saveFieldEdit" v-on:click.prevent="saveFieldEdit" class="btn btn-primary btn-orange" data-dismiss="modal" :disabled="fieldNameError || fieldCodeError">Save</button>
-                    </div>
 
                   </div>
                 </div>
@@ -272,8 +276,11 @@
                       </div>
                   </div>
                   <div class="row color-row">
-                      <div class="col-4 text-center offset-sm-4">
+                      <div class="col-4 text-center">
                         <div style="background-color: #e49ae1;" class="color-block"><h6>Date</h6></div>
+                      </div>
+                      <div class="col-4 text-center">
+                        <div style="background-color: magenta;" class="color-block"><h6>Media</h6></div>
                       </div>
                   </div>
               </div>
@@ -292,6 +299,7 @@ export default {
   data: function() {
     return {
         showHeader: false,
+        editItem: {'name': ''},
         formContent: null,
         editorDataTypeIndex: null,
         search_display_values: [],
@@ -328,7 +336,9 @@ export default {
 	user: function() { return this.$store.getters['people/getUserInfo']; },
 	activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     activeRepoID: function() { return this.$store.getters['repos/getActiveRepoID']; },
-	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
+	dataTypes: function() { 
+	    return this.$store.getters['schema/getDataTypes'];
+	},
 	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; },
 	fieldDataTypes: function() {
 	    let rawTypes = this.$store.getters['schema/getFieldDataTypeList'];  // remove all non-datatype entries
@@ -392,7 +402,7 @@ export default {
                 self.editDataType(response.type.id);
             });
         }
-        this.editItem = null;
+        this.editItem = {'name': ''};
         this.$forceUpdate();
     },
     saveFieldEdit: function() {
@@ -401,6 +411,7 @@ export default {
         delete field['pos'];
         this.formContent.fields[pos] = field;
         this.saveDataType();
+        this.showHeader = false;
     },
     cancelDataTypeEdit: function() {
         this.showHeader = false;
@@ -416,15 +427,11 @@ export default {
     // ------------------------------------
     // Fields form
     addDataTypeField: function() {
-        if (this.editorDataTypeIndex !== null) {
-            var newField = {'type': 'TextDataType', 'code': '', 'description': '', 'has_data': false, 'name': ''}
-            this.dataTypes[this.editorDataTypeIndex]['fields'].unshift(newField);
-            var container = this.$el.querySelector("#schemaEditor-form");
-			container.scrollTop = "1px";
-            this.saveDataType();
-        }
+        this.currentField = {'type': 'TextDataType', 'code': '', 'description': '', 'has_data': false, 'name': '', 'pos': this.formContent.fields.length };
+        this.showFieldModal = true;
+        this.fieldNameError = null;
+        this.fieldCodeError = null;
     },
-
     getFieldDataTypeSettings: function(dataType){
         var type = this.fieldDataTypes[dataType];
         var typeSettings = type['settings'];
@@ -487,6 +494,9 @@ export default {
                 break;
             case 'DateDataType':
                 headerClass = 'card-pink';
+                break;
+            case 'MediaDataType':
+                headerClass = 'card-schema-magenta';
                 break;
             default:
                 break;
