@@ -126,7 +126,7 @@ const actions = {
         return api.post('/schema/deleteType/' + context.rootGetters['repos/getActiveRepoID'] + '/' + type_id, { }, {headers: apiHeaders({"auth": true, "form": true})})
             .then(function(response) {
                 context.commit('DELETE_DATA_TYPE', response);
-                context.commit('SET_MESSAGE', 'Deleted type', {'root': true});
+                context.commit('SET_MESSAGE', (response._status == 200) ? 'Deleted type' : response.msg, {'root': true});
                 return response;
             })
         .catch(function(error) {
