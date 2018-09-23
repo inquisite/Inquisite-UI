@@ -330,7 +330,10 @@ export default {
     activeRepoID: function() { return this.$store.getters['repos/getActiveRepoID']; },
 	dataTypes: function() { return this.$store.getters['schema/getDataTypes']; },
 	fieldTypes: function() { return this.$store.getters['schema/getFieldTypeList']; },
-	fieldDataTypes: function() { return this.$store.getters['schema/getFieldDataTypeList']; },
+	fieldDataTypes: function() {
+	    let rawTypes = this.$store.getters['schema/getFieldDataTypeList'];  // remove all non-datatype entries
+	    return Object.keys(rawTypes).filter(key => key.match(/DataType$/)).reduce((obj, key) => { obj[key] = rawTypes[key]; return obj; }, {}); 
+	},
     repoLists: function() { return this.$store.getters['list/getListsForRepo']; }
   },
   filters: {
@@ -420,7 +423,6 @@ export default {
 			container.scrollTop = "1px";
             this.saveDataType();
         }
-
     },
 
     getFieldDataTypeSettings: function(dataType){
