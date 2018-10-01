@@ -35,15 +35,6 @@ export default {
       isSaving: false
     }
   },
-  mounted: function() {
-    var self = this;
-    // this.$store.dispatch('schema/getDataTypes', this.$store.getters['repos/getActiveRepoID']).then(function() {
-//         self.showType = self.$store.getters['schema/getDefaultDataType'];
-//         console.log("mepw", self.dataTypes);
-//         if (!self.showType) { self.showType = self.dataTypes[0]; }
-//         self.updateDataGrid();
-//     });
-  },
   computed: { 
     activeRepo: function() { return this.$store.getters['repos/getActiveRepo']; },
     dataTypes: function() { 
