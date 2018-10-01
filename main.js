@@ -13,7 +13,7 @@ import config from './config.js'
 import {Tabs, Tab} from 'vue-tabs-component'
 
 Vue.use(VueRouter, Vuex, axios);
-Vue.use(VueSocketio, config.api_endpoint, store);
+Vue.use(VueSocketio, config.socket_endpoint, store);
 Vue.use(BootstrapVue)
 Vue.component('tabs', Tabs);
 Vue.component('tab', Tab);
