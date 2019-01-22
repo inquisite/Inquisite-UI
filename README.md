@@ -21,7 +21,7 @@ npm run dev
 npm run build
 ```
 
-## Setup with installations already intact
+## Run with all installations already installed
 
 
 ``` bash
