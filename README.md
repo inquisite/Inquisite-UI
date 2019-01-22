@@ -21,4 +21,22 @@ npm run dev
 npm run build
 ```
 
+## Setup with installations already intact
+
+
+``` bash
+# change into Inquisite-Core, cd ../Inquiste-Core from this directory
+cd ../Inquiste-Core
+
+#then run neo4j
+neo4j start
+
+#then come back to Inquisite-UI
+cd ../Inquiste-UI
+
+#then run dev
+npm run dev
+
+```
+
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
