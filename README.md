@@ -25,17 +25,34 @@ npm run build
 
 
 ``` bash
-# change into Inquisite-Core, cd ../Inquiste-Core from this directory
-cd ../Inquiste-Core
-
-#then run neo4j
+#run neo4j
 neo4j start
+
+# change into Inquisite-Core, cd ../Inquiste-Core from this directory
+
+cd ../Inquiste-Core
+python2.7 app.py
 
 #then come back to Inquisite-UI
 cd ../Inquiste-UI
 
 #then run dev
 npm run dev
+
+#then authentification fix: we have to go to the neo4j web services and
+# manually set up a new password (we chose hello) then we update that to the config
+# file for the following entities -->   "database_user": "neo4j", "database_pass": "hello",
+# then we save that and re run .
+
+#then run dev again
+npm run dev
+
+#now we need to download elastic search with brew
+brew install elasticsearch
+
+# now we need to dowload 3 elasticsearch plugins from this link https://graphaware.com/products/
+# we will need 1) GraphAware Framework, 2) GraphAware Neo4j2Elastic, 3) GraphAware UUID
+# under each, click on download to download and readme for specfic download instructions
 
 ```
 
